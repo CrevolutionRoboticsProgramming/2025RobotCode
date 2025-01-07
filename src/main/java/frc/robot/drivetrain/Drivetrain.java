@@ -41,95 +41,95 @@ public class Drivetrain extends SwerveDrivetrain implements Subsystem{
     private Notifier m_simNotifier = null;
     private static double m_lastSimTime;
     
-        /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
-        private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
-        /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
-        private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.fromDegrees(180);
-        /* Keep track if we've ever applied the operator perspective before or not */
-        private boolean m_hasAppliedOperatorPerspective = false;
-    
-        /** Swerve request to apply during robot-centric path following */
-        private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    
-        /* Swerve requests to apply during SysId characterization */
-        private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
-        private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
-        private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-    
-        /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
-        private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null,        // Use default ramp rate (1 V/s)
-                Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-                null,        // Use default timeout (10 s)
-                // Log state with SignalLogger class
-                state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
-            ),
-            new SysIdRoutine.Mechanism(
-                output -> setControl(m_translationCharacterization.withVolts(output)),
-                null,
-                this
-            )
-        );
-    
-        /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
-        private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null,        // Use default ramp rate (1 V/s)
-                Volts.of(7), // Use dynamic voltage of 7 V
-                null,        // Use default timeout (10 s)
-                // Log state with SignalLogger class
-                state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
-            ),
-            new SysIdRoutine.Mechanism(
-                volts -> setControl(m_steerCharacterization.withVolts(volts)),
-                null,
-                this
-            )
-        );
-    
-        /*
-         * SysId routine for characterizing rotation.
-         * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
-         * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
-         */
-        private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                /* This is in radians per second², but SysId only supports "volts per second" */
-                Volts.of(Math.PI / 6).per(Second),
-                /* This is in radians per second, but SysId only supports "volts" */
-                Volts.of(Math.PI),
-                null, // Use default timeout (10 s)
-                // Log state with SignalLogger class
-                state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
-            ),
-            new SysIdRoutine.Mechanism(
-                output -> {
-                    /* output is actually radians per second, but SysId only supports "volts" */
-                    setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-                    /* also log the requested output for SysId */
-                    SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
-                },
-                null,
-                this
-            )
-        );
-    
-        /* The SysId routine to test */
-        private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
-    
-        /**
-         * Constructs a CTRE SwerveDrivetrain using the specified constants.
-         * <p>
-         * This constructs the underlying hardware devices, so user should not construct
-         * the devices themselves. If they need the devices, they can access them
-         * through getters in the classes.
-         *
-         * @param drivetrainConstants Drivetrain-wide constants for the swerve drive
-         * @param modules             Constants for each specific module
-         */
-        public Drivetrain(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... modules) {
-            super(null, null, null, drivetrainConstants, m_lastSimTime, null, null, modules);
+    /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
+    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
+    /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
+    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.fromDegrees(180);
+    /* Keep track if we've ever applied the operator perspective before or not */
+    private boolean m_hasAppliedOperatorPerspective = false;
+
+    /** Swerve request to apply during robot-centric path following */
+    private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+
+    /* Swerve requests to apply during SysId characterization */
+    private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
+    private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
+    private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
+    private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            null,        // Use default ramp rate (1 V/s)
+            Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
+            null,        // Use default timeout (10 s)
+            // Log state with SignalLogger class
+            state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            output -> setControl(m_translationCharacterization.withVolts(output)),
+            null,
+            this
+        )
+    );
+
+    /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
+    private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            null,        // Use default ramp rate (1 V/s)
+            Volts.of(7), // Use dynamic voltage of 7 V
+            null,        // Use default timeout (10 s)
+            // Log state with SignalLogger class
+            state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            volts -> setControl(m_steerCharacterization.withVolts(volts)),
+            null,
+            this
+        )
+    );
+
+    /*
+        * SysId routine for characterizing rotation.
+        * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
+        * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
+        */
+    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            /* This is in radians per second², but SysId only supports "volts per second" */
+            Volts.of(Math.PI / 6).per(Second),
+            /* This is in radians per second, but SysId only supports "volts" */
+            Volts.of(Math.PI),
+            null, // Use default timeout (10 s)
+            // Log state with SignalLogger class
+            state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            output -> {
+                /* output is actually radians per second, but SysId only supports "volts" */
+                setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
+                /* also log the requested output for SysId */
+                SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
+            },
+            null,
+            this
+        )
+    );
+
+    /* The SysId routine to test */
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
+
+    /**
+     * Constructs a CTRE SwerveDrivetrain using the specified constants.
+     * <p>
+     * This constructs the underlying hardware devices, so user should not construct
+     * the devices themselves. If they need the devices, they can access them
+     * through getters in the classes.
+     *
+     * @param drivetrainConstants Drivetrain-wide constants for the swerve drive
+     * @param modules             Constants for each specific module
+     */
+    public Drivetrain(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... modules) {
+        super(null, null, null, drivetrainConstants, m_lastSimTime, null, null, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
