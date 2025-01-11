@@ -11,10 +11,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,12 +28,44 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.crevolib.util.SDSConstants;
 import static edu.wpi.first.units.Units.*;
 
 public class DrivetrainConfig {
     public class DriveConstants {
         public static final int pigeonID = 13; 
+
+        // 0.0-1.0 of the max speed
+        public static final double MaxSpeedPercentage = 1.0; // Default 1.0
+        // Rotation per second max angular velocity
+        public static final double MaxAngularRatePercentage = 1; // Default 0.75 
+
+        // Deadbands for the drive and rotation
+        public static final double DriveDeadband = 0.15; // Drive Deadband
+        public static final double RotationDeadband = 0.15; // Rotation Deadband
+        public static final double SnapRotationDeadband = 0.001; // Snap Rotation Deadband
+
+        public static double MaxSpeed = MaxSpeedPercentage*(DriveConstants.kSpeedAt12Volts.in(MetersPerSecond)); // kSpeedAt12Volts desired top speed
+        public static double MaxAngularRate = RotationsPerSecond.of(MaxAngularRatePercentage).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+        public static Drivetrain drivetrain = DriveConstants.createDrivetrain();
+
+        /* Setting up bindings for necessary control of the swerve drive platform */
+        public static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * DriveDeadband).withRotationalDeadband(MaxAngularRate * RotationDeadband)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+        public static SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+        public static SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+        public static SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+        public static SwerveRequest.FieldCentricFacingAngle angle = new SwerveRequest.FieldCentricFacingAngle()
+            .withDeadband(MaxSpeed * DriveDeadband).withRotationalDeadband(MaxAngularRate * SnapRotationDeadband) // Add a deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors 
+        //  .withSteerRequestType(SteerRequestType.MotionMagicExpo); // Use motion magic control for steer motors
+
+        public PowerDistribution powerDistribution = new PowerDistribution();
 
         //SDS Constants Class Made to Easily Switch Module Gear Ratios
         public static final SDSConstants chosenModule = SDSConstants.MK4i.Falcon500(SDSConstants.MK4i.driveRatios.L2);
@@ -100,16 +134,6 @@ public class DrivetrainConfig {
         public static final double angleKP = 3;
         public static final double angleKI = 0;
         public static final double angleKD = 0.03;
-        
-        // 0.0-1.0 of the max speed
-        public static final double MaxSpeedPercentage = 1.0; // Default 1.0
-        // Rotation per second max angular velocity
-        public static final double MaxAngularRatePercentage = 1; // Default 0.75 
-
-        // Deadbands for the drive and rotation
-        public static final double DriveDeadband = 0.15; // Drive Deadband
-        public static final double RotationDeadband = 0.15; // Rotation Deadband
-        public static final double SnapRotationDeadband = 0.001; // Snap Rotation Deadband
 
         // Both sets of gains need to be tuned to your individual robot.
 

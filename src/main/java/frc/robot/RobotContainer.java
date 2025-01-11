@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.driver.Driver;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain.DrivetrainConfig;
+import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
+import frc.robot.drivetrain.commands.DrivetrainCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -54,13 +57,12 @@ public class RobotContainer {
     public void setDefaultCommands() {
         final var driver = Driver.getInstance();
         // final var driver = DriverXbox.getInstance();
-        // Drivetrain.getInstance().setDefaultCommand(DrivetrainCommands.drive(
-        //     driver::getDriveTranslation,
-        //     driver::getDriveRotation
-        // ));
 
-        // Drivetrain.getInstance().setDefaultCommand();
-
+        Drivetrain.getInstance().setDefaultCommand(DrivetrainCommands.drive(
+            -driver.controller.getLeftX()*DriveConstants.MaxSpeed, 
+            -driver.controller.getLeftY()*DriveConstants.MaxSpeed,
+            -driver.controller.getRightX()*DriveConstants.MaxAngularRate)
+        );
     }
 }
   
