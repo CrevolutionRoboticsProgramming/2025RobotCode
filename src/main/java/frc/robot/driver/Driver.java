@@ -41,29 +41,7 @@ public class Driver extends Gamepad {
     public void setupTeleopButtons() {
         // Drivetrain Commands
         
-
-        // controller.square().whileTrue(RobotCommands.primeSpeaker(SetAngleShooterPivot.Preset.kShooterNear));
-        // controller.cross().whileTrue(RobotCommands.prime());
-
-        // controller.R1().onTrue(RobotCommands.spitNote());
-
-        // controller.L1().onTrue(RobotCommands.zero());
-
-        //controller.povDown().whileTrue(DrivetrainCommands.driveAndLockTarget(this::getDriveTranslation));
-        //controller.povDown().whileTrue(ShooterPivotCommands.tuneLockSpeaker(() -> Rotation2d.fromDegrees(45)));
-
-        // controller.L1().whileTrue(new ConditionalCommand(
-        //     DrivetrainCommands.turnToAngle(Rotation2d.fromDegrees(28.51)),
-        //     DrivetrainCommands.turnToAngle(Rotation2d.fromDegrees(-28.51)),
-        //     () -> {
-        //         var alliance = DriverStation.getAlliance();
-        //         if (alliance.isPresent()) {
-        //             return alliance.get() == DriverStation.Alliance.Red;
-        //         }
-
-        //         return false;
-        //     }
-        // ));
+        
     }
 
     @Override

@@ -40,6 +40,8 @@ public class Drivetrain extends SwerveDrivetrain implements Subsystem{
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private static double m_lastSimTime;
+
+    public static Drivetrain mInstance;
     
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
@@ -118,6 +120,15 @@ public class Drivetrain extends SwerveDrivetrain implements Subsystem{
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
+    //Create Object in class
+    public static Drivetrain getInstance() {
+        if (mInstance == null) {
+            mInstance = DrivetrainConfig.DriveConstants.createDrivetrain();
+        }
+        return mInstance;
+    }
+
+    
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
