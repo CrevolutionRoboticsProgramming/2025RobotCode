@@ -52,12 +52,14 @@ public class RobotContainer {
     }
 
     public void setDefaultCommands() {
-        // final var driver = Driver.getInstance();
-        final var driver = DriverXbox.getInstance();
+        final var driver = Driver.getInstance();
+        // final var driver = DriverXbox.getInstance();
         // Drivetrain.getInstance().setDefaultCommand(DrivetrainCommands.drive(
         //     driver::getDriveTranslation,
         //     driver::getDriveRotation
         // ));
+
+        // Drivetrain.getInstance().setDefaultCommand();
 
     }
 }
