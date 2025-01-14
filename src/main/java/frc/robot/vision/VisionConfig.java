@@ -50,7 +50,5 @@ public class VisionConfig {
         new Transform3d(
             new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(0)),
             new Rotation3d(Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(0))
-        );
-
-    
+        );   
 }
