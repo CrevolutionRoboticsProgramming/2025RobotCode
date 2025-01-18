@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -17,6 +18,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.DeviceConstructor;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,7 +37,8 @@ import static edu.wpi.first.units.Units.*;
 
 public class DrivetrainConfig {
     public class DriveConstants {
-        public static final int pigeonID = 13; 
+        public static final int pigeonID = 13;
+        public static Pigeon2 gyro = new Pigeon2(pigeonID, "Canivore");
 
         // 0.0-1.0 of the max speed
         public static final double MaxSpeedPercentage = 1.0; // Default 1.0
@@ -49,7 +52,7 @@ public class DrivetrainConfig {
 
         public static double MaxSpeed = MaxSpeedPercentage*(DriveConstants.kSpeedAt12Volts.in(MetersPerSecond)); // kSpeedAt12Volts desired top speed
         public static double MaxAngularRate = RotationsPerSecond.of(MaxAngularRatePercentage).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-        public static Drivetrain drivetrain = DriveConstants.createDrivetrain();
+        // public static Drivetrain drivetrain = DriveConstants.createDrivetrain();
 
         /* Setting up bindings for necessary control of the swerve drive platform */
         public static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -249,6 +252,10 @@ public class DrivetrainConfig {
                 kFrontLeftSteerMotorId, kFrontLeftDriveMotorId, kFrontLeftEncoderId, kFrontLeftEncoderOffset,
                 kFrontLeftXPos, kFrontLeftYPos, kInvertLeftSide, kFrontLeftSteerMotorInverted, kFrontLeftCANcoderInverted
             );
+            
+            // public static final DeviceConstructor kFrontLeftDriveMotor = new DeviceConstructor<DeviceT>() {
+                
+            // };
         }
 
         // Front Right
@@ -309,10 +316,10 @@ public class DrivetrainConfig {
          * Creates a Drivetrain instance.
          * This should only be called once in your robot program,.
          */
-        public static Drivetrain createDrivetrain() {
-            return new Drivetrain(
-                DrivetrainConstants, Mod0.FrontLeft, Mod1.FrontRight, Mod2.BackLeft, Mod3.BackRight
-            );
-        }
+        // public static Drivetrain createDrivetrain() {
+        //     return new Drivetrain(
+        //         DrivetrainConstants, Mod0.FrontLeft, Mod1.FrontRight, Mod2.BackLeft, Mod3.BackRight
+        //     );
+        // }
     }
 }

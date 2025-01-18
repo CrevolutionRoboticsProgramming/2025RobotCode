@@ -120,14 +120,13 @@ public class Drivetrain extends SwerveDrivetrain implements Subsystem{
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
-    //Create Object in class
-    public static Drivetrain getInstance() {
-        if (mInstance == null) {
-            mInstance = DrivetrainConfig.DriveConstants.createDrivetrain();
-        }
-        return mInstance;
-    }
-
+    // //Create Object in class
+    // public static Drivetrain getInstance() {
+    //     if (mInstance == null) {
+    //         mInstance = DrivetrainConfig.DriveConstants.createDrivetrain();
+    //     }
+    //     return mInstance;
+    // }
     
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -139,13 +138,14 @@ public class Drivetrain extends SwerveDrivetrain implements Subsystem{
      * @param drivetrainConstants Drivetrain-wide constants for the swerve drive
      * @param modules             Constants for each specific module
      */
-    public Drivetrain(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... modules) {
-        super(null, null, null, drivetrainConstants, m_lastSimTime, null, null, modules);
+    public Drivetrain(DeviceConstructor driveMotor, DeviceConstructor steerMotor, DeviceConstructor encoderConstructor,  
+        SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants modules) {
+        super(driveMotor, steerMotor, encoderConstructor, drivetrainConstants, modules);
         if (Utils.isSimulation()) {
-            startSimThread();
+            startSimThread();   
         }
         configureAutoBuilder();
-    }
+    }   
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
