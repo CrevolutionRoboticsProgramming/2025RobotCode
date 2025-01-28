@@ -58,11 +58,11 @@ public class RobotContainer {
         final var driver = Driver.getInstance();
         // final var driver = DriverXbox.getInstance();
 
-        Drivetrain.getInstance().setDefaultCommand(DrivetrainCommands.drive(
-            -driver.controller.getLeftX()*DriveConstants.MaxSpeed, 
-            -driver.controller.getLeftY()*DriveConstants.MaxSpeed,
-            -driver.controller.getRightX()*DriveConstants.MaxAngularRate)
-        );
+        // Drivetrain.getInstance().setDefaultCommand(DrivetrainCommands.drive(
+        //     -driver.controller.getLeftX()*DriveConstants.MaxSpeed, 
+        //     -driver.controller.getLeftY()*DriveConstants.MaxSpeed,
+        //     -driver.controller.getRightX()*DriveConstants.MaxAngularRate)
+        // );
     }
 }
   
