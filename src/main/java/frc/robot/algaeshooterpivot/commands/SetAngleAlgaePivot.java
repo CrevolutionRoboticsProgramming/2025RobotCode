@@ -1,6 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+
 
 package frc.robot.algaeshooterpivot.commands;
 
@@ -10,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.algaeshooterpivot.AlgaeShooterPivot;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetAngleAlgaePivot extends Command {
   AlgaeShooterPivot mAlgaeShooterPivot;
     Supplier<Rotation2d> targetSupplier;
@@ -18,16 +15,10 @@ public class SetAngleAlgaePivot extends Command {
 
         public enum Preset {
         kZero(Rotation2d.fromDegrees(2)),
-        kHandoff(Rotation2d.fromDegrees(0)),
-        kHandoffClear(Rotation2d.fromDegrees(5)),
-        kShooterNear(Rotation2d.fromDegrees(0)),
-        kShooterMid(Rotation2d.fromDegrees(22.25)),
-        kShooterFarAuton(Rotation2d.fromDegrees(26)),
-        kShooterFar(Rotation2d.fromDegrees(25.5)),
-        kTrap(Rotation2d.fromDegrees(153.15)),
-        kClimb(Rotation2d.fromDegrees(170)),
-        kPass(Rotation2d.fromDegrees(10)),
-        kAmp(Rotation2d.fromDegrees(85));
+        kStowed(Rotation2d.fromDegrees(0)),
+        kElveatorHigh(Rotation2d.fromDegrees(0)),
+        kCoral(Rotation2d.fromDegrees(0)),
+        kShoot(Rotation2d.fromDegrees(0));
 
         Rotation2d target;
 
