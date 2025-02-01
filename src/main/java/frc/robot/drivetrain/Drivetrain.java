@@ -35,8 +35,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
 import frc.robot.drivetrain.DrivetrainConfig.DriveConstants.*;
+import frc.robot.drivetrain.DrivetrainConfig.TunerSwerveDrivetrain;
 
-public class Drivetrain extends SwerveDrivetrain implements Subsystem{
+public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem{
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private static double m_lastSimTime;
@@ -120,85 +121,23 @@ public class Drivetrain extends SwerveDrivetrain implements Subsystem{
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
-    // //Create Object in class
-    // public static Drivetrain getInstance() {
-    //     if (mInstance == null) {
-    //         mInstance = DrivetrainConfig.DriveConstants.createDrivetrain();
-    //     }
-    //     return mInstance;
-    // }
-    
-    /**
-     * Constructs a CTRE SwerveDrivetrain using the specified constants.
-     * <p>
-     * This constructs the underlying hardware devices, so user should not construct
-     * the devices themselves. If they need the devices, they can access them
-     * through getters in the classes.
-     *
-     * @param drivetrainConstants Drivetrain-wide constants for the swerve drive
-     * @param modules             Constants for each specific module
-     */
-    public Drivetrain(DeviceConstructor driveMotor, DeviceConstructor steerMotor, DeviceConstructor encoderConstructor,  
-        SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants modules) {
-        super(driveMotor, steerMotor, encoderConstructor, drivetrainConstants, modules);
-        if (Utils.isSimulation()) {
-            startSimThread();   
+    //Create Object in class
+    public static Drivetrain getInstance() {
+        if (mInstance == null) {
+            mInstance = DrivetrainConfig.DriveConstants.createDrivetrain();
         }
-        configureAutoBuilder();
-    }   
-
-    /**
-     * Constructs a CTRE SwerveDrivetrain using the specified constants.
-     * <p>
-     * This constructs the underlying hardware devices, so user should not construct
-     * the devices themselves. If they need the devices, they can access them
-     * through getters in the classes.
-     *
-     * @param drivetrainConstants        Drivetrain-wide constants for the swerve drive
-     * @param odometryUpdateFrequency    The frequency to run the odometry loop. If
-     *                                   unspecified or set to 0 Hz, this is 250 Hz on
-     *                                   CAN FD, and 100 Hz on CAN 2.0.
-     * @param modules                    Constants for each specific module
-     */
-    @SuppressWarnings("unchecked")
-    public Drivetrain(SwerveDrivetrainConstants drivetrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
-        super(null, null, null, drivetrainConstants, 
-        OdometryUpdateFrequency, null, null, modules);
-        if (Utils.isSimulation()) {
-            startSimThread();
-        }
-        configureAutoBuilder();
-        
-        
-
+        return mInstance;
     }
 
-    /**
-     * Constructs a CTRE SwerveDrivetrain using the specified constants.
-     * <p>
-     * This constructs the underlying hardware devices, so user should not construct
-     * the devices themselves. If they need the devices, they can access them through
-     * getters in the classes.
-     *
-     * @param drivetrainConstants        Drivetrain-wide constants for the swerve drive
-     * @param odometryUpdateFrequency    The frequency to run the odometry loop. If
-     *                                   unspecified or set to 0 Hz, this is 250 Hz on
-     *                                   CAN FD, and 100 Hz on CAN 2.0.
-     * @param odometryStandardDeviation  The standard deviation for odometry calculation
-     * @param visionStandardDeviation    The standard deviation for vision calculation
-     * @param modules                    Constants for each specific module
-     */
-    @SuppressWarnings("unchecked")
     public Drivetrain(
-            SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency,
-            Matrix<N3, N1> odometryStandardDeviation, Matrix<N3, N1> visionStandardDeviation,
-            SwerveModuleConstants... modules) {
-        super(null, null, null, drivetrainConstants, 
-        odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+        SwerveDrivetrainConstants drivetrainConstants,
+        SwerveModuleConstants<?, ?, ?>... modules
+    ) {
+        super(drivetrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        configureAutoBuilder();  
+        configureAutoBuilder();
     }
 
     private void configureAutoBuilder() {
