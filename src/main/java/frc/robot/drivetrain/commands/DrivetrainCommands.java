@@ -19,7 +19,7 @@ import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
 
 
 public class DrivetrainCommands {
-    // public static Command drive(double velocityX, double velocityY, double velocityRotational) {
-    //     return new TeleopDrive(velocityX, velocityY, velocityRotational);
-    // }
+    public static Command drive(double velocityX, double velocityY, double velocityRotational) {
+        return new TeleopDrive(velocityX, velocityY, velocityRotational);
+    }
 }
