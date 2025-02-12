@@ -1,6 +1,7 @@
 package frc.robot.ElbowPivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
@@ -8,12 +9,15 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.coralator.Coralator;
 
 public class ElbowPivot extends SubsystemBase{
     public static class Settings {
         static final int kElbowPivotId = 27;
+
+        static final int kCanCoderId = 2;
 
         static final InvertedValue kElevatorPivotInverted = InvertedValue.Clockwise_Positive;
 
@@ -30,29 +34,30 @@ public class ElbowPivot extends SubsystemBase{
         public static final Rotation2d kMaxAngularAcceleration = Rotation2d.fromDegrees(300);
         public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(180);
         public static final Rotation2d kMaxAnglePhysical = Rotation2d.fromDegrees(175);
-        
+
+        public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
+
     }
     public static ElbowPivot mInstance;
 
-    private TalonFX ElevatorPivot, CoralPivot;
+    private TalonFX ElbowPivot, CoralPivot;
     private final ProfiledPIDController mPPIDController;
     private Constraints mConstraints;
     private final ArmFeedforward mAFFController;
+    private final CANcoder mCanCoder;
 
     public ElbowPivot() {
-        ElevatorPivot = new TalonFX(Settings.kElbowPivotId);
+        ElbowPivot = new TalonFX(Settings.kElbowPivotId);
+        mCanCoder = new CANcoder(Settings.kCanCoderId, "Canivore");
 
-        var ElevatorPivotConfigurator = ElevatorPivot.getConfigurator();
-        var CoralPivotConfigurator = CoralPivot.getConfigurator();
+        var ElbowPivotConfigurator = ElbowPivot.getConfigurator();
 
-        var ElevatorPivotConfigs = new MotorOutputConfigs();
-        var CoralPivotConfigs = new MotorOutputConfigs();
+        var ElbowPivotConfigs = new MotorOutputConfigs();
 
         // set invert to CW+ and apply config change
-        ElevatorPivotConfigs.Inverted = Settings.kElevatorPivotInverted;
+        ElbowPivotConfigs.Inverted = Settings.kElevatorPivotInverted;
 
-        ElevatorPivotConfigurator.apply(ElevatorPivotConfigs);
-        CoralPivotConfigurator.apply(CoralPivotConfigs);
+        ElbowPivotConfigurator.apply(ElbowPivotConfigs);
 
         mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, mConstraints);
         mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
@@ -65,5 +70,38 @@ public class ElbowPivot extends SubsystemBase{
             mInstance = new ElbowPivot();
         }
         return mInstance;
+    }
+
+    public Rotation2d getAngle() {
+        var pos = mCanCoder.getPosition().getValueAsDouble();
+
+        return Rotation2d.fromDegrees(pos);
+    }
+
+    public Rotation2d getAngularVelocity() {
+        // Default counts per revolution of the CANCoder
+        double CPR = 4096.0;
+        var rawVel = mCanCoder.getVelocity().getValueAsDouble(); 
+        var radps = (rawVel*20*Math.PI)/ CPR;
+    
+        return new Rotation2d(radps);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Shooter Pivot Angle (radians)", getAngle().getRadians());
+        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
+
+        SmartDashboard.putNumber("Shooter Pivot Angle (degrees)", getAngle().getDegrees());
+        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
+
+        SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
+
+        double speed = mPPIDController.calculate(getAngle().getRadians());
+        speed += mAFFController.calculate(getAngle().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
+
+        SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
+
+        ElbowPivot.setVoltage(speed);
     }
 }

@@ -1,6 +1,7 @@
 package frc.robot.WristPivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
@@ -8,7 +9,9 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ElbowPivot.ElbowPivot;
 import frc.robot.coralator.Coralator;
 
 public class WristPivot extends SubsystemBase{
@@ -16,6 +19,8 @@ public class WristPivot extends SubsystemBase{
         static final int kWristPivotId = 28;
 
         static final InvertedValue kWristPivotInverted = InvertedValue.Clockwise_Positive;
+
+        static final int kCanCoderId = 6;
 
         static final double kG = 0.42; // V
         static final double kS = 0.0;  // V / rad
@@ -33,32 +38,30 @@ public class WristPivot extends SubsystemBase{
         
     }
     public static WristPivot mInstance;
-
-    private TalonFX ElevatorPivot, CoralPivot;
+    
+    private CANcoder mCANCoder;
+    private TalonFX WristPivot;
     private final ProfiledPIDController mPPIDController;
     private Constraints mConstraints;
     private final ArmFeedforward mAFFController;
 
     public WristPivot() {
-        ElevatorPivot = new TalonFX(Settings.kWristPivotId);
-        CoralPivot = new TalonFX(Settings.kWristPivotId);
+        WristPivot = new TalonFX(Settings.kWristPivotId);
 
-        var ElevatorPivotConfigurator = ElevatorPivot.getConfigurator();
-        var CoralPivotConfigurator = CoralPivot.getConfigurator();
+        mCANCoder = new CANcoder(Settings.kCanCoderId, "Canivore");
 
-        var ElevatorPivotConfigs = new MotorOutputConfigs();
-        var CoralPivotConfigs = new MotorOutputConfigs();
+        var WritstPivotConfigurator = WristPivot.getConfigurator();
+
+        var WristPivotConfigs = new MotorOutputConfigs();
 
         // set invert to CW+ and apply config change
-        CoralPivotConfigs.Inverted = Settings.kWristPivotInverted;
+        WristPivotConfigs.Inverted = Settings.kWristPivotInverted;
 
-        ElevatorPivotConfigurator.apply(ElevatorPivotConfigs);
-        CoralPivotConfigurator.apply(CoralPivotConfigs);
+        WritstPivotConfigurator.apply(WristPivotConfigs);
 
         mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, mConstraints);
         mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
         mConstraints = new Constraints( Settings.kMaxAngularVelocity.getRadians(), Settings.kMaxAngularAcceleration.getRadians());
-        
     }
 
     public static WristPivot getInstance() {
@@ -66,5 +69,38 @@ public class WristPivot extends SubsystemBase{
             mInstance = new WristPivot();
         }
         return mInstance;
+    }
+
+    // public Rotation2d getAngle() {
+    //     var pos = mCanCoder.getPosition().getValueAsDouble();
+
+    //     return Rotation2d.fromDegrees(pos);
+    // }
+
+    // public Rotation2d getAngularVelocity() {
+    //     // Default counts per revolution of the CANCoder
+    //     double CPR = 4096.0;
+    //     var rawVel = mCanCoder.getVelocity().getValueAsDouble(); 
+    //     var radps = (rawVel*20*Math.PI)/ CPR;
+    
+    //     return new Rotation2d(radps);
+    // }
+
+    @Override
+    public void periodic() {
+        // SmartDashboard.putNumber("Shooter Pivot Angle (radians)", getAngle().getRadians());
+        // SmartDashboard.putNumber("Shooter Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
+
+        // SmartDashboard.putNumber("Shooter Pivot Angle (degrees)", getAngle().getDegrees());
+        // SmartDashboard.putNumber("Shooter Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
+
+        // SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
+
+        // double speed = mPPIDController.calculate(getAngle().getRadians());
+        // speed += mAFFController.calculate(getAngle().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
+
+        // SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
+
+        // ElevatorPivot.setVoltage(speed);
     }
 }
