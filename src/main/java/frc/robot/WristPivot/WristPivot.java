@@ -36,6 +36,7 @@ public class WristPivot extends SubsystemBase{
         public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(180);
         public static final Rotation2d kMaxAnglePhysical = Rotation2d.fromDegrees(175);
         
+        public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
     }
     public static WristPivot mInstance;
     
@@ -71,36 +72,37 @@ public class WristPivot extends SubsystemBase{
         return mInstance;
     }
 
-    // public Rotation2d getAngle() {
-    //     var pos = mCanCoder.getPosition().getValueAsDouble();
+    public Rotation2d getAngle() {
+        var pos = mCANCoder.getPosition().getValueAsDouble();
 
-    //     return Rotation2d.fromDegrees(pos);
-    // }
+        return Rotation2d.fromDegrees(pos);
+    }
 
-    // public Rotation2d getAngularVelocity() {
-    //     // Default counts per revolution of the CANCoder
-    //     double CPR = 4096.0;
-    //     var rawVel = mCanCoder.getVelocity().getValueAsDouble(); 
-    //     var radps = (rawVel*20*Math.PI)/ CPR;
+    public Rotation2d getAngularVelocity() {
+        // Default counts per revolution of the CANCoder
+        double CPR = 4096.0;
+        var rawVel = mCANCoder.getVelocity().getValueAsDouble(); 
+        var radps = (rawVel*20*Math.PI)/ CPR;
     
-    //     return new Rotation2d(radps);
-    // }
+        return new Rotation2d(radps);
+    }
 
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("Shooter Pivot Angle (radians)", getAngle().getRadians());
-        // SmartDashboard.putNumber("Shooter Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
+        SmartDashboard.putNumber("Shooter Pivot Angle (radians)", getAngle().getRadians());
+        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
 
-        // SmartDashboard.putNumber("Shooter Pivot Angle (degrees)", getAngle().getDegrees());
-        // SmartDashboard.putNumber("Shooter Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
+        SmartDashboard.putNumber("Shooter Pivot Angle (degrees)", getAngle().getDegrees());
+        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
 
-        // SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
+        SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
 
-        // double speed = mPPIDController.calculate(getAngle().getRadians());
-        // speed += mAFFController.calculate(getAngle().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
+        // Method to run pivots
+        double speed = mPPIDController.calculate(getAngle().getRadians());
+        speed += mAFFController.calculate(getAngle().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
 
-        // SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
+        SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
 
-        // ElevatorPivot.setVoltage(speed);
+        WristPivot.setVoltage(speed);
     }
 }

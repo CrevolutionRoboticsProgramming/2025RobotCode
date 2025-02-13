@@ -46,6 +46,8 @@ public class ElbowPivot extends SubsystemBase{
     private final ArmFeedforward mAFFController;
     private final CANcoder mCanCoder;
 
+    private Rotation2d lastRequestedVelocity;
+
     public ElbowPivot() {
         ElbowPivot = new TalonFX(Settings.kElbowPivotId);
         mCanCoder = new CANcoder(Settings.kCanCoderId, "Canivore");
@@ -70,6 +72,10 @@ public class ElbowPivot extends SubsystemBase{
             mInstance = new ElbowPivot();
         }
         return mInstance;
+    }
+
+    public void setTargetAngle(Rotation2d angle) {
+        mPPIDController.setGoal(angle.getRadians());
     }
 
     public Rotation2d getAngle() {
@@ -97,6 +103,7 @@ public class ElbowPivot extends SubsystemBase{
 
         SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
 
+        // Method to run pivots
         double speed = mPPIDController.calculate(getAngle().getRadians());
         speed += mAFFController.calculate(getAngle().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
 
