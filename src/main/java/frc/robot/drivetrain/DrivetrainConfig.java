@@ -43,7 +43,6 @@ import static edu.wpi.first.units.Units.*;
 
 public class DrivetrainConfig {
     public class DriveConstants {
-        public static final int pigeonID = 13;
 
         // 0.0-1.0 of the max speed
         public static final double MaxSpeedPercentage = 1.0; // Default 1.0
