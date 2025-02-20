@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.Gamepad;
 import frc.robot.Robot;
-import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain2.Drivetrain;
 
 public class Driver extends Gamepad {
     private static class Settings {
