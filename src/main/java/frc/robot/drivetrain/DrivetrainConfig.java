@@ -1,12 +1,18 @@
 package frc.robot.drivetrain;
 
+import java.util.function.Supplier;
+
+import org.opencv.video.TrackerDaSiamRPN;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.pathplanner.lib.config.ModuleConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.crevolib.util.SDSConstants;
 import frc.robot.drivetrain.swerve.SwerveModuleConfig;
@@ -17,13 +23,20 @@ public class DrivetrainConfig {
         public static final int pigeonID = 13; 
 
         //SDS Constants Class Made to Easily Switch Module Gear Ratios
-        public static final SDSConstants chosenModule = SDSConstants.MK4i.Falcon500(SDSConstants.MK4i.driveRatios.L2);
+        public static final SDSConstants chosenModule = SDSConstants.MK4i.Falcon500(SDSConstants.MK4i.driveRatios.L3);
+
+        // Robot Specific Constants
+        public static double robotKG = 40.0;
+        public static double MOI = 20.0; // Units = kg*m^2
+        public static double COF = 1.0;
+        public static int numOfDriveMotors = 1;
 
         /* Drivetrain Constants */
         //TODO: Change Robot Frame's Width and Length Depending on Frame Size Design makes
         public static final double trackWidth = Units.inchesToMeters(22.75);
         public static final double wheelBase = Units.inchesToMeters(22.75);
         public static final double wheelCircumference = chosenModule.wheelCircumference;
+        public static final double wheelRadius = Units.inchesToMeters(3.0);
 
         /* Swerve Kinematics 
          * Only works for square or rectangular frame (do not worry about this) */
@@ -31,8 +44,18 @@ public class DrivetrainConfig {
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
             new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
             new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+        );
 
+        /* Module offsets from Center of Robot */
+        public static final Supplier<Translation2d[]> modsOffSets = () -> new Translation2d[] {
+            new Translation2d(-5.5, 5.5),
+            new Translation2d(5.5, 5.5),
+            new Translation2d(-5.5, -5.5),
+            new Translation2d(5.5, -5.5)
+        };
+        
+        
         /* Module Gear Ratios */
         public static final double driveGearRatio = chosenModule.driveGearRatio;
         public static final double angleGearRatio = chosenModule.angleGearRatio;
@@ -105,10 +128,21 @@ public class DrivetrainConfig {
         public static final double MAX_SPEED = (Units.feetToMeters(18.0)); //Max from SDS Limit Speed
         public static final double MAX_ANGULAR_VELOCITY = Math.PI * 4.12 * 0.5;
 
+        public static final DCMotor driveMotorGearBox = DCMotor.getFalcon500(1);
+
+        public static final ModuleConfig modConfig = 
+            new ModuleConfig(
+                wheelRadius,
+                maxSpeed,
+                COF, 
+                driveMotorGearBox, 
+                SDSConstants.MK4i.driveRatios.L3, 
+                driveCurrentLimit, 
+                numOfDriveMotors
+            );
 
         //TODO: TUNE THESE TO THE IDs FOR EACH MOTOR AND CANCODER and FIGURE OUT THE OFFSET
         /* Module Specific Constants */
-
 
         // Front Left
         public static final class Mod0 {
