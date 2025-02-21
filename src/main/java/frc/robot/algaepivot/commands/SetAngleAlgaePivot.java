@@ -1,15 +1,15 @@
 
 
-package frc.robot.algaeshooterpivot.commands;
+package frc.robot.algaepivot.commands;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.algaeshooterpivot.AlgaeShooterPivot;
+import frc.robot.algaepivot.AlgaeShooterPivot;
 
 public class SetAngleAlgaePivot extends Command {
-  AlgaeShooterPivot mAlgaeShooterPivot;
+    AlgaeShooterPivot mAlgaeShooterPivot;
     Supplier<Rotation2d> targetSupplier;
     boolean singleShot =  true;
 
