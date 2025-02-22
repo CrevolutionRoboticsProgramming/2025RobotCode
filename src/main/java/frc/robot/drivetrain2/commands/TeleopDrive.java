@@ -1,4 +1,4 @@
-package frc.robot.drivetrain.commands;
+package frc.robot.drivetrain2.commands;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -8,15 +8,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.crevolib.io.JoystickConfig;
-import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
+import frc.robot.drivetrain2.Drivetrain;
+import frc.robot.drivetrain2.DrivetrainConfig;
+import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants;
+import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants.*;;
 
 public class TeleopDrive extends Command {
     private final Drivetrain drivetrain;
-    private final Supplier<Translation2d> translationSupplier;
-    private final Supplier<Rotation2d> rotationSupplier;
-    // TODO: replace w/ enum
-    private final boolean isFieldRelative;
+    private double velocityX, velocityY, velocityRotational;
 
     /**
      *
@@ -25,12 +24,11 @@ public class TeleopDrive extends Command {
      * @param isFieldRelative field relative or robot centric
      * @param rotationOffset offset for the robot's center of rotation
      */
-    public TeleopDrive(Supplier<Translation2d> translationSupplier, Supplier<Rotation2d> rotationSupplier, boolean isFieldRelative,
-                       Translation2d rotationOffset, boolean modeS, boolean modeA) {
+    public TeleopDrive(double velocityX, double velocityY, double velocityRotational) {
         drivetrain = Drivetrain.getInstance();
-        this.translationSupplier = translationSupplier;
-        this.rotationSupplier = rotationSupplier;
-        this.isFieldRelative = isFieldRelative;
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
+        this.velocityRotational = velocityRotational;
 
         addRequirements(drivetrain);
     }
@@ -38,13 +36,9 @@ public class TeleopDrive extends Command {
 
     @Override
     public void execute() {
-        drivetrain.drive(
-            translationSupplier.get(),
-            rotationSupplier.get().getRadians(),
-            isFieldRelative,
-            true,
-            false,
-            false
+        Drivetrain.getInstance().applyRequest(() -> 
+            DriveConstants.drive.withVelocityX(velocityX)
+            .withVelocityY(velocityY).withRotationalRate(velocityRotational)
         );
     }
 }

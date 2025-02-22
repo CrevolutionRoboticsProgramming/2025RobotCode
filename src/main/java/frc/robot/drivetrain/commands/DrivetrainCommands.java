@@ -17,9 +17,46 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
 
-
 public class DrivetrainCommands {
-    public static Command drive(double velocityX, double velocityY, double velocityRotational) {
-        return new TeleopDrive(velocityX, velocityY, velocityRotational);
+    public static Command drive(Supplier<Translation2d> translationSupplier, DoubleSupplier rotationSupplier, double translationModifier,
+                                 double rotationModifier, boolean isFieldOriented, Translation2d rotationOffset, boolean modeS, boolean modeA) {
+        return new TeleopDrive(
+            () -> translationSupplier.get().times(DriveConstants.MAX_SPEED).times(translationModifier),
+            () -> Rotation2d.fromRadians(rotationSupplier.getAsDouble()).times(DriveConstants.MAX_ANGULAR_VELOCITY).times(rotationModifier),
+            isFieldOriented,
+            rotationOffset,
+            modeS,
+            modeA
+        );
+    }
+
+    public static Command stopSwerve(Supplier<Translation2d> translationSupplier) {
+        return drive(
+            translationSupplier, 
+            () -> 0.0,
+            1.0,
+            1.0,
+            true,
+            new Translation2d(0, 0),
+            false,
+            false
+        );
+    }
+
+    public static Command drive(Supplier<Translation2d> translationSupplier, DoubleSupplier rotation) {
+        return drive(translationSupplier, rotation, 1.0, 1.0, true, new Translation2d(0, 0), false, false);
+    }
+
+    public static Command driveSlowMode(Supplier<Translation2d> translationSupplier, DoubleSupplier rotation, boolean modeS, boolean modeA) {
+        return drive(
+            translationSupplier,
+            rotation,
+            DriveConstants.kSlowModeTranslationModifier,
+            DriveConstants.kSlowModeRotationModifier,
+            true,
+            new Translation2d(0, 0),
+            modeS,
+            modeA
+        );
     }
 }

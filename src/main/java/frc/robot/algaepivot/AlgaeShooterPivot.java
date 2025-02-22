@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.algaeshooterpivot;
+package frc.robot.algaepivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -23,7 +23,7 @@ public class AlgaeShooterPivot extends SubsystemBase{
         public static int kAlgaePivotEncoder = 1;
         public static boolean isInverted = false;
 
-        static final Slot0Configs kAlgaeShooterPivotConfigs = new Slot0Configs()
+        static final Slot0Configs kAlgaePivotConfigs = new Slot0Configs()
             .withKG(0.0)
             .withKS(0.0)
             .withKV(0.0)
@@ -58,13 +58,26 @@ public class AlgaeShooterPivot extends SubsystemBase{
         motorConfigs.Inverted = InvertedValue.Clockwise_Positive;
         talonFXConfigurator.apply(motorConfigs);
 
-        mKraken.getConfigurator().apply(Settings.kAlgaeShooterPivotConfigs);
+        mKraken.getConfigurator().apply(Settings.kAlgaePivotConfigs);
 
         mEncoder = new CANcoder(Settings.kAlgaePivotEncoder, "Canivore");
-        mConstraints = new Constraints( Settings.kMaxAngularVelocity.getRadians(), Settings.kMaxAngularAcceleration.getRadians());
-        mPPIDController = new ProfiledPIDController(Settings.kAlgaeShooterPivotConfigs.kP, Settings.kAlgaeShooterPivotConfigs.kI, Settings.kAlgaeShooterPivotConfigs.kD, mConstraints);
-        
-        mFFController = new ArmFeedforward(Settings.kAlgaeShooterPivotConfigs.kS, Settings.kAlgaeShooterPivotConfigs.kG, Settings.kAlgaeShooterPivotConfigs.kV, Settings.kAlgaeShooterPivotConfigs.kA);
+
+        mConstraints = new Constraints(
+            Settings.kMaxAngularVelocity.getRadians(), 
+            Settings.kMaxAngularAcceleration.getRadians()
+        );
+        mPPIDController = new ProfiledPIDController(
+            Settings.kAlgaePivotConfigs.kP, 
+            Settings.kAlgaePivotConfigs.kI, 
+            Settings.kAlgaePivotConfigs.kD, 
+            mConstraints
+        );
+        mFFController = new ArmFeedforward(
+            Settings.kAlgaePivotConfigs.kS, 
+            Settings.kAlgaePivotConfigs.kG, 
+            Settings.kAlgaePivotConfigs.kV, 
+            Settings.kAlgaePivotConfigs.kA
+        );
 
         //mEncoder = mKraken.getAbsoluteEncoder();
         
