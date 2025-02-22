@@ -6,6 +6,7 @@ package frc.robot.algaeflywheel;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -20,10 +21,15 @@ public class AlgaeFlyWheel extends SubsystemBase{
         static final int kLeftId = 27;
         static final int kRightId = 28;
 
-        static final Slot0Configs kFlywheelConfigs = new Slot0Configs()
-                .withKS(0.0)
-                .withKV(0.115)
-                .withKP(0.0);
+        static final InvertedValue kAlgaeScoringInverted = InvertedValue.Clockwise_Positive;
+        static final InvertedValue kAlgaeIntakingInverted = InvertedValue.CounterClockwise_Positive;
+
+        static final Slot0Configs kAlgaeFlyWheelConfigs = new Slot0Configs()
+            .withKS(0.0)
+            .withKV(0.115)
+            .withKA(0.1)
+            .withKP(0.01)
+        ;
 
         // 5800 RPM at motor; 11600 RPM at wheels
         public static final Rotation2d kMaxAngularVelocity = Rotation2d.fromRotations(6000.0 / 60.0);
@@ -33,25 +39,24 @@ public class AlgaeFlyWheel extends SubsystemBase{
 
     private static AlgaeFlyWheel mInstance;
     private final TalonFX mKrakenLeft, mKrakenRight;
+    private MotorOutputConfigs leftMotorConfigs, rightMotorConfigs;
+    private TalonFXConfigurator leftTalonFXConfigurator, rightTalonFXConfigurator;
+
 
     private AlgaeFlyWheel() {
         mKrakenLeft = new TalonFX(Settings.kLeftId);
         var leftTalonFXConfigurator = mKrakenLeft.getConfigurator();
-        var leftMotorConfigs = new MotorOutputConfigs();
+        leftMotorConfigs = new MotorOutputConfigs();
 
-        leftMotorConfigs.Inverted = InvertedValue.Clockwise_Positive;
-        leftTalonFXConfigurator.apply(leftMotorConfigs);
+        leftTalonFXConfigurator.apply(Settings.kAlgaeFlyWheelConfigs);
 
 
         mKrakenRight = new TalonFX(Settings.kRightId);
         var rightTalonFXConfigurator = mKrakenRight.getConfigurator();
-        var righttMotorConfigs = new MotorOutputConfigs();
+        rightMotorConfigs = new MotorOutputConfigs();
 
-        righttMotorConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
-        rightTalonFXConfigurator.apply(righttMotorConfigs);
+        rightTalonFXConfigurator.apply(Settings.kAlgaeFlyWheelConfigs);
     }
-
-    // 57 degreedf
 
     public static AlgaeFlyWheel getInstance() {
         if (mInstance == null) {
@@ -60,11 +65,19 @@ public class AlgaeFlyWheel extends SubsystemBase{
         return mInstance;
     }
 
-    public void setLeftFlywheelVelocity(Rotation2d velocity) {
+    public void setLeftFlywheelVelocity(Rotation2d velocity, InvertedValue kInvertedValue) {
+        // set invert to CW+ and apply config change
+        leftMotorConfigs.Inverted = kInvertedValue;
+        leftTalonFXConfigurator.apply(leftMotorConfigs);
+
         mKrakenLeft.setControl(new VelocityVoltage(velocity.getRotations()));
     }
 
-    public void setRightFlywheelVelocity(Rotation2d velocity) {
+    public void setRightFlywheelVelocity(Rotation2d velocity, InvertedValue kInvertedValue) {
+        // set invert to CW+ and apply config change
+        rightMotorConfigs.Inverted = kInvertedValue;
+        rightTalonFXConfigurator.apply(rightMotorConfigs);
+
         mKrakenRight.setControl(new VelocityVoltage(velocity.getRotations()));
     }
 
