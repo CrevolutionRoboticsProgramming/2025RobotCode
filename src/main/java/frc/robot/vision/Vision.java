@@ -96,9 +96,29 @@ public class Vision {
                 //No tags visible. Default to single-tag std devs
                 curStdDevs = singleTagStdDevs;
             } else {
-                //One or more tags visible, run the full heuristic
+                // One or more tags visible, run the full heuristic.
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1)
+                  estStdDevs = multiTagStdDevs;
+                // Increase std devs based on (average) distance
+                if (numTags == 1 && avgDist > 4) {
+                  estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                } else {
+                  estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                }
+                curStdDevs = estStdDevs;
             }
         }
     }
-    
+
+    /**
+    * Returns the latest standard deviations of the estimated pose from {@link
+    * #getEstimatedGlobalPose()}, for use with {@link
+    * edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}. This should
+    * only be used when there are targets visible.
+    */
+    public Matrix<N3, N1> getEstimationStdDevs() {
+        return curStdDevs;
+    }
 }
