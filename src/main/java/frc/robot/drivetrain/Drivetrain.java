@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
 import frc.robot.drivetrain.swerve.SwerveModule;
-import frc.robot.vision.VisionPoseEstimator;
 
 public class Drivetrain extends SubsystemBase {
     private static Drivetrain mInstance;
