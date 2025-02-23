@@ -1,4 +1,4 @@
-package frc.robot.ElbowPivot.commands;
+package frc.robot.elbowpivot.commands;
 
 import java.util.function.Supplier;
 
