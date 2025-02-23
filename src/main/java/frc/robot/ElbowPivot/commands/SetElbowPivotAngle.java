@@ -16,9 +16,9 @@ public class SetElbowPivotAngle extends Command{
         kCoralL2(Rotation2d.fromDegrees(5)),
         kCoralL3(Rotation2d.fromDegrees(0)),
         kCoralL4(Rotation2d.fromDegrees(22.25)),
-        kAlgaeL1(Rotation2d.fromDegrees(26)),
-        kAlgaeL2(Rotation2d.fromDegrees(25.5)),
-        kAlgaeL3(Rotation2d.fromDegrees(153.15)),
+        kAlgaeL2(Rotation2d.fromDegrees(26)),
+        kAlgaeL3(Rotation2d.fromDegrees(25.5)),
+        kAlgaeShoot(Rotation2d.fromDegrees(153.15)),
         kStowed(Rotation2d.fromDegrees(170));
 
         Rotation2d target;

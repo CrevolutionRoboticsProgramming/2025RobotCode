@@ -16,9 +16,13 @@ public class SetAngleAlgaePivot extends Command {
         public enum Preset {
         kZero(Rotation2d.fromDegrees(2)),
         kStowed(Rotation2d.fromDegrees(0)),
-        kElveatorHigh(Rotation2d.fromDegrees(0)),
-        kCoral(Rotation2d.fromDegrees(0)),
-        kShoot(Rotation2d.fromDegrees(0));
+        kAlgaeL2(Rotation2d.fromDegrees(0)),
+        kAlgaeL3(Rotation2d.fromDegrees(0)),
+        kCoralL1(Rotation2d.fromDegrees(0)),
+        kCoralL2(Rotation2d.fromDegrees(5)),
+        kCoralL3(Rotation2d.fromDegrees(0)),
+        kCoralL4(Rotation2d.fromDegrees(22.25)),
+        kAlgaeShoot(Rotation2d.fromDegrees(0));
 
         Rotation2d target;
 
