@@ -3,7 +3,7 @@ package frc.crevolib.configs;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
-import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants;
+import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
 
 public final class CTREConfigs {
     public TalonFXConfiguration angleMotorConfig = new TalonFXConfiguration();

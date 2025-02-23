@@ -1,4 +1,4 @@
-package frc.robot.WristPivot;
+package frc.robot.wristPivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -12,7 +12,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.coralator.Coralator;
-import frc.robot.elbowpivot.ElbowPivot;
 
 public class WristPivot extends SubsystemBase{
     public static class Settings {

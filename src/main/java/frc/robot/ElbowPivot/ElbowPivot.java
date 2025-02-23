@@ -1,4 +1,4 @@
-package frc.robot.elbowpivot;
+package frc.robot.elbowPivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;

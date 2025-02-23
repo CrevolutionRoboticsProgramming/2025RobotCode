@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.XboxGamepad;
 import frc.robot.Robot;
-import frc.robot.drivetrain2.Drivetrain;
+
 
 public class DriverXbox extends XboxGamepad {
     private static class Settings {
