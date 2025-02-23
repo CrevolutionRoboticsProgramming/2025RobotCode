@@ -28,7 +28,7 @@ public class VisionConfig {
     }; 
 
     // Creates field layout for AprilTags
-    public static final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    public static final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     // Standard deviation of vision poses, this helps with correction or something idk thats what photon said
     // TODO: experiment with standard deviation values and set them to whatever gives the most correct pose
