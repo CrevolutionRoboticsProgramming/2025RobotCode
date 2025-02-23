@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.elbowPivot.commands.SetElbowPivotAngle;
 
 public class WristPivotCommands {
-    public static Command setWristPivotAngle(SetElbowPivotAngle.Preset state) {
+    public static Command setWristPivotAngle(SetWristPivotAngle.Preset state) {
         return new SetWristPivotAngle(state.getRotation2d());
     }
 

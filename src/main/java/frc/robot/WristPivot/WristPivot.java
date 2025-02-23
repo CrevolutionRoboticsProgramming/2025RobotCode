@@ -71,6 +71,10 @@ public class WristPivot extends SubsystemBase{
         return mInstance;
     }
 
+    public void setTargetAngle(Rotation2d angle) {
+        mPPIDController.setGoal(angle.getRadians());
+    }
+
     public Rotation2d getAngle() {
         var pos = mCANCoder.getPosition().getValueAsDouble();
 

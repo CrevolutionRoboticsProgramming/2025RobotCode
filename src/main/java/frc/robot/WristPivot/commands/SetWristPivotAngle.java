@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.elbowPivot.ElbowPivot;
+import frc.robot.wristPivot.WristPivot;
 
 public class SetWristPivotAngle extends Command{
-    ElbowPivot mElbowPivot;
+    WristPivot mWristPivot;
     Supplier<Rotation2d> targetSupplier;
 
     public enum Preset {
@@ -37,11 +37,11 @@ public class SetWristPivotAngle extends Command{
     }
 
     public SetWristPivotAngle(Rotation2d angleIn) {
-        mElbowPivot = ElbowPivot.getInstance();   
+        mWristPivot = WristPivot.getInstance();   
         targetSupplier = ()-> angleIn;
     }
     public SetWristPivotAngle(Supplier<Rotation2d> angleIn) {
-        mElbowPivot = ElbowPivot.getInstance();  
+        mWristPivot = WristPivot.getInstance();  
         targetSupplier = angleIn; 
     }
 
@@ -53,7 +53,7 @@ public class SetWristPivotAngle extends Command{
 
     @Override
     public void execute() {
-        mElbowPivot.setTargetAngle(targetSupplier.get());
+        mWristPivot.setTargetAngle(targetSupplier.get());
     }
 
 
