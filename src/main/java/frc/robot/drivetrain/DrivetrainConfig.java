@@ -28,7 +28,7 @@ public class DrivetrainConfig {
         // Robot Specific Constants
         public static double robotKG = 40.0;
         public static double MOI = 20.0; // Units = kg*m^2
-        public static double COF = 1.0;
+        public static double COF = 1.2;
         public static int numOfDriveMotors = 1;
 
         /* Drivetrain Constants */
