@@ -1,4 +1,4 @@
-package frc.robot.elbowPivot;
+package frc.robot.climber;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -11,15 +11,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.coralator.Coralator;
+import frc.robot.elbowPivot.ElbowPivot;
 
-public class ElbowPivot extends SubsystemBase{
+public class Climber extends SubsystemBase{
     public static class Settings {
-        static final int kElbowPivotId = 27;
+        static final int kClimberPivotId = 27;
 
         static final int kCanCoderId = 2;
 
-        static final InvertedValue kElevatorPivotInverted = InvertedValue.Clockwise_Positive;
+        static final InvertedValue kClimberPivotInverted = InvertedValue.Clockwise_Positive;
 
         static final double kG = 0.42; // V
         static final double kS = 0.0;  // V / rad
@@ -38,26 +38,22 @@ public class ElbowPivot extends SubsystemBase{
         public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
 
     }
-    public static ElbowPivot mInstance;
+    public static Climber mInstance;
 
-    private TalonFX ElbowPivot, CoralPivot;
+    private TalonFX ClimberPivot;
     private final ProfiledPIDController mPPIDController;
     private Constraints mConstraints;
     private final ArmFeedforward mAFFController;
-    private final CANcoder mCanCoder;
 
-    private Rotation2d lastRequestedVelocity;
+    public Climber() {
+        ClimberPivot = new TalonFX(Settings.kClimberPivotId, "Canivore");
 
-    public ElbowPivot() {
-        ElbowPivot = new TalonFX(Settings.kElbowPivotId, "Canivore");
-        mCanCoder = new CANcoder(Settings.kCanCoderId, "Canivore");
-
-        var ElbowPivotConfigurator = ElbowPivot.getConfigurator();
+        var ElbowPivotConfigurator = ClimberPivot.getConfigurator();
 
         var ElbowPivotConfigs = new MotorOutputConfigs();
 
         // set invert to CW+ and apply config change
-        ElbowPivotConfigs.Inverted = Settings.kElevatorPivotInverted;
+        ElbowPivotConfigs.Inverted = Settings.kClimberPivotInverted;
 
         ElbowPivotConfigurator.apply(ElbowPivotConfigs);
 
@@ -67,9 +63,9 @@ public class ElbowPivot extends SubsystemBase{
         
     }
 
-    public static ElbowPivot getInstance() {
+    public static Climber getInstance() {
         if (mInstance == null) {
-            mInstance = new ElbowPivot();
+            mInstance = new Climber();
         }
         return mInstance;
     }
@@ -79,7 +75,7 @@ public class ElbowPivot extends SubsystemBase{
     }
 
     public Rotation2d getAngle() {
-        var pos = mCanCoder.getPosition().getValueAsDouble();
+        var pos = ClimberPivot.getPosition().getValueAsDouble();
 
         return Rotation2d.fromDegrees(pos);
     }
@@ -87,7 +83,7 @@ public class ElbowPivot extends SubsystemBase{
     public Rotation2d getAngularVelocity() {
         // Default counts per revolution of the CANCoder
         double CPR = 4096.0;
-        var rawVel = mCanCoder.getVelocity().getValueAsDouble(); 
+        var rawVel = ClimberPivot.getVelocity().getValueAsDouble(); 
         var radps = (rawVel*20*Math.PI)/ CPR;
     
         return new Rotation2d(radps);
@@ -109,6 +105,6 @@ public class ElbowPivot extends SubsystemBase{
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
 
-        ElbowPivot.setVoltage(speed);
+        ClimberPivot.setVoltage(speed);
     }
 }

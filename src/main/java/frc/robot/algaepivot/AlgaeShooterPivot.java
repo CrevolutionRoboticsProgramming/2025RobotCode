@@ -50,7 +50,7 @@ public class AlgaeShooterPivot extends SubsystemBase{
     private final ArmFeedforward mFFController;
 
     public AlgaeShooterPivot() {
-        mKraken = new TalonFX(Settings.kAlgaePivotTalonID);
+        mKraken = new TalonFX(Settings.kAlgaePivotTalonID,"Canivore");
     
         var talonFXConfigurator = mKraken.getConfigurator();
         var motorConfigs = new MotorOutputConfigs();

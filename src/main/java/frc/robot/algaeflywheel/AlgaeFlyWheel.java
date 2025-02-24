@@ -38,21 +38,21 @@ public class AlgaeFlyWheel extends SubsystemBase{
     }
 
     private static AlgaeFlyWheel mInstance;
-    private final TalonFX mKrakenLeft, mKrakenRight;
+    private final TalonFX LeftFlyWheel, RightFlyWheel;
     private MotorOutputConfigs leftMotorConfigs, rightMotorConfigs;
     private TalonFXConfigurator leftTalonFXConfigurator, rightTalonFXConfigurator;
 
 
     private AlgaeFlyWheel() {
-        mKrakenLeft = new TalonFX(Settings.kLeftId);
-        var leftTalonFXConfigurator = mKrakenLeft.getConfigurator();
+        LeftFlyWheel = new TalonFX(Settings.kLeftId, "Canivore");
+        var leftTalonFXConfigurator = LeftFlyWheel.getConfigurator();
         leftMotorConfigs = new MotorOutputConfigs();
 
         leftTalonFXConfigurator.apply(Settings.kAlgaeFlyWheelConfigs);
 
 
-        mKrakenRight = new TalonFX(Settings.kRightId);
-        var rightTalonFXConfigurator = mKrakenRight.getConfigurator();
+        RightFlyWheel = new TalonFX(Settings.kRightId, "Canivore");
+        var rightTalonFXConfigurator = RightFlyWheel.getConfigurator();
         rightMotorConfigs = new MotorOutputConfigs();
 
         rightTalonFXConfigurator.apply(Settings.kAlgaeFlyWheelConfigs);
@@ -70,7 +70,7 @@ public class AlgaeFlyWheel extends SubsystemBase{
         leftMotorConfigs.Inverted = kInvertedValue;
         leftTalonFXConfigurator.apply(leftMotorConfigs);
 
-        mKrakenLeft.setControl(new VelocityVoltage(velocity.getRotations()));
+        LeftFlyWheel.setControl(new VelocityVoltage(velocity.getRotations()));
     }
 
     public void setRightFlywheelVelocity(Rotation2d velocity, InvertedValue kInvertedValue) {
@@ -78,21 +78,21 @@ public class AlgaeFlyWheel extends SubsystemBase{
         rightMotorConfigs.Inverted = kInvertedValue;
         rightTalonFXConfigurator.apply(rightMotorConfigs);
 
-        mKrakenRight.setControl(new VelocityVoltage(velocity.getRotations()));
+        RightFlyWheel.setControl(new VelocityVoltage(velocity.getRotations()));
     }
 
     public Rotation2d getLeftFlywheelVelocity() {
-        return Rotation2d.fromRotations(mKrakenLeft.getVelocity().getValueAsDouble());
+        return Rotation2d.fromRotations(LeftFlyWheel.getVelocity().getValueAsDouble());
     }
 
     public Rotation2d getRightFlywheelVelocity() {
-        return Rotation2d.fromRotations(mKrakenRight.getVelocity().getValueAsDouble());
+        return Rotation2d.fromRotations(RightFlyWheel.getVelocity().getValueAsDouble());
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Left Flywheel Velocity (RPM)", mKrakenLeft.getVelocity().getValueAsDouble() * 60);
-        SmartDashboard.putNumber("Right Flywheel Velocity (RPM)", mKrakenRight.getVelocity().getValueAsDouble() * 60);
+        SmartDashboard.putNumber("Left Flywheel Velocity (RPM)", LeftFlyWheel.getVelocity().getValueAsDouble() * 60);
+        SmartDashboard.putNumber("Right Flywheel Velocity (RPM)", RightFlyWheel.getVelocity().getValueAsDouble() * 60);
     }
 }
 
