@@ -2,7 +2,6 @@ package frc.robot.drivetrain;
 
 import java.util.function.Supplier;
 
-import org.opencv.video.TrackerDaSiamRPN;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -15,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.crevolib.util.SDSConstants;
+import frc.crevolib.util.WCPConstants;
 import frc.robot.drivetrain.swerve.SwerveModuleConfig;
 
 public class DrivetrainConfig {
@@ -23,8 +23,11 @@ public class DrivetrainConfig {
         public static final int pigeonID = 13; 
 
         //SDS Constants Class Made to Easily Switch Module Gear Ratios
-        public static final SDSConstants chosenModule = SDSConstants.MK4i.Falcon500(SDSConstants.MK4i.driveRatios.L3);
-
+        // public static final SDSConstants chosenModule = SDSConstants.MK4i.Falcon500(SDSConstants.MK4i.driveRatios.L3);
+        
+        //WCP Constants
+        public static final WCPConstants chosenModule = WCPConstants.X2t.Falcon500(WCPConstants.X2t.driveRatios.ratio);
+        
         // Robot Specific Constants
         public static double robotKG = 40.0;
         public static double MOI = 20.0; // Units = kg*m^2
@@ -98,25 +101,25 @@ public class DrivetrainConfig {
 
         /* Drive Motor PID Values */
         //TODO: TUNE THIS BASED ON TESTING
-        public static final double driveKP = 0.1;;
+        public static final double driveKP = 0.1;
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.1;
 
         /* Drive Motor Characterization Values From SYSID */
         //TODO: This must be tuned to specific robot using SYSID, But Knight Vision Constants work good :)
-        // public static final double driveKS = 0.48665; 
-        // public static final double driveKV = 2.4132;
-        // public static final double driveKA = 0.06921;
 
-        public static final double driveKS = 0.48665; 
-//        public static final double driveKV = 2.4132;
-        public static final double driveKV = 2.2;
-//        public static final double driveKA = 0.06921;
-        public static final double driveKA = 0.37;
+        // public static final double driveKS = 0.48665; //2024
+        // public static final double driveKV = 2.2; //2024
+        // public static final double driveKA = 0.37; //2024
+
+        public static final double driveKS = 0.48665; //2025 - left the same
+        public static final double driveKV = 1.82; //2025 - recalc
+        public static final double driveKA = 0.44; //2025 - recalc
+
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = Units.feetToMeters(18.0);
+        public static final double maxSpeed = Units.feetToMeters(22.70); // from recalc
         /** Radians per Second */
         public static final double maxAngularVelocity = Math.PI * 4.12 * 0.5;
 
