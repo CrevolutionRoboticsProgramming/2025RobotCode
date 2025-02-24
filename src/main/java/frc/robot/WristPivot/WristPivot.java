@@ -1,4 +1,4 @@
-package frc.robot.wristPivot;
+package frc.robot.WristPivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;

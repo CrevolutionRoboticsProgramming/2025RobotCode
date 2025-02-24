@@ -18,6 +18,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import frc.robot.vision.Vision;
+import frc.robot.vision.VisionConfig.*;
+import frc.robot.vision.VisionConsumer;
 
 /*
  * This code is a modified version of Photonvision's own example and 7028's vision code:
@@ -30,6 +33,7 @@ public class Vision {
     private final PhotonCamera cam;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
+    private static Vision[] mInstance;
 
     //Construct Vision Instance
     public Vision(String cameraName, Transform3d camTransform){
@@ -40,6 +44,16 @@ public class Vision {
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
             camTransform);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    }
+
+    public static Vision[] getInstance() {
+        if (mInstance == null) {
+            mInstance = new Vision[VisionConfig.camNames.length];
+        for (int i = 0; i < VisionConfig.camNames.length; i++){
+            mInstance[i] = new Vision(VisionConfig.camNames[i], VisionConfig.robotToCamTransforms[i]);
+        }
+        }
+        return mInstance;
     }
 
     /**

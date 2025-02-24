@@ -1,10 +1,10 @@
-package frc.robot.elbowPivot.commands;
+package frc.robot.ElbowPivot.commands;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.elbowPivot.ElbowPivot;
+import frc.robot.ElbowPivot.ElbowPivot;
 
 public class SetElbowPivotAngle extends Command{
     ElbowPivot mElbowPivot;
