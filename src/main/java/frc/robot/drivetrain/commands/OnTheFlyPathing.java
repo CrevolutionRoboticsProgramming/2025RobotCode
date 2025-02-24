@@ -3,6 +3,8 @@ package frc.robot.drivetrain.commands;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.photonvision.EstimatedRobotPose;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,11 +18,13 @@ import frc.robot.aprilTagPoses.CoralGoalPose2d.*;
 import frc.robot.coralator.Coralator;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.vision.Vision;
+import frc.robot.vision.VisionConfig;
 
 public class OnTheFlyPathing extends Command{
     Vision[] mVision;
     Drivetrain mDrivetrain;
     CoralGoalPose2d mGoalPose2d;
+    Optional<EstimatedRobotPose> currRobotPose;
     int tagNum;
     boolean right;
 
@@ -34,12 +38,19 @@ public class OnTheFlyPathing extends Command{
 
     @Override
     public void initialize() {
+        // initialize curr robot pose
+
+        // find closest coral setpoint
+        mGoalPose2d = null; //define this - findClosestToCurrPose( currRobotPose )
 
     }
 
     @Override
     public void execute() {
         Pose2d goalPose = null;
+        
+        //get PathPlanner command here and do the on the fly traj generation and following
+
         if (right){
             
         }else {

@@ -49,9 +49,9 @@ public class Vision {
     public static Vision[] getInstance() {
         if (mInstance == null) {
             mInstance = new Vision[VisionConfig.camNames.length];
-        for (int i = 0; i < VisionConfig.camNames.length; i++){
-            mInstance[i] = new Vision(VisionConfig.camNames[i], VisionConfig.robotToCamTransforms[i]);
-        }
+            for (int i = 0; i < VisionConfig.camNames.length; i++){
+                mInstance[i] = new Vision(VisionConfig.camNames[i], VisionConfig.robotToCamTransforms[i]);
+            }
         }
         return mInstance;
     }
