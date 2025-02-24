@@ -16,6 +16,7 @@ import edu.wpi.first.math.util.Units;
 public class VisionConfig {
     
     // Creates camera names; ensure these all match with the correct camera on the Photonvison Dashboard
+    public static final int TOTAL_CAMERAS = 4;
     public static final String[] camNames = new String[] {"Center_Cam", "Left_Cam", "Right_Cam", "Drive_Cam"};
 
     //Camera Positions
