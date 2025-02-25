@@ -20,7 +20,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionConfig.*;
-import frc.robot.vision.VisionConsumer;
 
 /*
  * This code is a modified version of Photonvision's own example and 7028's vision code:
