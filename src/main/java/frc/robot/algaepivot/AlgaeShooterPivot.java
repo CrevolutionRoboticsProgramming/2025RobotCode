@@ -111,19 +111,19 @@ public class AlgaeShooterPivot extends SubsystemBase{
     }
 
     public Rotation2d getAngularVelocity() {
-        return Rotation2d.fromRotations(mEncoder.getVelocity().getValueAsDouble()).div(140.0 * 60.0);
+        // Default counts per revolution of the CANCoder
+        double CPR = 4096.0;
+        var rawVel = mEncoder.getVelocity().getValueAsDouble(); 
+        var radps = (rawVel*20*Math.PI)/ CPR;
+    
+        return new Rotation2d(radps);
     }
 
     
     public Rotation2d getAngle() {
         var pos = mEncoder.getPosition().getValueAsDouble();
 
-        // Accounts for encoder gear ratio
-        pos /= 2.0;
-        if (pos > Settings.kMaxAnglePhysical.getRotations()) {
-            pos = 0;
-        }
-        return Rotation2d.fromRotations(pos);
+        return Rotation2d.fromDegrees(pos);
     }
 
     public void resetAngle() {
