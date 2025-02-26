@@ -1,28 +1,14 @@
 package frc.robot.elevator;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.WristPivot.WristPivot;
-
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 
@@ -93,32 +79,35 @@ public class Elevator extends SubsystemBase{
         mPPIDController.setGoal(angle.getRadians());
     }
 
-    public Rotation2d getPosition() {
-        var pos = ElevatorLeft.getPosition().getValueAsDouble();
+    public double getPosition() {
+        var encoderRoataions = ElevatorLeft.getPosition().getValueAsDouble();
+        double gearRatio = 4.0/8.0;
+        double drumDiameter = 10.0;
+        double drumCircum = Math.PI*drumDiameter;
 
-        return Rotation2d.fromDegrees(pos);
+        return (encoderRoataions*drumCircum) / gearRatio;
     }
 
-    public Rotation2d getAngularVelocity() {
-        // Default counts per revolution of the CANCoder
-        double CPR = 4096.0;
+    public double getVelocity() {
+        double gearRatio = 4.0/8.0;
+        double drumDiameter = 10.0;
+        double drumCircum = Math.PI*drumDiameter;
         var rawVel = ElevatorLeft.getVelocity().getValueAsDouble(); 
-        var radps = (rawVel*20*Math.PI)/ CPR;
     
-        return new Rotation2d(radps);
+        return rawVel * (drumCircum/gearRatio);
     }
     
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator Postion (meters)", getPosition().getRadians());
-        SmartDashboard.putNumber("Elevator Postion Velocity (meters / sec)", getAngularVelocity().getRadians());
+        SmartDashboard.putNumber("Elevator Postion (meters)", getPosition());
+        SmartDashboard.putNumber("Elevator Postion Velocity (meters / sec)", getVelocity());
 
         SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
 
         // Method to run pivots
-        double speed = mPPIDController.calculate(getPosition().getRadians());
-        speed += mAFFController.calculate(getPosition().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
+        double speed = mPPIDController.calculate(getPosition());
+        speed += mAFFController.calculate(getPosition() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
 
