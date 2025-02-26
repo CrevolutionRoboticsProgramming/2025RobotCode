@@ -76,15 +76,15 @@ public class SwerveVisionEstimator extends SubsystemBase{
 
     @Override
     public void periodic(){
-        //Update swerve pose estimator using drivetrain
-        poseEstimator.update(rotationSupplier.get(), modSupplier.get());
-        //Add vision measurements to swerve pose estimator
-        estimatorUpdate();
+        // //Update swerve pose estimator using drivetrain
+        // poseEstimator.update(rotationSupplier.get(), modSupplier.get());
+        // //Add vision measurements to swerve pose estimator
+        // estimatorUpdate();
 
-        //log to dashboard
-        var dashboardPose = poseEstimator.getEstimatedPosition();
-        SmartDashboard.putString("Estimated Pose", getFormattedPose());
-        SmartDashboard.putData(field2d);
-        field2d.setRobotPose(getCurrrentPose());
+        // //log to dashboard
+        // var dashboardPose = poseEstimator.getEstimatedPosition();
+        // SmartDashboard.putString("Estimated Pose", getFormattedPose());
+        // SmartDashboard.putData(field2d);
+        // field2d.setRobotPose(getCurrrentPose());
     }
 }
