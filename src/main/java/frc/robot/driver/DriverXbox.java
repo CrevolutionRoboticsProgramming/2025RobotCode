@@ -17,6 +17,7 @@ import frc.robot.Robot;
 import frc.robot.algaeflywheel.AlgaeFlyWheel;
 import frc.robot.algaeflywheel.commands.AlgaeFlyWheelCommands;
 import frc.robot.algaeflywheel.commands.SetVelocityAlgaeFlyWheel;
+import frc.robot.drivetrain.Drivetrain;
 import frc.robot.indexer.commands.IndexerCommands;
 
 
@@ -61,6 +62,8 @@ public class DriverXbox extends XboxGamepad {
         ));
 
         controller.b().whileTrue(IndexerCommands.setOutput(() ->0.10));
+
+        controller.y().onTrue(new InstantCommand(() -> Drivetrain.getInstance().zeroHeading()));
     }
 
     @Override
