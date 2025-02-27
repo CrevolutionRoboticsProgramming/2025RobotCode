@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.driver.Driver;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.DrivetrainConfig;
@@ -55,7 +54,7 @@ public class RobotContainer {
     }
 
     public void setDefaultCommands() {
-        final var driver = Driver.getInstance();
+        final var driver = DriverXbox.getInstance();
         // final var driver = DriverXbox.getInstance();
 
         Drivetrain.getInstance().setDefaultCommand(DrivetrainCommands.drive(

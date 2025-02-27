@@ -15,9 +15,9 @@ import frc.robot.coralator.Coralator;
 
 public class ElbowPivot extends SubsystemBase{
     public static class Settings {
-        static final int kElbowPivotId = 27;
+        static final int kElbowPivotId = 11;
 
-        static final int kCanCoderId = 2;
+        static final int kCanCoderId = 23;
 
         static final InvertedValue kElevatorPivotInverted = InvertedValue.Clockwise_Positive;
 

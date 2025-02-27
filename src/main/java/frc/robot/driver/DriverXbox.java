@@ -17,6 +17,7 @@ import frc.robot.Robot;
 import frc.robot.algaeflywheel.AlgaeFlyWheel;
 import frc.robot.algaeflywheel.commands.AlgaeFlyWheelCommands;
 import frc.robot.algaeflywheel.commands.SetVelocityAlgaeFlyWheel;
+import frc.robot.indexer.commands.IndexerCommands;
 
 
 public class DriverXbox extends XboxGamepad {
@@ -52,32 +53,14 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
+        controller.a().whileTrue(
+            AlgaeFlyWheelCommands.setAngularVelocity(                
+            () -> AlgaeFlyWheel.Settings.kMaxAngularVelocity.times(0.8),
+            AlgaeFlyWheel.Settings.kAlgaeScoringInverted,
+            AlgaeFlyWheel.Settings.kAlgaeIntakingInverted
+        ));
 
-        // Drivetrain Commands
-
-
-
-        // Future notice: A = speaker and x = amp wil be amp and speaker shoot on move
-        // controller.a().whileTrue(DrivetrainCommands.shootSpeakerMode(() -> mInstance.getDriveTranslation(), () -> mInstance.getDriveRotation(), true, false));
-        // controller.a().whileFalse(DrivetrainCommands.shootSpeakerMode(() -> mInstance.getDriveTranslation(), () -> mInstance.getDriveRotation(), false, false));
-
-        // controller.x().whileFalse(DrivetrainCommands.shootAmpMode(() -> mInstance.getDriveTranslation(), () -> mInstance.getDriveRotation(), false, true));
-        // controller.x().whileFalse(DrivetrainCommands.shootAmpMode(() -> mInstance.getDriveTranslation(), () -> mInstance.getDriveRotation(), false, false));
-
-
-
-        // controller.L1().whileTrue(new ConditionalCommand(
-        //     DrivetrainCommands.turnToAngle(Rotation2d.fromDegrees(28.51)),
-        //     DrivetrainCommands.turnToAngle(Rotation2d.fromDegrees(-28.51)),
-        //     () -> {
-        //         var alliance = DriverStation.getAlliance();
-        //         if (alliance.isPresent()) {
-        //             return alliance.get() == DriverStation.Alliance.Red;
-        //         }
-
-        //         return false;
-        //     }
-        // ));
+        controller.b().whileTrue(IndexerCommands.setOutput(() ->0.10));
     }
 
     @Override
@@ -100,49 +83,5 @@ public class DriverXbox extends XboxGamepad {
 
     public double getDriveRotation() {
         return rotationStickCurve.calculate(-controller.getRightX());
-        // return reqAngularVel;
-        // System.out.println("Is it true??? " + autoAim);
-        // if (true) {
-        //     final Drivetrain drivetrain = Drivetrain.getInstance();
-
-        //     PIDController pidController = new PIDController(1.0, 0.0, 0.1);
-            
-        //     Rotation2d deltaTheta;
-        //     Rotation2d targetAngle;
-        //     Rotation2d kMaxAngularVelocity = Rotation2d.fromDegrees(1.0);
-
-        //     Pose2d goalPose = null;
-            
-
-        //     final var mPoseEstimator = Vision.PoseEstimator.getInstance();
-        //     final var robotPose = mPoseEstimator.getCurrentPose();
-
-        //     Optional<Alliance> ally = DriverStation.getAlliance();
-        //     if (ally.isPresent()) {
-        //         if (ally.get() == Alliance.Blue) {
-        //             goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42)), new Rotation2d(0));
-        //         }
-        //         if (ally.get() == Alliance.Red) {
-        //             goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42)), new Rotation2d(Units.degreesToRadians(180)));
-        //         }
-        //     }
-        //     final var startingAngle = robotPose.getRotation();
-        //     final var endAngle = goalPose.getTranslation().minus(robotPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(180.0));
-        //     deltaTheta = endAngle.minus(startingAngle);
-
-        //     targetAngle = Rotation2d.fromDegrees(drivetrain.getGyroYaw().getDegrees() + deltaTheta.getDegrees());
-
-        //     final var currentAngle = drivetrain.getGyroYaw();
-        //     final var requestedAngularVelocity = Rotation2d.fromDegrees(MathUtil.clamp(
-        //         pidController.calculate(currentAngle.getDegrees(), targetAngle.getDegrees()),
-        //         -kMaxAngularVelocity.getDegrees(),
-        //         kMaxAngularVelocity.getDegrees()
-        //     ));
-
-        //     System.out.println("requested Angular Vel: " + requestedAngularVelocity.getDegrees());
-        //     return requestedAngularVelocity.getDegrees();
-        // } else {
-        //     return rotationStickCurve.calculate(-controller.getRightX());
-        // }
     }
 }

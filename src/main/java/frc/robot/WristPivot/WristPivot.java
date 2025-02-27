@@ -15,11 +15,11 @@ import frc.robot.coralator.Coralator;
 
 public class WristPivot extends SubsystemBase{
     public static class Settings {
-        static final int kWristPivotId = 28;
+        static final int kWristPivotId = 12;
 
         static final InvertedValue kWristPivotInverted = InvertedValue.Clockwise_Positive;
 
-        static final int kCanCoderId = 6;
+        static final int kCanCoderId = 24;
 
         static final double kG = 0.42; // V
         static final double kS = 0.0;  // V / rad

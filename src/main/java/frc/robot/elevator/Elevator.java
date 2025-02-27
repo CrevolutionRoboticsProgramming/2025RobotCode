@@ -14,8 +14,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 
 public class Elevator extends SubsystemBase{
     public static class Settings {
-        static final int kElevatorLeftId = 28;
-        static final int kElevatorRightId = 28;
+        static final int kElevatorLeftId = 9;
+        static final int kElevatorRightId = 10;
 
         static final InvertedValue kElevatorInverted = InvertedValue.Clockwise_Positive;
 

@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** Add your docs here. */
 public class AlgaeShooterPivot extends SubsystemBase{
     public class Settings{
-        public static int kAlgaePivotTalonID = 19;
-        public static int kAlgaePivotEncoder = 1;
+        public static int kAlgaePivotTalonID = 14;
+        public static int kAlgaePivotEncoder = 25;
         public static boolean isInverted = false;
 
         static final Slot0Configs kAlgaePivotConfigs = new Slot0Configs()

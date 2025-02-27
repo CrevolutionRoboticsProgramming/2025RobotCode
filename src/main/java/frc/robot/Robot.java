@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.crevolib.configs.CTREConfigs;
-import frc.robot.driver.Driver;
 import frc.robot.driver.DriverXbox;
 import frc.robot.operator.OperatorXbox;
 
@@ -47,7 +46,7 @@ public class Robot extends LoggedRobot {
     // Reset Config for all gamepads and other button bindings
     // Driver.getInstance().resetConfig();
     // Operator.getInstance().resetConfig();
-    Driver.getInstance().resetConfig();
+    DriverXbox.getInstance().resetConfig();
     OperatorXbox.getInstance().resetConfig();
   }
 

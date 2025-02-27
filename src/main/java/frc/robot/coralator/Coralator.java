@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Coralator extends SubsystemBase{
     public static class Settings {
-        static final int kCoralatorId = 29;
+        static final int kCoralatorId = 13;
 
         static final InvertedValue kCoralatorScoringInverted = InvertedValue.Clockwise_Positive;
         static final InvertedValue kCoralatorIntakingInverted = InvertedValue.CounterClockwise_Positive;
