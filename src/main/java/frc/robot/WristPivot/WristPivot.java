@@ -92,11 +92,11 @@ public class WristPivot extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter Pivot Angle (radians)", getAngle().getRadians());
-        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
+        SmartDashboard.putNumber("Wrist Pivot Angle (radians)", getAngle().getRadians());
+        SmartDashboard.putNumber("Wrist Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
 
-        SmartDashboard.putNumber("Shooter Pivot Angle (degrees)", getAngle().getDegrees());
-        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
+        SmartDashboard.putNumber("Wrist Pivot Angle (degrees)", getAngle().getDegrees());
+        SmartDashboard.putNumber("Wrist Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
 
         SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
 

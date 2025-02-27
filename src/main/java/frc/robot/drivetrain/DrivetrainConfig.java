@@ -52,10 +52,10 @@ public class DrivetrainConfig {
 
         /* Module offsets from Center of Robot */
         public static final Supplier<Translation2d[]> modsOffSets = () -> new Translation2d[] {
-            new Translation2d(-5.5, 5.5),
-            new Translation2d(5.5, 5.5),
-            new Translation2d(-5.5, -5.5),
-            new Translation2d(5.5, -5.5)
+            new Translation2d(-10.5, 10.5),
+            new Translation2d(10.5, 10.5),
+            new Translation2d(-10.5, -10.5),
+            new Translation2d(10.5, -10.5)
         };
         
         

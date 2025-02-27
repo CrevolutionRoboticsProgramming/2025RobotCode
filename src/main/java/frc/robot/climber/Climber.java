@@ -90,11 +90,11 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter Pivot Angle (radians)", getAngle().getRadians());
-        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
+        SmartDashboard.putNumber("Climber Pivot Angle (radians)", getAngle().getRadians());
+        SmartDashboard.putNumber("Climber Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
 
-        SmartDashboard.putNumber("Shooter Pivot Angle (degrees)", getAngle().getDegrees());
-        SmartDashboard.putNumber("Shooter Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
+        SmartDashboard.putNumber("Climber Pivot Angle (degrees)", getAngle().getDegrees());
+        SmartDashboard.putNumber("Climber Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
 
         SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
 

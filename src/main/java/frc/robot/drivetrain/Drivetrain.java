@@ -34,8 +34,7 @@ public class Drivetrain extends SubsystemBase {
     private Translation2d lastTranslation;
     private double lastRotation;
 
-    public static boolean ampMode, speakerMode;
-    private double noteSpeed, avgVelocity;
+    private double avgVelocity;
 
     private Drivetrain() {
         gyro = new Pigeon2(DriveConstants.pigeonID, "Canivore");
@@ -60,13 +59,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     //MASTER DRIVE METHOD
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop, boolean modeS, boolean modeA) {
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         avgVelocity = 0;
-        ampMode = modeA;
-        speakerMode = modeS;
-
-        // Note Speed is in m/s
-        noteSpeed = 16.0;
 
         // Used to find avg Velocity of all 4 Mods
         for (SwerveModule mod : mSwerveMods) {
@@ -114,7 +108,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void stopSwerve() {
         Translation2d stop = new Translation2d(0, 0);
-        drive(stop, 0, true, true, false, false);
+        drive(stop, 0, true, true);
     }
 
     //USE FOR AUTONOMOUS COMMANDS

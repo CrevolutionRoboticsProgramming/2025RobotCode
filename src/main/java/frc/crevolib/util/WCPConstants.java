@@ -51,7 +51,7 @@ public class WCPConstants {
         }
 
         public static final class driveRatios{
-            public static final double ratio = (5.15 / 1.0);
+            public static final double ratio = (6.2 / 1.0);
         }
     }
 
