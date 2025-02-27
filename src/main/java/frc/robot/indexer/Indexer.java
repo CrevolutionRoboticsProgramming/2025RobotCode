@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Indexer extends SubsystemBase{
   public static class Settings {
-      static int kTalonID = 10;
+      static int kTalonID = 17;
       static final double kMaxVoltage = 12.0;
       static final int kCurrentLimit = 200;
       static final int kCurrentThreshold = 100;
@@ -25,7 +25,7 @@ public class Indexer extends SubsystemBase{
     var talonFXConfigurator = mKraken.getConfigurator();
     var motorConfigs = new MotorOutputConfigs();
 
-    motorConfigs.Inverted = InvertedValue.Clockwise_Positive;
+    motorConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
     talonFXConfigurator.apply(motorConfigs);
 
   }
