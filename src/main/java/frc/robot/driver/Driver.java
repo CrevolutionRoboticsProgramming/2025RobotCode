@@ -7,9 +7,13 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.Gamepad;
+import frc.crevolib.util.XboxGamepad;
 import frc.robot.Robot;
+import frc.robot.algaeflywheel.AlgaeFlyWheel;
+import frc.robot.algaeflywheel.commands.AlgaeFlyWheelCommands;
+import frc.robot.indexer.commands.IndexerCommands;
 
-public class Driver extends Gamepad {
+public class Driver extends XboxGamepad {
     private static class Settings {
         static final int port = 0;
         static final String name = "driver";
@@ -38,7 +42,16 @@ public class Driver extends Gamepad {
 
     @Override
     public void setupTeleopButtons() {
+        controller.a().whileTrue(
+            AlgaeFlyWheelCommands.setAngularVelocity(                
+            () -> AlgaeFlyWheel.Settings.kMaxAngularVelocity.times(0.8),
+            AlgaeFlyWheel.Settings.kAlgaeScoringInverted,
+            AlgaeFlyWheel.Settings.kAlgaeIntakingInverted
+        ));
+
+        controller.b().whileTrue(IndexerCommands.setOutput(() ->0.10));
         // Drivetrain Commands
+        
         
         
     }

@@ -6,6 +6,7 @@ package frc.robot.algaepivot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -48,12 +49,14 @@ public class AlgaeShooterPivot extends SubsystemBase{
     private Constraints mConstraints;
     private final ProfiledPIDController mPPIDController;
     private final ArmFeedforward mFFController;
+    private MotorOutputConfigs motorConfigs;
+    private TalonFXConfigurator talonFXConfigurator;
 
     public AlgaeShooterPivot() {
         mKraken = new TalonFX(Settings.kAlgaePivotTalonID,"Canivore");
     
-        var talonFXConfigurator = mKraken.getConfigurator();
-        var motorConfigs = new MotorOutputConfigs();
+        talonFXConfigurator = mKraken.getConfigurator();
+        motorConfigs = new MotorOutputConfigs();
 
         motorConfigs.Inverted = InvertedValue.Clockwise_Positive;
         talonFXConfigurator.apply(motorConfigs);
