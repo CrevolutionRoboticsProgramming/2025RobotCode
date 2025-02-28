@@ -1,4 +1,4 @@
-package frc.robot.drivetrain;
+package frc.robot.drivetrain2;
 
 import java.util.function.Supplier;
 
@@ -15,7 +15,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.crevolib.util.SDSConstants;
 import frc.crevolib.util.WCPConstants;
-import frc.robot.drivetrain.swerve.SwerveModuleConfig;
+import frc.robot.drivetrain2.swerve.SwerveModuleConfig;
 
 public class DrivetrainConfig {
     public class DriveConstants {
@@ -152,7 +152,8 @@ public class DrivetrainConfig {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 19;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-140.888671875);
+            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-140.888671875);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
             public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -162,7 +163,8 @@ public class DrivetrainConfig {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 20;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(139.5703125);
+            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(139.5703125);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
             public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -172,7 +174,8 @@ public class DrivetrainConfig {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 21;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(150.029296875 - 180.0);
+            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(150.029296875);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
             public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -182,7 +185,8 @@ public class DrivetrainConfig {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 22;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-96.85546875 + 180.0);
+            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-96.85546875);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
             public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

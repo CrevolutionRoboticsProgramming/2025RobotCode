@@ -17,7 +17,7 @@ import frc.robot.Robot;
 import frc.robot.algaeflywheel.AlgaeFlyWheel;
 import frc.robot.algaeflywheel.commands.AlgaeFlyWheelCommands;
 import frc.robot.algaeflywheel.commands.SetVelocityAlgaeFlyWheel;
-import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain2.Drivetrain;
 import frc.robot.indexer.commands.IndexerCommands;
 
 
@@ -54,16 +54,16 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        controller.a().whileTrue(
-            AlgaeFlyWheelCommands.setAngularVelocity(                
-            () -> AlgaeFlyWheel.Settings.kMaxAngularVelocity.times(0.8),
-            AlgaeFlyWheel.Settings.kAlgaeScoringInverted,
-            AlgaeFlyWheel.Settings.kAlgaeIntakingInverted
-        ));
+        // controller.a().whileTrue(
+        //     AlgaeFlyWheelCommands.setAngularVelocity(                
+        //     () -> AlgaeFlyWheel.Settings.kMaxAngularVelocity.times(0.8),
+        //     AlgaeFlyWheel.Settings.kAlgaeScoringInverted,
+        //     AlgaeFlyWheel.Settings.kAlgaeIntakingInverted
+        // ));
 
-        controller.b().whileTrue(IndexerCommands.setOutput(() ->0.10));
+        // controller.b().whileTrue(IndexerCommands.setOutput(() ->0.10));
 
-        controller.y().onTrue(new InstantCommand(() -> Drivetrain.getInstance().zeroHeading()));
+        // controller.y().onTrue(new InstantCommand(() -> Drivetrain.getInstance().zeroHeading()));
     }
 
     @Override
@@ -73,10 +73,11 @@ public class DriverXbox extends XboxGamepad {
     public void setupTestButtons() {}
 
     public Translation2d getDriveTranslation() {
-        final var xComponent = translationStickCurve.calculate(-controller.getLeftX());
-        final var yComponent = translationStickCurve.calculate(-controller.getLeftY());
+        final var xComponent = translationStickCurve.calculate(controller.getLeftX());
+        final var yComponent = translationStickCurve.calculate(controller.getLeftY());
         // Components are reversed because field coordinates are opposite of joystick coordinates
         // System.out.println("Colin Is GAY!!! " + new Translation2d(yComponent, xComponent).toString());
+        
         return new Translation2d(yComponent, xComponent);
     }
 

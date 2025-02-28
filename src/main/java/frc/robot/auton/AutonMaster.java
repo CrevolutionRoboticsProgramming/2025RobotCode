@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.DrivetrainConfig;
-import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
+import frc.robot.drivetrain2.Drivetrain;
+import frc.robot.drivetrain2.DrivetrainConfig;
+import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants;
 
 
 /* MASTER AUTON CLASS */

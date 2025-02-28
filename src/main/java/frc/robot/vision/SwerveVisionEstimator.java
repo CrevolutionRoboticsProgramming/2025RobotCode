@@ -13,8 +13,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.DrivetrainConfig.DriveConstants;
+import frc.robot.drivetrain2.Drivetrain;
+import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants;
 
 public class SwerveVisionEstimator extends SubsystemBase{
 

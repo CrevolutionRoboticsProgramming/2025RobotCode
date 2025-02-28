@@ -1,4 +1,4 @@
-package frc.robot.drivetrain.commands;
+package frc.robot.drivetrain2.commands;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.aprilTagPoses.CoralGoalPose2d;
 import frc.robot.aprilTagPoses.CoralGoalPose2d.*;
 import frc.robot.coralator.Coralator;
-import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain2.Drivetrain;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionConfig;
 
