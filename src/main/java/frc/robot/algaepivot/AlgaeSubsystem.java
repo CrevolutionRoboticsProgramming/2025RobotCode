@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.algaepivot;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
@@ -62,6 +62,8 @@ public class AlgaeSubsystem extends SubsystemBase {
     private final ArmFeedforward mFFController;
     private final ProfiledPIDController mPPIDController;
 
+    public static State kLastState;
+
     private AlgaeSubsystem() {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
@@ -91,6 +93,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     }
 
     public void setTargetState(State targetState) {
+        kLastState = targetState;
         setTargetPosition(targetState.pos);
     }
 
@@ -124,24 +127,24 @@ public class AlgaeSubsystem extends SubsystemBase {
     }
 
     public static class DefaultCommand extends Command {
-        private final Supplier<Double> percentSupplier;
-        private final AlgaeSubsystem subsystem;
 
-        public DefaultCommand(AlgaeSubsystem subsystem, Supplier<Double> percentSupplier) {
-            this.percentSupplier = percentSupplier;
-            this.subsystem = subsystem;
-            addRequirements(subsystem);
+        public DefaultCommand() {
+
+        }
+
+        @Override
+        public void initialize() {
+            if (kLastState == State.kTuck) {
+                AlgaeSubsystem.getInstance().setTargetState(State.kTuck);
+            } else {
+                AlgaeSubsystem.getInstance().setTargetState(State.kStow);
+            }
         }
 
         @Override
         public void execute() {
-            var tp  = getTargetPosition();
-            subsystem.setTargetPosition(tp);
         }
 
-        private Rotation2d getTargetPosition() {
-            return Rotation2d.fromRotations((Settings.kMaxPos.getRotations() - Settings.kMinPos.getRotations()) * percentSupplier.get() + Settings.kMinPos.getRotations());
-        }
     }
 
 }
