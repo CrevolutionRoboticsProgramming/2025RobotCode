@@ -48,12 +48,13 @@ public class AlgaeSubsystem extends SubsystemBase {
         kFloorIntake(Settings.kMinPos),
         kReefIntake(Rotation2d.fromRotations(0)),
         kScore(Rotation2d.fromRotations(0.15)),
-        kStow(Settings.kMaxPos);
+        kStow(Rotation2d.fromRotations(0.18)),
+        kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
             this.pos = pos;
         }
-        final Rotation2d pos;
+        public final Rotation2d pos;
     }
 
     private final TalonFX mTalonPivot;
@@ -93,7 +94,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         setTargetPosition(targetState.pos);
     }
 
-    void setTargetPosition(Rotation2d targetPosition) {
+    public void setTargetPosition(Rotation2d targetPosition) {
         // NOTE: Use radians for target goal to align with re:calc constant units
         mPPIDController.setGoal(targetPosition.getRadians());
     }
@@ -142,4 +143,5 @@ public class AlgaeSubsystem extends SubsystemBase {
             return Rotation2d.fromRotations((Settings.kMaxPos.getRotations() - Settings.kMinPos.getRotations()) * percentSupplier.get() + Settings.kMinPos.getRotations());
         }
     }
+
 }

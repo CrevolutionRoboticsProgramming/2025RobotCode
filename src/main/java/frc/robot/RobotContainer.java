@@ -55,7 +55,8 @@ public class RobotContainer {
 //            )
 //        );
 
-        algaeSubsystem.setDefaultCommand(new AlgaeSubsystem.DefaultCommand(algaeSubsystem, () -> (driver.getRightX() + 1) / 2.0));
+        //algaeSubsystem.setDefaultCommand(new AlgaeSubsystem.DefaultCommand(algaeSubsystem, () -> (driver.getRightX() + 1) / 2.0));
+        algaeSubsystem.setDefaultCommand(new AlgaeSubsystem.DefaultCommand(algaeSubsystem, () -> 1.0));
     }
 }
   
