@@ -21,8 +21,8 @@ public class AlgaeFlyWheel extends SubsystemBase{
         static final int kLeftId = 15;
         static final int kRightId = 16;
 
-        public static final InvertedValue kAlgaeScoringInverted = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue kAlgaeIntakingInverted = InvertedValue.CounterClockwise_Positive;
+        public static final InvertedValue kAlgaeLeftInverted = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue kAlgaeRightInverted = InvertedValue.CounterClockwise_Positive;
 
         static final Slot0Configs kAlgaeFlyWheelConfigs = new Slot0Configs()
             .withKS(0.0)
@@ -48,12 +48,18 @@ public class AlgaeFlyWheel extends SubsystemBase{
         leftTalonFXConfigurator = LeftFlyWheel.getConfigurator();
         leftMotorConfigs = new MotorOutputConfigs();
 
+        leftMotorConfigs.Inverted = Settings.kAlgaeLeftInverted;
+        leftTalonFXConfigurator.apply(rightMotorConfigs);
+
         leftTalonFXConfigurator.apply(Settings.kAlgaeFlyWheelConfigs);
 
 
         RightFlyWheel = new TalonFX(Settings.kRightId);
         rightTalonFXConfigurator = RightFlyWheel.getConfigurator();
         rightMotorConfigs = new MotorOutputConfigs();
+
+        rightMotorConfigs.Inverted = Settings.kAlgaeRightInverted;
+        rightTalonFXConfigurator.apply(rightMotorConfigs);
 
         rightTalonFXConfigurator.apply(Settings.kAlgaeFlyWheelConfigs);
     }
@@ -65,19 +71,11 @@ public class AlgaeFlyWheel extends SubsystemBase{
         return mInstance;
     }
 
-    public void setLeftFlywheelVelocity(Rotation2d velocity, InvertedValue kLeftInvertedValue) {
-        // set invert to CW+ and apply config change
-        leftMotorConfigs.Inverted = kLeftInvertedValue;
-        leftTalonFXConfigurator.apply(leftMotorConfigs);
-
+    public void setLeftFlywheelVelocity(Rotation2d velocity) {
         LeftFlyWheel.setControl(new VelocityVoltage(velocity.getRotations()));
     }
 
-    public void setRightFlywheelVelocity(Rotation2d velocity, InvertedValue kRightInvertedValue) {
-        // set invert to CW+ and apply config change
-        rightMotorConfigs.Inverted = kRightInvertedValue;
-        rightTalonFXConfigurator.apply(rightMotorConfigs);
-
+    public void setRightFlywheelVelocity(Rotation2d velocity) {
         RightFlyWheel.setControl(new VelocityVoltage(velocity.getRotations()));
     }
 

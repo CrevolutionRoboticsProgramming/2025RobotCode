@@ -5,12 +5,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.Gamepad;
 import frc.crevolib.util.XboxGamepad;
 import frc.robot.Robot;
+import frc.robot.commands.RobotCommands;
+import frc.robot.indexer.commands.IndexerCommands;
 
 public class OperatorXbox extends XboxGamepad {
     private static class Settings {
@@ -44,7 +47,12 @@ public class OperatorXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        
+        controller.leftBumper().whileTrue(IndexerCommands.setOutput(() -> -1.0));
+
+        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
+        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
+
+
     }
 
     @Override

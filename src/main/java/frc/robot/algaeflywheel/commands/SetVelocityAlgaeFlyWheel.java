@@ -14,28 +14,27 @@ import com.ctre.phoenix6.signals.InvertedValue;
 public class SetVelocityAlgaeFlyWheel extends Command {
     private final AlgaeFlyWheel flywheel;
     private final Supplier<Rotation2d> leftVelocitySupplier, rightVelocitySupplier;
-    private final InvertedValue kLeftInvertedValue, kRightInvertedValue;
 
     private final Rotation2d kAllowedError = Rotation2d.fromRotations(5); // 300 RPM
 
-    SetVelocityAlgaeFlyWheel(Supplier<Rotation2d> leftVelocitySupplier, Supplier<Rotation2d> rightVelocitySupplier, InvertedValue kLeftInvertedValue, InvertedValue kRightInvertedValue) {
+    SetVelocityAlgaeFlyWheel(Supplier<Rotation2d> leftVelocitySupplier, Supplier<Rotation2d> rightVelocitySupplier) {
         flywheel = AlgaeFlyWheel.getInstance();
         this.leftVelocitySupplier = leftVelocitySupplier;
         this.rightVelocitySupplier = rightVelocitySupplier;
-        this.kLeftInvertedValue = kLeftInvertedValue;
-        this.kRightInvertedValue = kRightInvertedValue;
+        addRequirements(flywheel);
     }
 
-    SetVelocityAlgaeFlyWheel(Supplier<Rotation2d> velocitySupplier, InvertedValue kLeftInvertedValue, InvertedValue kRightInvertedValue) {
-        this(velocitySupplier, velocitySupplier, kLeftInvertedValue, kRightInvertedValue);
+    SetVelocityAlgaeFlyWheel(Supplier<Rotation2d> velocitySupplier) {
+        this(velocitySupplier, velocitySupplier);
+        addRequirements(flywheel);
     }
 
     @Override
     public void execute() {
         final var leftVel = leftVelocitySupplier.get();
         final var rightVel = rightVelocitySupplier.get();
-        flywheel.setRightFlywheelVelocity(leftVel, kRightInvertedValue);
-        flywheel.setLeftFlywheelVelocity(rightVel, kLeftInvertedValue);
+        flywheel.setRightFlywheelVelocity(leftVel);
+        flywheel.setLeftFlywheelVelocity(rightVel);
 
         SmartDashboard.putBoolean("Shooter Ready (left)", (Math.abs(leftVel.getRotations()) - (Math.abs(flywheel.getLeftFlywheelVelocity().getRotations()))) < kAllowedError.getRotations());
         SmartDashboard.putBoolean("Shooter Ready (right)", (Math.abs(rightVel.getRotations()) - (Math.abs(flywheel.getRightFlywheelVelocity().getRotations()))) < kAllowedError.getRotations());
@@ -56,7 +55,7 @@ public class SetVelocityAlgaeFlyWheel extends Command {
 
     @Override
     public void end(boolean isInterrupted) {
-        flywheel.setRightFlywheelVelocity(Rotation2d.fromDegrees(0), kRightInvertedValue);
-        flywheel.setLeftFlywheelVelocity(Rotation2d.fromDegrees(0), kLeftInvertedValue);
+        flywheel.setRightFlywheelVelocity(Rotation2d.fromDegrees(0));
+        flywheel.setLeftFlywheelVelocity(Rotation2d.fromDegrees(0));
     }
 }

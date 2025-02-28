@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.XboxGamepad;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.algaeflywheel.AlgaeFlyWheel;
 import frc.robot.algaeflywheel.commands.AlgaeFlyWheelCommands;
 import frc.robot.algaeflywheel.commands.SetVelocityAlgaeFlyWheel;
@@ -60,22 +61,15 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        // controller.a().whileTrue(
-        //     AlgaeFlyWheelCommands.setAngularVelocity(                
-        //     () -> AlgaeFlyWheel.Settings.kMaxAngularVelocity.times(0.8),
-        //     AlgaeFlyWheel.Settings.kAlgaeScoringInverted,
-        //     AlgaeFlyWheel.Settings.kAlgaeIntakingInverted
-        // ));
-
-        // controller.b().whileTrue(IndexerCommands.setOutput(() ->0.10));
-
-        // controller.y().onTrue(new InstantCommand(() -> Drivetrain.getInstance().zeroHeading()));
+        // Change for Slow & Fast Mode
+        controller.a().onTrue(new InstantCommand(() -> {RobotContainer.modeFast = false;}));
+        controller.x().onTrue(new InstantCommand(() -> {RobotContainer.modeFast = true;}));
 
         
-        controller.a().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
-        controller.b().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kReefIntake));
-        controller.x().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kScore));
-        controller.y().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kStow));
+        // controller.a().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
+        // controller.b().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kReefIntake));
+        // controller.x().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kScore));
+        // controller.y().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kStow));
 
     }
 

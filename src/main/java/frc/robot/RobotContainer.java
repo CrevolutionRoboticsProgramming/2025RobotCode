@@ -11,6 +11,8 @@ import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
+import frc.robot.drivetrain2.Drivetrain;
+
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import frc.robot.algaepivot.commands.*;
@@ -24,6 +26,8 @@ import frc.robot.algaepivot.commands.*;
 public class RobotContainer {
     private final double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private final double kMaxAngularVelocity = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+    
+    public static boolean modeFast = true;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -48,13 +52,21 @@ public class RobotContainer {
 
     public void setDefaultCommands() {
         final var driver = DriverXbox.getInstance();
-       CommandSwerveDrivetrain.getInstance().setDefaultCommand(
-           CommandSwerveDrivetrain.getInstance().applyRequest(() ->
-               drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
-               .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
-               .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity) // Drive counterclockwise with negative X (left)
-           )
-       );
+
+        CommandSwerveDrivetrain.getInstance().setDefaultCommand(
+            CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+                if (modeFast){
+                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+                } else {
+                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.5) // Drive forward with negative Y (forward)
+                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.5) // Drive left with negative X (left)
+                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.5); // Drive counterclockwise with negative X (left)
+                }
+            })           
+        );
+
         AlgaeSubsystem.getInstance().setDefaultCommand(
             new AlgaeSubsystem.DefaultCommand()
         );
