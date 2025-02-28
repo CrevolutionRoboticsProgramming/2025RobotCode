@@ -88,4 +88,6 @@ public class DriverXbox extends XboxGamepad {
     public double getDriveRotation() {
         return rotationStickCurve.calculate(-controller.getRightX());
     }
+
+    public double getRightX() { return controller.getRightX(); }
 }
