@@ -7,68 +7,43 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.algaepivot.AlgaeShooterPivot;
+import frc.robot.subsystems.AlgaeSubsystem;
 
 public class SetAngleAlgaePivot extends Command {
-    AlgaeShooterPivot mAlgaeShooterPivot;
-    Supplier<Rotation2d> targetSupplier;
-    boolean singleShot =  true;
+    AlgaeSubsystem mAlgaeSubsystem;
+    AlgaeSubsystem.State targetState;
 
-        public enum Preset {
-        kZero(Rotation2d.fromDegrees(2)),
-        kStowed(Rotation2d.fromDegrees(0)),
-        kAlgaeL2(Rotation2d.fromDegrees(0)),
-        kAlgaeL3(Rotation2d.fromDegrees(0)),
-        kCoralL1(Rotation2d.fromDegrees(0)),
-        kCoralL2(Rotation2d.fromDegrees(5)),
-        kCoralL3(Rotation2d.fromDegrees(0)),
-        kCoralL4(Rotation2d.fromDegrees(22.25)),
-        kAlgaeShoot(Rotation2d.fromDegrees(0));
+    // public enum State {
+    //     kFloorIntake(Rotation2d.fromRotations(-0.04)),
+    //     kReefIntake(Rotation2d.fromRotations(0)),
+    //     kScore(Rotation2d.fromRotations(0.15)),
+    //     kStow(Rotation2d.fromRotations(0.23));
 
-        Rotation2d target;
+    //     State(Rotation2d pos) {
+    //         this.pos = pos;
+    //     }
+    //     public final Rotation2d pos;
+    
 
-        Preset(Rotation2d target) {
-            this.target = target;
-        }
+    //     public double getDegrees() {
+    //         return pos.getDegrees();
+    //     }
 
-        public double getDegrees() {
-            return target.getDegrees();
-        }
+    //     public Rotation2d getRotation2d() {
+    //         return pos;
+    //     }
+    // }
 
-        public Rotation2d getRotation2d() {
-            return target;
-        }
-    }
-
-    public SetAngleAlgaePivot(Rotation2d angleIn) {
-        mAlgaeShooterPivot = AlgaeShooterPivot.getInstance();   
-        targetSupplier = ()-> angleIn;
-    }
-    public SetAngleAlgaePivot(Supplier<Rotation2d> angleIn) {
-        mAlgaeShooterPivot = AlgaeShooterPivot.getInstance();  
-        targetSupplier = angleIn; 
-    }
-
-    public SetAngleAlgaePivot(Supplier<Rotation2d> angleIn, boolean singleSet) {
-        mAlgaeShooterPivot = AlgaeShooterPivot.getInstance();  
-        targetSupplier = angleIn;
-        singleShot = singleSet; 
+    public SetAngleAlgaePivot(AlgaeSubsystem.State targetState) {
+        mAlgaeSubsystem = AlgaeSubsystem.getInstance();   
+        this.targetState = targetState;
+        addRequirements(mAlgaeSubsystem);
     }
 
     @Override
     public void initialize() {
-        
+        mAlgaeSubsystem.setTargetPosition(targetState.pos);
 
-    }
-
-    @Override
-    public void execute() {
-        mAlgaeShooterPivot.setTargetAngle(targetSupplier.get());
-    }
-
-
-    @Override
-    public boolean isFinished() {
-        return singleShot;
     }
 
     @Override
