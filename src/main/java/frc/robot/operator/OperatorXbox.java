@@ -57,6 +57,7 @@ public class OperatorXbox extends XboxGamepad {
 //        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
 //        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
         controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
+        controller.leftTrigger().whileTrue(new AlgaeRoller.PrimeCommand());
         controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
 //        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
 //
@@ -82,7 +83,8 @@ public class OperatorXbox extends XboxGamepad {
         return new Translation2d(yComponent, xComponent);
     }
 
-    public double getElevatorOutput() {
+    public double 
+    getElevatorOutput() {
         return stickCurve.calculate(controller.getRightY());
     }
 

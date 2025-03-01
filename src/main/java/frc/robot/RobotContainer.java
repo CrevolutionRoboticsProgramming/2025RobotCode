@@ -42,18 +42,7 @@ public class RobotContainer {
         setDefaultCommands();
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-        RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
-             .withVelocityY(0.0) // Drive left with negative X (left)
-             .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
-     );
-    }
+
 
     public void setDefaultCommands() {
         final var driver = DriverXbox.getInstance();
