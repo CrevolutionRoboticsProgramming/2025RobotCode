@@ -17,6 +17,7 @@ import frc.robot.subsystems.CoralRollerSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -24,13 +25,13 @@ import frc.robot.subsystems.ElevatorSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    private final double kMaxAngularVelocity = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+    public static double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    public static double kMaxAngularVelocity = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
     
     public static boolean modeFast = true;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    public static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(kMaxVelocity * 0.1)
         .withRotationalDeadband(kMaxAngularVelocity * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
@@ -47,7 +48,11 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return mAutonChooser.getSelected();
+        return CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+        RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
+             .withVelocityY(0.0) // Drive left with negative X (left)
+             .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
+     );
     }
 
     public void setDefaultCommands() {

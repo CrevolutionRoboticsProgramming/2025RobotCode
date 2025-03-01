@@ -4,8 +4,14 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -14,7 +20,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.crevolib.configs.CTREConfigs;
 import frc.robot.driver.DriverXbox;
+import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.drivetrain.TunerConstants;
 import frc.robot.operator.OperatorXbox;
+import frc.robot.RobotContainer.*;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -108,12 +117,18 @@ public class Robot extends LoggedRobot {
     }
   }
 
+  
+
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
-      
+    // CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+    //    RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
+    //         .withVelocityY(0.0) // Drive left with negative X (left)
+    //         .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
+    // );
   }
 
   @Override
