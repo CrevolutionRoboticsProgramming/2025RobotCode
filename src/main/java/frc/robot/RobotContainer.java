@@ -4,17 +4,18 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
-import frc.robot.algaepivot.AlgaeSubsystem.State;
-import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
 
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import frc.robot.algaepivot.commands.*;
+import frc.robot.operator.OperatorXbox;
+import frc.robot.subsystems.CoralRollerSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,24 +52,26 @@ public class RobotContainer {
 
     public void setDefaultCommands() {
         final var driver = DriverXbox.getInstance();
+        final var operator = OperatorXbox.getInstance();
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
-                if (modeFast){
-                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+                return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
                         .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
                         .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-                } else {
-                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.5) // Drive forward with negative Y (forward)
-                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.5) // Drive left with negative X (left)
-                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.5); // Drive counterclockwise with negative X (left)
-                }
-            })           
+            })
         );
 
+        AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
+        ElevatorSubsystem.getInstance().setDefaultCommand(
+                new ElevatorSubsystem.DefaultCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
+        );
         AlgaeSubsystem.getInstance().setDefaultCommand(
             new AlgaeSubsystem.DefaultCommand()
         );
+        CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
+        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
+//        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
 }
   

@@ -1,4 +1,4 @@
-package frc.robot.algaepivot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.function.Supplier;
 
-public class AlgaeSubsystem extends SubsystemBase {
+public class CoralSubsystem extends SubsystemBase {
     public static class Settings {
-        static final int kTalonPivotID = 14;
-        static final int kCANcoderPivotID = 25;
+        static final int kTalonPivotID = 11;
+        static final int kCANcoderPivotID = 23;
 
         static final double kG = 0.19; // V
         static final double kS = 0.0; // V / rad
@@ -33,28 +33,25 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300);
         static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
-        static final double kP = 15.0;
+        static final double kP = 4.0;
         static final double kI = 0.0;
         static final double kD = 0;
 
-        static final double kZeroOffset = 0.3225; // rotations
+        static final double kZeroOffset = -0.126-.067; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.025);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.23);
+//        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.025);
+//        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.23);
     }
 
     public enum State {
-        kFloorIntake(Settings.kMinPos),
-        kProcessor(Rotation2d.fromRotations(0.05)),
-        kReefIntake(Rotation2d.fromRotations(0)),
-        kScore(Rotation2d.fromRotations(0.15)),
-        kStow(Rotation2d.fromRotations(0.18)),
-        kTuck(Settings.kMaxPos);
+        kHumanPlayer(Rotation2d.fromRotations(0.196)),
+        kScore(Rotation2d.fromRotations(0.06));
 
         State(Rotation2d pos) {
             this.pos = pos;
         }
+
         public final Rotation2d pos;
     }
 
@@ -63,18 +60,16 @@ public class AlgaeSubsystem extends SubsystemBase {
     private final ArmFeedforward mFFController;
     private final ProfiledPIDController mPPIDController;
 
-    public static State kLastState;
-
-    private AlgaeSubsystem() {
+    private CoralSubsystem() {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Brake)
+                .withNeutralMode(NeutralModeValue.Coast)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);
         mCANcoderPivot.getConfigurator().apply(new CANcoderConfiguration().withMagnetSensor(new MagnetSensorConfigs().
-                withSensorDirection(SensorDirectionValue.Clockwise_Positive).
+                withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).
                 withMagnetOffset(Settings.kZeroOffset)
         ));
 
@@ -84,20 +79,20 @@ public class AlgaeSubsystem extends SubsystemBase {
                 Settings.kMaxAcceleration.getRadians()
         ));
 
-        setTargetState(State.kTuck);
+        setTargetState(State.kHumanPlayer);
     }
 
 
-    private static AlgaeSubsystem mInstance;
-    public static AlgaeSubsystem getInstance() {
+    private static CoralSubsystem mInstance;
+
+    public static CoralSubsystem getInstance() {
         if (mInstance == null) {
-            mInstance = new AlgaeSubsystem();
+            mInstance = new CoralSubsystem();
         }
         return mInstance;
     }
 
     public void setTargetState(State targetState) {
-        kLastState = targetState;
         setTargetPosition(targetState.pos);
     }
 
@@ -119,32 +114,54 @@ public class AlgaeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         var voltage = mPPIDController.calculate(getWristPosition().getRadians());
-//        voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
         mTalonPivot.setVoltage(voltage);
 
         // Telemetry
-        SmartDashboard.putNumber("Algae Pivot Pos (rotations)", getWristPosition().getRotations());
-        SmartDashboard.putNumber("Algae Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
-        SmartDashboard.putNumber("Algae Pivot Vel (rotations / sec)", getWristVelocity().getRotations());
-        SmartDashboard.putNumber("Algae Pivot Target Vel (rotations / sec)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
-        SmartDashboard.putNumber("Algae Pivot Applied Voltage", voltage);
+        SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getWristPosition().getRotations());
+        SmartDashboard.putNumber("Coral Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
+        SmartDashboard.putNumber("Coral Pivot Vel (rotations*sec^-1)", getWristVelocity().getRotations());
+        SmartDashboard.putNumber("Coral Pivot Target Vel (rotations*sec^-1)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
+        SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
     }
 
-    public static class DefaultCommand extends Command {
-
-        public DefaultCommand() {
-            addRequirements(AlgaeSubsystem.getInstance());
+    public static class TuningCommand extends Command {
+        Supplier<Double> ds;
+        public TuningCommand(Supplier<Double> ds) {
+            this.ds = ds;
+            addRequirements(CoralSubsystem.getInstance());
         }
 
         @Override
         public void execute() {
-            if (kLastState == State.kTuck) {
-                AlgaeSubsystem.getInstance().setTargetState(State.kTuck);
-            } else {
-                AlgaeSubsystem.getInstance().setTargetState(State.kStow);
-            }
+            final var kMin = 0.0f;
+            final var kMax = 0.2f;
+            CoralSubsystem.getInstance().setTargetPosition(Rotation2d.fromRotations(ds.get() * 0.2));
         }
-
     }
 
+
+    public static class DefaultCommand extends Command {
+        public DefaultCommand() {
+            addRequirements(CoralSubsystem.getInstance());
+        }
+
+        @Override
+        public void execute() {
+            CoralSubsystem.getInstance().setTargetState(State.kHumanPlayer);
+        }
+    }
+
+    public static class SetStateCommand extends Command {
+        private State state;
+        public SetStateCommand(State state) {
+            this.state = state;
+            addRequirements(CoralSubsystem.getInstance());
+        }
+
+        @Override
+        public void initialize() {
+            CoralSubsystem.getInstance().setTargetState(state);
+        }
+    }
 }

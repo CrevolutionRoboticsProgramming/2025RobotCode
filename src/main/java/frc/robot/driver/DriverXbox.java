@@ -1,28 +1,14 @@
 package frc.robot.driver;
 
-import java.util.Optional;
-import java.util.Set;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.XboxGamepad;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.algaeflywheel.AlgaeFlyWheel;
-import frc.robot.algaeflywheel.commands.AlgaeFlyWheelCommands;
-import frc.robot.algaeflywheel.commands.SetVelocityAlgaeFlyWheel;
+import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
-import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
-import frc.robot.indexer.commands.IndexerCommands;
+import frc.robot.subsystems.CoralRollerSubsystem;
 
 
 public class DriverXbox extends XboxGamepad {
@@ -60,16 +46,9 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        // Change for Slow & Fast Mode
-        controller.a().onTrue(new InstantCommand(() -> {RobotContainer.modeFast = false;}));
-        controller.x().onTrue(new InstantCommand(() -> {RobotContainer.modeFast = true;}));
-
-        
-        // controller.a().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
-        // controller.b().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kReefIntake));
-        // controller.x().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kScore));
-        // controller.y().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kStow));
-
+        controller.rightTrigger().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
+        controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
     }
 
     @Override

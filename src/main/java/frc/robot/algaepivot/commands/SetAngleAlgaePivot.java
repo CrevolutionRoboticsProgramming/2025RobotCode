@@ -27,7 +27,7 @@ public class SetAngleAlgaePivot extends Command {
 
     @Override
     public void initialize() {
-        mAlgaeSubsystem.setTargetPosition(targetState.pos);
+        mAlgaeSubsystem.setTargetState(targetState);
 
     }
 

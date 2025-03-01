@@ -12,8 +12,13 @@ import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.Gamepad;
 import frc.crevolib.util.XboxGamepad;
 import frc.robot.Robot;
-import frc.robot.commands.RobotCommands;
+import frc.robot.algaeflywheel.AlgaeRoller;
+import frc.robot.algaepivot.AlgaeSubsystem;
+import frc.robot.algaepivot.commands.AlgaePivotCommands;
+import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.indexer.commands.IndexerCommands;
+import frc.robot.subsystems.CoralRollerSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 
 public class OperatorXbox extends XboxGamepad {
     private static class Settings {
@@ -47,12 +52,16 @@ public class OperatorXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        controller.leftBumper().whileTrue(IndexerCommands.setOutput(() -> -1.0));
-
-        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
-        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
-
-
+//        controller.leftBumper().whileTrue(IndexerCommands.setOutput(() -> -1.0));
+//
+//        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
+//        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
+        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
+        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
+//        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
+//
+        controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScore));
+        controller.rightBumper().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(-12));
     }
 
     @Override
@@ -73,7 +82,12 @@ public class OperatorXbox extends XboxGamepad {
         return new Translation2d(yComponent, xComponent);
     }
 
-    public double getDriveRotation() {
-        return -stickCurve.calculate(controller.getRightX());
+    public double getElevatorOutput() {
+        return stickCurve.calculate(controller.getRightY());
     }
+
+    public double getDriveRotation() {
+        return -stickCurve.calculate(-controller.getRightX());
+    }
+
 }
