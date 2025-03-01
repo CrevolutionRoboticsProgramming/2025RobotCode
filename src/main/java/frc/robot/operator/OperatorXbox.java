@@ -56,12 +56,12 @@ public class OperatorXbox extends XboxGamepad {
 //
 //        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
 //        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
-        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
+        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
         controller.leftTrigger().whileTrue(new AlgaeRoller.PrimeCommand());
         controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
 //        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
 //
-        controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScore));
+        controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScoreV2));
         controller.rightBumper().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(-12));
     }
 
@@ -83,9 +83,8 @@ public class OperatorXbox extends XboxGamepad {
         return new Translation2d(yComponent, xComponent);
     }
 
-    public double 
-    getElevatorOutput() {
-        return stickCurve.calculate(controller.getRightY());
+    public double getElevatorOutput() {
+        return stickCurve.calculate(-controller.getRightY());
     }
 
     public double getDriveRotation() {

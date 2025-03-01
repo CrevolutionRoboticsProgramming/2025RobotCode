@@ -4,6 +4,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.driver.DriverXbox;
@@ -26,7 +27,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
  */
 public class RobotContainer {
     public static double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    public static double kMaxAngularVelocity = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+    public static double kMaxAngularVelocity = RotationsPerSecond.of(2.5).in(RadiansPerSecond);
     
     public static boolean modeFast = true;
 
@@ -42,6 +43,18 @@ public class RobotContainer {
         setDefaultCommands();
     }
 
+        /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+        RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
+             .withVelocityY(0.0) // Drive left with negative X (left)
+             .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
+     );
+    }
 
 
     public void setDefaultCommands() {
@@ -65,6 +78,7 @@ public class RobotContainer {
         );
         CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
         CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
+        AlgaeRoller.getInstance().setDefaultCommand(new InstantCommand(() -> AlgaeRoller.getInstance().setIndexerVoltage(-6)));
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
 }

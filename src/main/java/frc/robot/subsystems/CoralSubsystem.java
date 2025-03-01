@@ -46,6 +46,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     public enum State {
         kHumanPlayer(Rotation2d.fromRotations(0.196)),
+        kScoreV2(Rotation2d.fromRotations(-0.125732)),
         kScore(Rotation2d.fromRotations(0.06));
 
         State(Rotation2d pos) {
