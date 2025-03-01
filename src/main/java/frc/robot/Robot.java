@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 
@@ -23,6 +26,7 @@ import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
 import frc.robot.operator.OperatorXbox;
+import frc.robot.RobotContainer.*;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -119,6 +123,8 @@ public class Robot extends LoggedRobot {
     
   }
 
+  
+
   /**
    * This function is called periodically during autonomous.
    */
@@ -148,14 +154,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousPeriodic() {
-      // CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-      //   drive.withVelocityX(5.0 * kMaxVelocity)
-      //   .withVelocityY(0.0)
-      //   .withRotationalRate(0.0)
-      // );
-      
-      // runDrivetrain();
-  
+
   }
 
   @Override
