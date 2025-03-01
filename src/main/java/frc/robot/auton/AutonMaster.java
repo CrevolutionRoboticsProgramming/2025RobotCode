@@ -14,50 +14,46 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.drivetrain2.Drivetrain;
-import frc.robot.drivetrain2.DrivetrainConfig;
-import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants;
-
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
     private static Field2d mGameField;
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
-    private final Drivetrain drivetrain;
+    // private final Drivetrain drivetrain;
 
     public AutonMaster() {
-        drivetrain = Drivetrain.getInstance();
-        /* Define Named Commands Here */
-        configureNamedCommands();
+        // drivetrain = Drivetrain.getInstance();
+        // /* Define Named Commands Here */
+        // configureNamedCommands();
 
-        // Configuring AutoBuilder
-        AutoBuilder.configure(
-            drivetrain::getPose,
-            drivetrain::resetPose,
-            drivetrain::getRobotRelativeSpeeds,
-            drivetrain::driveRobotRelative,
-            new PPHolonomicDriveController(
-                AutonConfig.TRANSLATION_PID,
-                AutonConfig.ROTATION_PID
-            ),
-            new RobotConfig(
-                DriveConstants.robotKG,
-                DriveConstants.MOI,
-                DriveConstants.modConfig,
-                DriveConstants.modsOffSets.get()
-            ),
-            () -> {
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-            },
-            drivetrain
-        );
+        // // Configuring AutoBuilder
+        // AutoBuilder.configure(
+        //     drivetrain::getPose,
+        //     drivetrain::resetPose,
+        //     drivetrain::getRobotRelativeSpeeds,
+        //     drivetrain::driveRobotRelative,
+        //     new PPHolonomicDriveController(
+        //         AutonConfig.TRANSLATION_PID,
+        //         AutonConfig.ROTATION_PID
+        //     ),
+        //     new RobotConfig(
+        //         DriveConstants.robotKG,
+        //         DriveConstants.MOI,
+        //         DriveConstants.modConfig,
+        //         DriveConstants.modsOffSets.get()
+        //     ),
+        //     () -> {
+        //         var alliance = DriverStation.getAlliance();
+        //         if (alliance.isPresent()) {
+        //             return alliance.get() == DriverStation.Alliance.Red;
+        //         }
+        //         return false;
+        //     },
+        //     drivetrain
+        // );
        
-        configurePathPlannerLogging();
+        // configurePathPlannerLogging();
     }
 
     public void configureNamedCommands() {

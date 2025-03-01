@@ -129,7 +129,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     public static class DefaultCommand extends Command {
 
         public DefaultCommand() {
-
+            addRequirements(AlgaeSubsystem.getInstance());
         }
 
         @Override

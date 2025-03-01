@@ -11,7 +11,6 @@ import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
-import frc.robot.drivetrain2.Drivetrain;
 
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;

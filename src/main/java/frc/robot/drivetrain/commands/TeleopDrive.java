@@ -13,10 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.crevolib.io.JoystickConfig;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
-import frc.robot.drivetrain2.Drivetrain;
-import frc.robot.drivetrain2.DrivetrainConfig;
-import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants;
-import frc.robot.drivetrain2.DrivetrainConfig.DriveConstants.*;
 import static edu.wpi.first.units.Units.*;
 
 public class TeleopDrive extends Command {
