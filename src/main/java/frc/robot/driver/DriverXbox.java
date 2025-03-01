@@ -49,6 +49,8 @@ public class DriverXbox extends XboxGamepad {
         controller.rightTrigger().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
         controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
         controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
+
+        controller.y().onTrue(new InstantCommand());
     }
 
     @Override

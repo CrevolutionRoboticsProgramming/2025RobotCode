@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /** Add your docs here. */
 public class AlgaeRoller extends SubsystemBase{
@@ -101,8 +102,9 @@ public class AlgaeRoller extends SubsystemBase{
 
         @Override
         public void initialize() {
-            roller.setFlywheelVoltage(12);
             roller.setIndexerVoltage(-6);
+            new WaitCommand(1.5);
+            roller.setFlywheelVoltage(12);
         }
     }
 
