@@ -63,22 +63,41 @@ public class RobotContainer {
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+                if (modeFast) {
                 return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
-                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
-                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-            })
+                .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+            } else {
+                return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.5) // Drive forward with negative Y (forward)
+                    .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.5) // Drive left with negative X (left)
+                    .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.5); // Drive counterclockwise with negative X (left)
+            }
+            }
+            )
         );
 
-        AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
+        // CommandSwerveDrivetrain.getInstance().setDefaultCommand(
+        //     CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+        //         return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+        //                 .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+        //                 .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+        //     })
+        // );
+
+        // AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
         ElevatorSubsystem.getInstance().setDefaultCommand(
                 new ElevatorSubsystem.DefaultCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
         );
+
+        // ElevatorSubsystem.getInstance().setDefaultCommand(
+        //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
+        // );
         AlgaeSubsystem.getInstance().setDefaultCommand(
             new AlgaeSubsystem.DefaultCommand()
         );
         CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
         CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
-        AlgaeRoller.getInstance().setDefaultCommand(new InstantCommand(() -> AlgaeRoller.getInstance().setIndexerVoltage(-6)));
+        AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -3));
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
 }

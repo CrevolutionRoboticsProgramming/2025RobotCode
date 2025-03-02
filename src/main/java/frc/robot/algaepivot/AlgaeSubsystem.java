@@ -46,7 +46,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     public enum State {
         kFloorIntake(Settings.kMinPos),
-        kProcessor(Rotation2d.fromRotations(0.05)),
+        kProcessor(Rotation2d.fromRotations(0.06)),
         kReefIntake(Rotation2d.fromRotations(0)),
         kScore(Rotation2d.fromRotations(0.15)),
         kStow(Rotation2d.fromRotations(0.18)),
@@ -69,7 +69,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Brake)
+                .withNeutralMode(NeutralModeValue.Coast)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);

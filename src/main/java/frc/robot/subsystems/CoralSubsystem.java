@@ -65,7 +65,7 @@ public class CoralSubsystem extends SubsystemBase {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Coast)
+                .withNeutralMode(NeutralModeValue.Brake)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);
@@ -114,16 +114,16 @@ public class CoralSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        var voltage = mPPIDController.calculate(getWristPosition().getRadians());
-        voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
-        mTalonPivot.setVoltage(voltage);
+        // var voltage = mPPIDController.calculate(getWristPosition().getRadians());
+        // voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        // mTalonPivot.setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getWristPosition().getRotations());
         SmartDashboard.putNumber("Coral Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
         SmartDashboard.putNumber("Coral Pivot Vel (rotations*sec^-1)", getWristVelocity().getRotations());
         SmartDashboard.putNumber("Coral Pivot Target Vel (rotations*sec^-1)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
-        SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
+        // SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
     }
 
     public static class TuningCommand extends Command {

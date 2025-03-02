@@ -6,12 +6,15 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.elevator.Elevator;
 
 import java.util.function.Supplier;
 
@@ -25,12 +28,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         static final int kCanCoderId = 6;
 
-        static final double kG = 0.42; // V
+        static final double kG = 0.01; // V
         static final double kS = 0.0;  // V / rad
-        static final double kV = 1.6; // V * sec / rad
+        static final double kV = 6.3; // V * sec / rad
         static final double kA = 0.0; // V * sec^2 / rad
 
-        static final double kP = 7.0;
+        static final double kP = 0.0;
         static final double kI = 0.0;
         static final double kD = 0.0;
 
@@ -41,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private static ElevatorSubsystem mInstance;
 
     private TalonFX mTalonLeft, mTalonRight;
-    private final ArmFeedforward mFFController;
+    private final ElevatorFeedforward mFFController;
     private final ProfiledPIDController mPPIDController;
 
     public enum State {
@@ -73,7 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
         mTalonRight.setPosition(0);
 
-        mFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
+        mFFController = new ElevatorFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
         mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, new TrapezoidProfile.Constraints(
                 Settings.kMaxVelocity.getRadians(),
                 Settings.kMaxAcceleration.getRadians()
@@ -99,6 +102,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         return mTalonRight.getPosition().getValueAsDouble();
     }
 
+    public double getVelocity() {
+        return mTalonRight.getVelocity().getValueAsDouble();
+    }
+
+    // public void setVoltageSupplier(Supplier<Double> voltageSupplier)
+
     public static ElevatorSubsystem getInstance() {
         if (mInstance == null) {
             mInstance = new ElevatorSubsystem();
@@ -108,11 +117,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator Position", getPosition());
+        // var voltage = mPPIDController.calculate(getPosition());
+        // voltage += mFFController.calculate(getPosition(), mPPIDController.getSetpoint().velocity);
+        // setVoltage(voltage);
 
-        var voltage = mPPIDController.calculate(getPosition());
-        voltage += mFFController.calculate(getPosition(), mPPIDController.getSetpoint().velocity);
-        setVoltage(voltage);
+        // Telemetry
+        SmartDashboard.putNumber("Elevator Pos (rotations)", getPosition());
+        // SmartDashboard.putNumber("Elevator Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
+        SmartDashboard.putNumber("Elevator Vel (rotations*sec^-1)", getVelocity());
+        // SmartDashboard.putNumber("Elevator Target Vel (rotations*sec^-1)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
+        // SmartDashboard.putNumber("Elevator Applied Voltage", voltage);
     }
 
     public static class DefaultCommand extends Command {
@@ -121,6 +135,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         private final double kBound = 3.0f;
         private final double kMaxPosition = 40.0f;
+
+        private final double kMaxVelocity = 10.0f;
 
         public DefaultCommand(ElevatorSubsystem subsystem, Supplier<Double> percentSupplier) {
             this.subsystem = subsystem;
@@ -151,6 +167,47 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
 
             subsystem.setVoltage(targetVoltage);
+        }
+    }
+
+    public static class VelocityCommand extends Command {
+        private ElevatorSubsystem subsystem;
+        private Supplier<Double> percentSupplier;
+
+        private final double kBound = 3.0f;
+        private final double kMaxPosition = 40.0f;
+
+        private final double kMaxVelocity = 15.0f; // Rotations / Second
+        ElevatorFeedforward mFFController;
+
+        public VelocityCommand(ElevatorSubsystem subsystem, Supplier<Double> percentSupplier) {
+            this.subsystem = subsystem;
+            this.percentSupplier = percentSupplier;
+            addRequirements(subsystem);
+
+            mFFController = new ElevatorFeedforward(0.0, 0.0, 0.2);
+        }
+
+        @Override
+        public void execute() {
+            var targetVelocity = percentSupplier.get() * kMaxVelocity;
+            if (subsystem.getPosition() <= 0 && targetVelocity < 0) {
+                targetVelocity = 0.0;
+            } 
+            if (subsystem.getPosition() >= kMaxPosition && targetVelocity > 0) {
+                targetVelocity = 0.0;
+            }
+
+            final var voltage = mFFController.calculate(targetVelocity);
+            subsystem.setVoltage(voltage);
+
+            SmartDashboard.putNumber("Elevator Target Velocity (rotations)", targetVelocity);
+            SmartDashboard.putNumber("Elevato Applied Voltage", voltage);
+        }
+
+        @Override
+        public void end(boolean interrupted) {
+            subsystem.setVoltage(0);
         }
     }
 }

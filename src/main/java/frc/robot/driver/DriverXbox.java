@@ -50,6 +50,9 @@ public class DriverXbox extends XboxGamepad {
         controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
         controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
 
+        controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
+        controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
+
         controller.y().onTrue(new InstantCommand());
     }
 
