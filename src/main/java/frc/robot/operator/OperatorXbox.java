@@ -61,15 +61,30 @@ public class OperatorXbox extends XboxGamepad {
 //
 //        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
 //        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
-        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
-        controller.leftTrigger().whileTrue(new AlgaeRoller.PrimeCommand());
-        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
 //        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
-//
-        controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScoreV2));
-        controller.rightBumper().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(-12));
 
-        controller.x().whileTrue(new AlgaeRoller.ProcessShootCommand());
+/*Used Commands */
+        // controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
+        // controller.leftTrigger().whileTrue(new AlgaeRoller.PrimeCommand());
+        // controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
+
+//
+        // controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScoreV2));
+        // controller.rightBumper().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(-12));
+
+        // controller.x().whileTrue(new AlgaeRoller.ProcessShootCommand());
+
+        /*Didn't use these commands */
+        // controller.y().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kStow));
+        // controller.y().whileTrue(new AlgaeRoller.PrimeCommand());
+
+        // controller.povLeft().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kCoralL1)));
+        // controller.povUp().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kCoralL2)));
+        // controller.povRight().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kCoralL3)));
+
+        // controller.a().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kAlgaeL2)));
+        // controller.b().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kAlgaeL3)));
+
 
         // controller.povLeft().whileTrue(RobotCommands.coralPrime(CoralSubsys  tem.State.kScoreV2, ElevatorSubsystem.State.kCoralL1));
         // controller.povUp().whileTrue(RobotCommands.coralPrime(CoralSubsystem.State.kScoreV2, ElevatorSubsystem.State.kCoralL2));

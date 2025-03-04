@@ -114,9 +114,9 @@ public class CoralSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // var voltage = mPPIDController.calculate(getWristPosition().getRadians());
-        // voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
-        // mTalonPivot.setVoltage(voltage);
+        var voltage = mPPIDController.calculate(getWristPosition().getRadians());
+        voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        mTalonPivot.setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getWristPosition().getRotations());

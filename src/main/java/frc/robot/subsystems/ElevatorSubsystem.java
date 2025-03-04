@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         static final double kGLow = 0.01; // V
         static final double kGHigh = 0.01; // V
         static final double kS = 0.0;  // V / rad
-        static final double kV = 6.3; // V * sec / rad
+        static final double kV = 0.2; // V * sec / rad
         static final double kA = 0.0; // V * sec^2 / rad
 
         static final double kP = 0.0;
@@ -40,7 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         static final double kMaxVelocity = 25.0f;
         static final double kMaxAcceleration = 100.0f;
 
-        static final double kCrossoverPoint = 10.0f;
+        static final double kCrossoverPoint = 18.0f;
     }
 
     private static ElevatorSubsystem mInstance;

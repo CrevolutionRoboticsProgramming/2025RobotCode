@@ -40,7 +40,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         static final double kZeroOffset = 0.3225; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.025);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.04);
         static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.23);
     }
 

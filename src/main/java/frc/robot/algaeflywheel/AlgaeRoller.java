@@ -64,21 +64,6 @@ public class AlgaeRoller extends SubsystemBase{
         }
     }
 
-    public static class SetVoltageCommand extends Command {
-        AlgaeRoller roller;
-        double voltage;
-        public SetVoltageCommand(AlgaeRoller subsystem, double voltage) {
-            roller = AlgaeRoller.getInstance();
-            addRequirements(roller);
-            this.voltage = voltage;
-        }
-
-        @Override
-        public void initialize() {
-            roller.setFlywheelVoltage(voltage);
-        }
-    }
-
     public static class SetIndexerVoltagCommand extends Command {
         AlgaeRoller roller;
         double voltage;
@@ -91,6 +76,22 @@ public class AlgaeRoller extends SubsystemBase{
         @Override
         public void initialize() {
             roller.setIndexerVoltage(voltage);
+            roller.setFlywheelVoltage(0);
+        }
+    }
+
+    public static class SetFlywheelVoltagCommand extends Command {
+        AlgaeRoller roller;
+        double voltage;
+        public SetFlywheelVoltagCommand(AlgaeRoller subsystem, double voltage) {
+            roller = AlgaeRoller.getInstance();
+            addRequirements(roller);
+            this.voltage = voltage;
+        }
+
+        @Override
+        public void initialize() {
+            roller.setFlywheelVoltage(voltage);
         }
     }
 
@@ -118,8 +119,7 @@ public class AlgaeRoller extends SubsystemBase{
         @Override
         public void initialize() {
             roller.setIndexerVoltage(-6);
-            new WaitCommand(1.5);
-            roller.setFlywheelVoltage(12);
+            roller.setFlywheelVoltage(6);
         }
     }
 
@@ -132,8 +132,8 @@ public class AlgaeRoller extends SubsystemBase{
 
         @Override
         public void initialize() {
-            roller.setFlywheelVoltage(12);
-            roller.setIndexerVoltage(12);
+            roller.setFlywheelVoltage(6);
+            roller.setIndexerVoltage(6);
         }
     }
 
