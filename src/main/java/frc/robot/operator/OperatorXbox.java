@@ -19,11 +19,11 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.commands.RobotCommands;
+import frc.robot.coralArm.CoralSubsystem;
+import frc.robot.coralator.CoralRollerSubsystem;
+import frc.robot.elevator.ElevatorSubsystem;
+import frc.robot.elevator.ElevatorSubsystem.State;
 import frc.robot.indexer.commands.IndexerCommands;
-import frc.robot.subsystems.CoralRollerSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.State;
 
 public class OperatorXbox extends XboxGamepad {
     private static class Settings {

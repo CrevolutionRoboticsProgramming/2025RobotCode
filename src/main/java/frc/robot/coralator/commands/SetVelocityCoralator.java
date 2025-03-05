@@ -8,32 +8,19 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.coralator.Coralator;
+import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.operator.OperatorXbox;
 
 public class SetVelocityCoralator extends Command{
-    private final Coralator mCoralator;
-    private final Supplier<Rotation2d> velocitySupplier;
-    private final InvertedValue kInvertedValue;
-
-    SetVelocityCoralator(Supplier<Rotation2d> velocitySupplier, InvertedValue kInvertedValue) {
-        mCoralator = Coralator.getInstance();
-        this.velocitySupplier = velocitySupplier;
-        this.kInvertedValue = kInvertedValue;
+    double volts;
+    public SetVelocityCoralator(double volts) {
+        this.volts = volts;
+        addRequirements(CoralRollerSubsystem.getInstance());
     }
 
     @Override
-    public void execute() {
-        mCoralator.setVelocity(velocitySupplier.get(), kInvertedValue);
+    public void initialize() {
+        CoralRollerSubsystem.getInstance().setVoltage(volts);
     }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    public void end(boolean isInterrupted) {
-        mCoralator.setVelocity(Rotation2d.fromDegrees(0), kInvertedValue);
-    }
+        
 }

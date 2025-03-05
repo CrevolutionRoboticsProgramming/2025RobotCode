@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ElbowPivot.ElbowPivot;
 
 public class CoralGoalPose2d extends SubsystemBase{
     public static CoralGoalPose2d mInstance;

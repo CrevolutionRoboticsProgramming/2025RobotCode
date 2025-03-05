@@ -14,20 +14,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.drivetrain.CommandSwerveDrivetrain;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
     private static Field2d mGameField;
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+    private static CommandSwerveDrivetrain drivetrain;
 
     // private final Drivetrain drivetrain;
 
     public AutonMaster() {
-        // drivetrain = Drivetrain.getInstance();
-        // /* Define Named Commands Here */
-        // configureNamedCommands();
+        drivetrain = CommandSwerveDrivetrain.getInstance();
+        /* Define Named Commands Here */
+        configureNamedCommands();
 
-        // // Configuring AutoBuilder
+        // Configuring AutoBuilder
         // AutoBuilder.configure(
         //     drivetrain::getPose,
         //     drivetrain::resetPose,
@@ -53,7 +55,7 @@ public class AutonMaster {
         //     drivetrain
         // );
        
-        // configurePathPlannerLogging();
+        configurePathPlannerLogging();
     }
 
     public void configureNamedCommands() {

@@ -4,8 +4,12 @@
 
 package frc.robot.algaeflywheel;
 
+import org.opencv.core.RotatedRect;
+
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +21,8 @@ public class AlgaeRoller extends SubsystemBase{
         static final int kLeftID = 15;
         static final int kRightID = 16;
         static final int kIndexID = 17;
+
+        static final Rotation2d kMaxAngluarVelocity = Rotation2d.fromRotations(6000 / 60);
     }
 
     private static AlgaeRoller mInstance;
@@ -40,8 +46,21 @@ public class AlgaeRoller extends SubsystemBase{
         mTalonShooterRight.setVoltage(voltage);
     }
 
+    public void setFlywheelVelocity(Rotation2d velocity) {
+        mTalonShooterLeft.setControl(new VelocityVoltage(velocity.getRotations()));
+        mTalonShooterRight.setControl(new VelocityVoltage(velocity.getRotations()));
+    }
+
     public void setIndexerVoltage(double voltage) {
         mTalonIndexer.setVoltage(voltage);
+    }
+
+    public Rotation2d geLeftVelocity() {
+        return Rotation2d.fromRotations(mTalonShooterLeft.getVelocity().getValueAsDouble());
+    }
+
+    public Rotation2d getRightVelocity() {
+        return Rotation2d.fromRotations(mTalonShooterRight.getVelocity().getValueAsDouble());
     }
 
     @Override

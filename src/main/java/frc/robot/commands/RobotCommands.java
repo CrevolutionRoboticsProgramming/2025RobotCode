@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.algaepivot.AlgaeSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.coralArm.CoralSubsystem;
+import frc.robot.elevator.ElevatorSubsystem;
 
 public class RobotCommands {
     public static Command coralPrime(CoralSubsystem.State coralState, ElevatorSubsystem.State eleState) {

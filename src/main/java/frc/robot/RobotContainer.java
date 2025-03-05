@@ -7,16 +7,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
+import frc.robot.coralArm.CoralSubsystem;
+import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
+import frc.robot.elevator.ElevatorSubsystem;
 
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import frc.robot.operator.OperatorXbox;
-import frc.robot.subsystems.CoralRollerSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 
 /**

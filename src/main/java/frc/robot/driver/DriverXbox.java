@@ -8,7 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
-import frc.robot.subsystems.CoralRollerSubsystem;
+import frc.robot.coralator.CoralRollerSubsystem;
 
 
 public class DriverXbox extends XboxGamepad {
