@@ -4,6 +4,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.driver.DriverXbox;
@@ -26,7 +27,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
  */
 public class RobotContainer {
     public static double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    public static double kMaxAngularVelocity = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+    public static double kMaxAngularVelocity = RotationsPerSecond.of(2.5).in(RadiansPerSecond);
     
     public static boolean modeFast = true;
 
@@ -42,7 +43,7 @@ public class RobotContainer {
         setDefaultCommands();
     }
 
-    /**
+        /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
@@ -55,27 +56,49 @@ public class RobotContainer {
      );
     }
 
+
     public void setDefaultCommands() {
         final var driver = DriverXbox.getInstance();
         final var operator = OperatorXbox.getInstance();
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+                if (modeFast) {
                 return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
-                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
-                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-            })
+                .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+            } else {
+                return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.5) // Drive forward with negative Y (forward)
+                    .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.5) // Drive left with negative X (left)
+                    .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.5); // Drive counterclockwise with negative X (left)
+            }
+            }
+            )
         );
 
-        AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
-        ElevatorSubsystem.getInstance().setDefaultCommand(
-                new ElevatorSubsystem.DefaultCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
-        );
-        AlgaeSubsystem.getInstance().setDefaultCommand(
-            new AlgaeSubsystem.DefaultCommand()
-        );
-        CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
-        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
+        // CommandSwerveDrivetrain.getInstance().setDefaultCommand(
+        //     CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+        //         return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+        //                 .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+        //                 .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+        //     })
+        // );
+
+        // AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
+        // ElevatorSubsystem.getInstance().setDefaultCommand(
+        //         new ElevatorSubsystem.DefaultCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
+        // );
+
+        // ElevatorSubsystem.getInstance().setDefaultCommand(
+        //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
+        // );
+        // AlgaeSubsystem.getInstance().setDefaultCommand(
+        //     new AlgaeSubsystem.DefaultCommand()
+        // );
+        // CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
+        // CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
+        // AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
+        
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
 }

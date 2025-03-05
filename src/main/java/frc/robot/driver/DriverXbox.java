@@ -46,9 +46,14 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        controller.rightTrigger().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
-        controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
-        controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
+        // controller.rightTrigger().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
+        // controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
+        // controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
+
+        controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
+        controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
+
+        // controller.y().onTrue(new InstantCommand());
     }
 
     @Override

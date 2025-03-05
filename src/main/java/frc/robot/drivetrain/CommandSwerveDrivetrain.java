@@ -204,7 +204,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        // System.out.println("YAY Motor is being CALLEEDD!!!! ;)))))");
+        System.out.println("YAY Motor is being CALLEEDD!!!! ;)))))");
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
@@ -244,10 +244,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 setOperatorPerspectiveForward(
                     allianceColor == Alliance.Red
                         ? kRedAlliancePerspectiveRotation
-                        : kBlueAlliancePerspectiveRotation
+                        : Rotation2d.k180deg
                 );
-                m_hasAppliedOperatorPerspective = true;
             });
+            m_hasAppliedOperatorPerspective = true;
         }
     }
 

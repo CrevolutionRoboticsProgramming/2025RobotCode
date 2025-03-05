@@ -46,6 +46,7 @@ public class CoralSubsystem extends SubsystemBase {
 
     public enum State {
         kHumanPlayer(Rotation2d.fromRotations(0.196)),
+        kScoreV2(Rotation2d.fromRotations(-0.125732)),
         kScore(Rotation2d.fromRotations(0.06));
 
         State(Rotation2d pos) {
@@ -64,7 +65,7 @@ public class CoralSubsystem extends SubsystemBase {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Coast)
+                .withNeutralMode(NeutralModeValue.Brake)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);
@@ -122,7 +123,7 @@ public class CoralSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Coral Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
         SmartDashboard.putNumber("Coral Pivot Vel (rotations*sec^-1)", getWristVelocity().getRotations());
         SmartDashboard.putNumber("Coral Pivot Target Vel (rotations*sec^-1)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
-        SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
+        // SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
     }
 
     public static class TuningCommand extends Command {

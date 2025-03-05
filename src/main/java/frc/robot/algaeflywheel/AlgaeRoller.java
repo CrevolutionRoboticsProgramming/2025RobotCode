@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /** Add your docs here. */
 public class AlgaeRoller extends SubsystemBase{
@@ -63,10 +64,26 @@ public class AlgaeRoller extends SubsystemBase{
         }
     }
 
-    public static class SetVoltageCommand extends Command {
+    public static class SetIndexerVoltagCommand extends Command {
         AlgaeRoller roller;
         double voltage;
-        public SetVoltageCommand(AlgaeRoller subsystem, double voltage) {
+        public SetIndexerVoltagCommand(AlgaeRoller subsystem, double voltage) {
+            roller = AlgaeRoller.getInstance();
+            addRequirements(roller);
+            this.voltage = voltage;
+        }
+
+        @Override
+        public void initialize() {
+            roller.setIndexerVoltage(voltage);
+            roller.setFlywheelVoltage(0);
+        }
+    }
+
+    public static class SetFlywheelVoltagCommand extends Command {
+        AlgaeRoller roller;
+        double voltage;
+        public SetFlywheelVoltagCommand(AlgaeRoller subsystem, double voltage) {
             roller = AlgaeRoller.getInstance();
             addRequirements(roller);
             this.voltage = voltage;
@@ -101,8 +118,8 @@ public class AlgaeRoller extends SubsystemBase{
 
         @Override
         public void initialize() {
-            roller.setFlywheelVoltage(12);
             roller.setIndexerVoltage(-6);
+            roller.setFlywheelVoltage(6);
         }
     }
 
@@ -115,8 +132,22 @@ public class AlgaeRoller extends SubsystemBase{
 
         @Override
         public void initialize() {
-            roller.setFlywheelVoltage(12);
-            roller.setIndexerVoltage(12);
+            roller.setFlywheelVoltage(6);
+            roller.setIndexerVoltage(6);
+        }
+    }
+
+    public static class ProcessShootCommand extends Command {
+        AlgaeRoller roller;
+        public ProcessShootCommand() {
+            roller = AlgaeRoller.getInstance();
+            addRequirements(roller);
+        }
+
+        @Override
+        public void initialize() {
+            roller.setFlywheelVoltage(6);
+            roller.setIndexerVoltage(6);
         }
     }
 }

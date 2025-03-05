@@ -18,12 +18,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.crevolib.configs.CTREConfigs;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
 import frc.robot.operator.OperatorXbox;
 import frc.robot.RobotContainer.*;
+
+import static edu.wpi.first.units.Units.*;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -115,6 +120,7 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
         m_autonomousCommand.schedule();
     }
+    
   }
 
   
@@ -122,13 +128,33 @@ public class Robot extends LoggedRobot {
   /**
    * This function is called periodically during autonomous.
    */
+
+  private final double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+  private final double kMaxAngularVelocity = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+
+  /* Setting up bindings for necessary control of the swerve drive platform */
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    .withDeadband(kMaxVelocity * 0.1)
+    .withRotationalDeadband(kMaxAngularVelocity * 0.1) // Add a 10% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+
+
+  private Command runDrivetrain() {
+    return new SequentialCommandGroup(
+      new ParallelRaceGroup(
+        new InstantCommand(() -> 
+        CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+        drive.withVelocityX(1.0 * kMaxVelocity)
+        .withVelocityY(0.0)
+        .withRotationalRate(0.0)
+      ))
+      )
+    );
+  }
+
   @Override
   public void autonomousPeriodic() {
-    // CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-    //    RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
-    //         .withVelocityY(0.0) // Drive left with negative X (left)
-    //         .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
-    // );
+
   }
 
   @Override

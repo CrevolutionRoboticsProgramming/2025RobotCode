@@ -1,5 +1,7 @@
 package frc.robot.operator;
 
+import com.ctre.phoenix6.controls.ControlRequest;
+
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,9 +18,12 @@ import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
+import frc.robot.commands.RobotCommands;
 import frc.robot.indexer.commands.IndexerCommands;
 import frc.robot.subsystems.CoralRollerSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.State;
 
 public class OperatorXbox extends XboxGamepad {
     private static class Settings {
@@ -56,12 +61,37 @@ public class OperatorXbox extends XboxGamepad {
 //
 //        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());
 //        controller.leftTrigger().whileTrue(IndexerCommands.setOutput(() -> 1.0));
-        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
-        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
 //        controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
+
+/*Used Commands */
+        // controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
+        // controller.leftTrigger().whileTrue(new AlgaeRoller.PrimeCommand());
+        // controller.leftBumper().whileTrue(new AlgaeRoller.ShootCommand());
+
 //
-        controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScore));
-        controller.rightBumper().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(-12));
+        // controller.rightTrigger().whileTrue(new CoralSubsystem.SetStateCommand(CoralSubsystem.State.kScoreV2));
+        // controller.rightBumper().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(-12));
+
+        // controller.x().whileTrue(new AlgaeRoller.ProcessShootCommand());
+
+        /*Didn't use these commands */
+        // controller.y().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kStow));
+        // controller.y().whileTrue(new AlgaeRoller.PrimeCommand());
+
+        // controller.povLeft().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kCoralL1)));
+        // controller.povUp().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kCoralL2)));
+        // controller.povRight().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kCoralL3)));
+
+        // controller.a().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kAlgaeL2)));
+        // controller.b().onTrue(new InstantCommand(() -> ElevatorSubsystem.getInstance().setTargetState(ElevatorSubsystem.State.kAlgaeL3)));
+
+
+        // controller.povLeft().whileTrue(RobotCommands.coralPrime(CoralSubsys  tem.State.kScoreV2, ElevatorSubsystem.State.kCoralL1));
+        // controller.povUp().whileTrue(RobotCommands.coralPrime(CoralSubsystem.State.kScoreV2, ElevatorSubsystem.State.kCoralL2));
+        // controller.povRight().whileTrue(RobotCommands.coralPrime(CoralSubsystem.State.kScoreV2, ElevatorSubsystem.State.kCoralL3));
+
+        // controller.a().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kFloorIntake, ElevatorSubsystem.State.kAlgaeL2));
+        // controller.b().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kFloorIntake, ElevatorSubsystem.State.kAlgaeL3));
     }
 
     @Override
@@ -83,7 +113,7 @@ public class OperatorXbox extends XboxGamepad {
     }
 
     public double getElevatorOutput() {
-        return stickCurve.calculate(controller.getRightY());
+        return stickCurve.calculate(-controller.getRightY());
     }
 
     public double getDriveRotation() {

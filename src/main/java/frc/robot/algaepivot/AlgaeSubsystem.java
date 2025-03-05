@@ -40,13 +40,13 @@ public class AlgaeSubsystem extends SubsystemBase {
         static final double kZeroOffset = 0.3225; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.025);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.04);
         static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.23);
     }
 
     public enum State {
         kFloorIntake(Settings.kMinPos),
-        kProcessor(Rotation2d.fromRotations(0.05)),
+        kProcessor(Rotation2d.fromRotations(0.06)),
         kReefIntake(Rotation2d.fromRotations(0)),
         kScore(Rotation2d.fromRotations(0.15)),
         kStow(Rotation2d.fromRotations(0.18)),
@@ -69,7 +69,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Brake)
+                .withNeutralMode(NeutralModeValue.Coast)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);
