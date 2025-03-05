@@ -2,12 +2,14 @@ package frc.robot.auton;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,11 +29,11 @@ public class AutonMaster {
     public AutonMaster() {
         drivetrain = CommandSwerveDrivetrain.getInstance();
         /* Define Named Commands Here */
-        configureNamedCommands();
+        // configureNamedCommands();
 
         // Configuring AutoBuilder
         // AutoBuilder.configure(
-        //     drivetrain::getPose,
+        //     drivetrain::getState().Pose,
         //     drivetrain::resetPose,
         //     drivetrain::getRobotRelativeSpeeds,
         //     drivetrain::driveRobotRelative,
@@ -54,12 +56,45 @@ public class AutonMaster {
         //     },
         //     drivetrain
         // );
-       
+        configureAutoBuilder(drivetrain);
+        configureNamedCommands();
         configurePathPlannerLogging();
+
+        autonChooser.addOption("TestPath", AutoBuilder.buildAuto("TestAuto"));
     }
 
     public void configureNamedCommands() {
        
+    }
+
+
+    private void configureAutoBuilder(CommandSwerveDrivetrain drivetrain) {
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                () -> drivetrain.getState().Pose,   // Supplier of current robot pose
+                drivetrain::resetPose,         // Consumer for seeding pose against auto
+                () -> drivetrain.getState().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> drivetrain.setControl(
+                    drivetrain.m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(10, 0, 0),
+                    // PID constants for rotation
+                    new PIDConstants(7, 0, 0)
+                ),
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                drivetrain // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
     }
 
 
