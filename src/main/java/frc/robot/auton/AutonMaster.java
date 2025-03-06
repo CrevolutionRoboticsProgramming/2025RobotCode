@@ -56,25 +56,13 @@ public class AutonMaster {
         //     },
         //     drivetrain
         // );
-        configureAutoBuilder(drivetrain);
-        configureNamedCommands();
-        configurePathPlannerLogging();
 
-        autonChooser.addOption("TestPath", AutoBuilder.buildAuto("TestAuto"));
-    }
-
-    public void configureNamedCommands() {
-       
-    }
-
-
-    private void configureAutoBuilder(CommandSwerveDrivetrain drivetrain) {
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
-                () -> drivetrain.getState().Pose,   // Supplier of current robot pose
+                drivetrain::getPose,   // Supplier of current robot pose
                 drivetrain::resetPose,         // Consumer for seeding pose against auto
-                () -> drivetrain.getState().Speeds, // Supplier of current robot speeds
+                drivetrain::getRobotRelvativeSpeeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
                 (speeds, feedforwards) -> drivetrain.setControl(
                     drivetrain.m_pathApplyRobotSpeeds.withSpeeds(speeds)
@@ -95,6 +83,20 @@ public class AutonMaster {
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
+        // configureAutoBuilder(drivetrain);
+        configureNamedCommands();
+        configurePathPlannerLogging();
+
+        autonChooser.addOption("TestPath", AutoBuilder.buildAuto("TestAuto"));
+    }
+
+    public void configureNamedCommands() {
+       
+    }
+
+
+    private void configureAutoBuilder(CommandSwerveDrivetrain drivetrain) {
+        
     }
 
 

@@ -14,6 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -85,6 +86,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this
         )
     );
+
 
     /*
      * SysId routine for characterizing rotation.
@@ -252,6 +254,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
             m_hasAppliedOperatorPerspective = true;
         }
+    }
+    
+
+    public ChassisSpeeds getRobotRelvativeSpeeds() {
+        return getState().Speeds;
+    }
+
+    public Pose2d getPose() {
+        return getState().Pose;
     }
 
     private void startSimThread() {
