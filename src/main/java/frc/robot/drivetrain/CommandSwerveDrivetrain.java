@@ -21,6 +21,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -262,6 +263,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
             m_hasAppliedOperatorPerspective = true;
         }
+
+        SmartDashboard.putNumber("Encoder Pos FL", getState().ModulePositions[0].angle.getRotations());
+        SmartDashboard.putNumber("Encoder Pos FR", getState().ModulePositions[1].angle.getRotations());
+        SmartDashboard.putNumber("Encoder Pos BL", getState().ModulePositions[2].angle.getRotations());
+        SmartDashboard.putNumber("Encoder Pos BR", getState().ModulePositions[3].angle.getRotations());
+
     }
     
 
