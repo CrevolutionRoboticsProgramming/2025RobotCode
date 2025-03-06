@@ -2,11 +2,15 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
+import frc.robot.auton.AutonMaster;
 import frc.robot.coralArm.CoralSubsystem;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.driver.DriverXbox;
@@ -31,6 +35,7 @@ public class RobotContainer {
     
     public static boolean modeFast = true;
 
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(kMaxVelocity * 0.1)
@@ -38,9 +43,15 @@ public class RobotContainer {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     public static SendableChooser<Command> mAutonChooser;
+    AutonMaster mAutonMaster = new AutonMaster();
 
     public RobotContainer() {
+        mAutonChooser = mAutonMaster.getAutonSelector();
         setDefaultCommands();
+
+        ShuffleboardTab autonTab = Shuffleboard.getTab("Auton Chooser");
+        autonTab.add(mAutonChooser);
+        SmartDashboard.putData(mAutonChooser);
     }
 
         /**
@@ -49,11 +60,12 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-        RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
-             .withVelocityY(0.0) // Drive left with negative X (left)
-             .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
-     );
+    //     return CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+    //     RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
+    //          .withVelocityY(0.0) // Drive left with negative X (left)
+    //          .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
+    //  );
+        return mAutonChooser.getSelected();
     }
 
 
