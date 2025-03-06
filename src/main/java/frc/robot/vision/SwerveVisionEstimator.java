@@ -35,8 +35,7 @@ public class SwerveVisionEstimator extends SubsystemBase{
             this.rotationSupplier = rotSup;
 
             poseEstimator = new SwerveDrivePoseEstimator(
-                //DriveConstants.swerveKinematics
-                null,
+                CommandSwerveDrivetrain.getInstance().getKinematics(),
                 rotationSupplier.get(),
                 modSupplier.get(),
                 new Pose2d());

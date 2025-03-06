@@ -31,7 +31,7 @@ import frc.robot.operator.OperatorXbox;
  */
 public class RobotContainer {
     public static double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    public static double kMaxAngularVelocity = RotationsPerSecond.of(2.5).in(RadiansPerSecond);
+    public static double kMaxAngularVelocity = RotationsPerSecond.of(1.0).in(RadiansPerSecond);
     
     public static boolean modeFast = true;
 
