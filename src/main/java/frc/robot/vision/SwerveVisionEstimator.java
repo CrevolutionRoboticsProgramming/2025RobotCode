@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.drivetrain.TunerConstants;
 
 
 public class SwerveVisionEstimator extends SubsystemBase{
@@ -50,7 +51,9 @@ public class SwerveVisionEstimator extends SubsystemBase{
         if (mInstance == null){
             final var drivetrain = CommandSwerveDrivetrain.getInstance();
             //mInstance = new SwerveVisionEstimator(drivetrain::getGyroYaw, drivetrain::getModulePositions);
-            mInstance = new SwerveVisionEstimator(() -> Rotation2d.fromDegrees(CommandSwerveDrivetrain.mGyro.getYaw().getValueAsDouble()), null);
+            mInstance = new SwerveVisionEstimator(() -> 
+                Rotation2d.fromDegrees(drivetrain.mGyro.getYaw().getValueAsDouble()), 
+                ()-> TunerConstants.K_SWERVE_MODULE_POSITIONS);
         }
         return mInstance;
     }

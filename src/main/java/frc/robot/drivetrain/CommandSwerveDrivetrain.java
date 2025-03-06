@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,6 +40,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public static CommandSwerveDrivetrain mInstance;
 
     public static Pigeon2 mGyro = new Pigeon2(TunerConstants.kPigeonId, "Canivore");
+
+    public static TalonFX FrontLeftSteerMotor = new TalonFX(TunerConstants.kFrontLeftSteerMotorId, "Canbus");
+    public static TalonFX FrontRightSteerMotor = new TalonFX(TunerConstants.kFrontRightSteerMotorId, "Canbus");
+    public static TalonFX BackLeftSteerMotor = new TalonFX(TunerConstants.kBackLeftSteerMotorId, "Canbus");
+    public static TalonFX BackRightSteerMotor = new TalonFX(TunerConstants.kBackRightSteerMotorId, "Canbus");
+
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;

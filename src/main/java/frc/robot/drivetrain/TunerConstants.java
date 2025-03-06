@@ -12,11 +12,13 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import frc.crevolib.math.Conversions;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.vision.Vision;
 import frc.robot.vision.VisionConfig;
@@ -107,7 +109,6 @@ public class TunerConstants {
 
     public static final int kPigeonId = 18;
 
-
     // These are only used for simulation
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);
     private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.01);
@@ -146,7 +147,7 @@ public class TunerConstants {
 
     // Front Left
     private static final int kFrontLeftDriveMotorId = 1;
-    private static final int kFrontLeftSteerMotorId = 5;
+    public static final int kFrontLeftSteerMotorId = 5;
     private static final int kFrontLeftEncoderId = 19;
     private static final Angle kFrontLeftEncoderOffset = Rotations.of(0.384765625);
     private static final boolean kFrontLeftSteerMotorInverted = false;
@@ -157,7 +158,7 @@ public class TunerConstants {
 
     // Front Right
     private static final int kFrontRightDriveMotorId = 2;
-    private static final int kFrontRightSteerMotorId = 6;
+    public static final int kFrontRightSteerMotorId = 6;
     private static final int kFrontRightEncoderId = 20;
     private static final Angle kFrontRightEncoderOffset = Rotations.of(0.110107421875);
     private static final boolean kFrontRightSteerMotorInverted = false;
@@ -168,7 +169,7 @@ public class TunerConstants {
 
     // Back Left
     private static final int kBackLeftDriveMotorId = 3;
-    private static final int kBackLeftSteerMotorId = 7;
+    public static final int kBackLeftSteerMotorId = 7;
     private static final int kBackLeftEncoderId = 21;
     private static final Angle kBackLeftEncoderOffset = Rotations.of(0.086181640625);
     private static final boolean kBackLeftSteerMotorInverted = false;
@@ -179,7 +180,7 @@ public class TunerConstants {
 
     // Back Right
     private static final int kBackRightDriveMotorId = 4;
-    private static final int kBackRightSteerMotorId = 8;
+    public static final int kBackRightSteerMotorId = 8;
     private static final int kBackRightEncoderId = 22;
     private static final Angle kBackRightEncoderOffset = Rotations.of(0.274658203125);
     private static final boolean kBackRightSteerMotorInverted = false;
@@ -210,6 +211,7 @@ public class TunerConstants {
             kBackRightXPos, kBackRightYPos, kInvertRightSide, kBackRightSteerMotorInverted, kBackRightEncoderInverted
         );
 
+
     /**
      * Creates a CommandSwerveDrivetrain instance.
      * This should only be called once in your robot program,.
@@ -220,6 +222,12 @@ public class TunerConstants {
         );
     }
 
+    public static final SwerveModulePosition[] K_SWERVE_MODULE_POSITIONS = new SwerveModulePosition[]{
+        new SwerveModulePosition(kFrontLeftXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.FrontLeftSteerMotor.getPosition().getValueAsDouble())),
+        new SwerveModulePosition(kFrontRightXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.FrontRightSteerMotor.getPosition().getValueAsDouble())),
+        new SwerveModulePosition(kBackLeftXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.BackLeftSteerMotor.getPosition().getValueAsDouble())),
+        new SwerveModulePosition(kBackRightXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.BackRightSteerMotor.getPosition().getValueAsDouble()))
+    };
 
     /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected device types.
