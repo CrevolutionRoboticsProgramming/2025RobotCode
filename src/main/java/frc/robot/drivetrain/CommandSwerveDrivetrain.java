@@ -283,7 +283,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void zeroHeading() {
-        seedFieldCentric();
+        // seedFieldCentric();
     }
 
     private void startSimThread() {

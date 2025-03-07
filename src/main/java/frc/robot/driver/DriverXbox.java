@@ -54,7 +54,8 @@ public class DriverXbox extends XboxGamepad {
         controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
         controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
 
-        controller.y().onTrue(new InstantCommand(() -> CommandSwerveDrivetrain.getInstance().zeroHeading()));
+        // controller.y().onTrue(new InstantCommand(() -> CommandSwerveDrivetrain.getInstance().zeroHeading()));
+        controller.y().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
     }
 
     @Override
