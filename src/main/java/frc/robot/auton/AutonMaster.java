@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -82,7 +83,7 @@ public class AutonMaster {
     }
 
     public Command getTestPathFindingCommand() {
-        PathConstraints pathFindConstraints = new PathConstraints(3.00, 3.00, 9.42478, 12.5664);
+        PathConstraints pathFindConstraints = new PathConstraints(3.00, 3.00, Units.degreesToRadians(540), Units.degreesToRadians(720));
         Translation2d pathFindGoalPoseTranslation = new Translation2d(1.202, 2.169);
         Rotation2d pathFindGoalPoseRotation = Rotation2d.fromDegrees(0);
         Pose2d pathFindGoalPose = new Pose2d(pathFindGoalPoseTranslation, pathFindGoalPoseRotation);
