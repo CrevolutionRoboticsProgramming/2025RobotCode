@@ -20,43 +20,12 @@ import frc.robot.drivetrain.CommandSwerveDrivetrain;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
-    private static Field2d mGameField;
+    // private static Field2d mGameField;
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
     private static CommandSwerveDrivetrain drivetrain;
 
-    // private final Drivetrain drivetrain;
-
     public AutonMaster() {
         drivetrain = CommandSwerveDrivetrain.getInstance();
-        /* Define Named Commands Here */
-        // configureNamedCommands();
-
-        // Configuring AutoBuilder
-        // AutoBuilder.configure(
-        //     drivetrain::getState().Pose,
-        //     drivetrain::resetPose,
-        //     drivetrain::getRobotRelativeSpeeds,
-        //     drivetrain::driveRobotRelative,
-        //     new PPHolonomicDriveController(
-        //         AutonConfig.TRANSLATION_PID,
-        //         AutonConfig.ROTATION_PID
-        //     ),
-        //     new RobotConfig(
-        //         DriveConstants.robotKG,
-        //         DriveConstants.MOI,
-        //         DriveConstants.modConfig,
-        //         DriveConstants.modsOffSets.get()
-        //     ),
-        //     () -> {
-        //         var alliance = DriverStation.getAlliance();
-        //         if (alliance.isPresent()) {
-        //             return alliance.get() == DriverStation.Alliance.Red;
-        //         }
-        //         return false;
-        //     },
-        //     drivetrain
-        // );
-
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
@@ -83,10 +52,11 @@ public class AutonMaster {
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
-        // configureAutoBuilder(drivetrain);
+
         configureNamedCommands();
         configurePathPlannerLogging();
-
+        
+        //Add Auton Options Here
         autonChooser.addOption("TestPath", AutoBuilder.buildAuto("TestAuto"));
     }
 
@@ -94,30 +64,24 @@ public class AutonMaster {
        
     }
 
-
-    private void configureAutoBuilder(CommandSwerveDrivetrain drivetrain) {
-        
-    }
-
-
     public SendableChooser<Command> getAutonSelector() {
         return autonChooser;
     }
 
     private void configurePathPlannerLogging() {
-        mGameField = new Field2d();
-        SmartDashboard.putData("Field", mGameField);
+        // mGameField = new Field2d();
+        // SmartDashboard.putData("Field", mGameField);
 
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            mGameField.setRobotPose(pose);
-        });
+        // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+        //     mGameField.setRobotPose(pose);
+        // });
 
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            mGameField.getObject("target pose").setPose(pose);
-        });
+        // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+        //     mGameField.getObject("target pose").setPose(pose);
+        // });
 
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            mGameField.getObject("path").setPoses(poses);
-        });
+        // PathPlannerLogging.setLogActivePathCallback((poses) -> {
+        //     mGameField.getObject("path").setPoses(poses);
+        // });
     }
 }
