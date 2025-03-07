@@ -12,20 +12,25 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 
 public class VisionConfig {
     
     // Creates camera names; ensure these all match with the correct camera on the Photonvison Dashboard
     public static final int TOTAL_CAMERAS = 4;
-    public static final String[] camNames = new String[] {"Center_Cam", "Left_Cam", "Right_Cam", "Drive_Cam"};
+    public static final String[] camNames = new String[] {"Left_Cam", "Right_Cam"}; //TODO: add center cam and drive cam
 
     //Camera Positions
     // TODO: config camera transforms
     public static final Transform3d[] robotToCamTransforms = new Transform3d[] {
-        new Transform3d(new Translation3d(), new Rotation3d()),
-        new Transform3d(new Translation3d(), new Rotation3d()),
-        new Transform3d(new Translation3d(), new Rotation3d()),
-        new Transform3d(new Translation3d(), new Rotation3d())
+        //left cam
+        new Transform3d(
+            new Translation3d(Units.inchesToMeters(-12.436), Units.inchesToMeters(11.677), Units.inchesToMeters(7.413)),
+            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(-20))),
+        //right cam
+        new Transform3d(
+            new Translation3d(Units.inchesToMeters(-12.436), Units.inchesToMeters(-11.677), Units.inchesToMeters(7.413)), 
+            new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(20)))
     }; 
 
     // Creates field layout for AprilTags
