@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4125,
-        "y": 6.17975
+        "x": 3.9176104654873436,
+        "y": 5.433773337467259
       },
       "isLocked": false,
       "linkedName": "Test_Path1End"
@@ -20,8 +20,8 @@
         "y": 6.86225
       },
       "prevControl": {
-        "x": 4.762249999999999,
-        "y": 6.86225
+        "x": 5.38796641925105,
+        "y": 6.59669406830266
       },
       "nextControl": null,
       "isLocked": false,
