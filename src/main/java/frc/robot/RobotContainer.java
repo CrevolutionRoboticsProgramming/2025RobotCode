@@ -74,18 +74,17 @@ public class RobotContainer {
         final var operator = OperatorXbox.getInstance();
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
-            CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
-                if (modeFast) {
-                return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
-                .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
-                .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-            } else {
-                return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.5) // Drive forward with negative Y (forward)
-                    .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.5) // Drive left with negative X (left)
-                    .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.5); // Drive counterclockwise with negative X (left)
-            }
-            }
-            )
+                CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+                    if (modeFast) {
+                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+                    .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                    .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+                } else {
+                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.5) // Drive forward with negative Y (forward)
+                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.5) // Drive left with negative X (left)
+                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.5); // Drive counterclockwise with negative X (left)
+                }
+            })
         );
 
         // CommandSwerveDrivetrain.getInstance().setDefaultCommand(
