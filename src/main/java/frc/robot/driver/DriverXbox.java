@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
+import frc.robot.auton.AutonMaster;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 
@@ -53,6 +54,8 @@ public class DriverXbox extends XboxGamepad {
 
         controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
         controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
+        
+        controller.leftBumper().onTrue(AutonMaster.getInstance().getTestPathFindingCommand());
 
         // controller.y().onTrue(new InstantCommand(() -> CommandSwerveDrivetrain.getInstance().zeroHeading()));
         controller.y().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));

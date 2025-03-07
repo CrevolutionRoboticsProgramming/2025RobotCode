@@ -1,13 +1,18 @@
 package frc.robot.auton;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -16,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 
 /* MASTER AUTON CLASS */
@@ -24,6 +30,9 @@ public class AutonMaster {
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
     private static CommandSwerveDrivetrain drivetrain;
 
+    private static AutonMaster mInstance;
+
+    
     public AutonMaster() {
         drivetrain = CommandSwerveDrivetrain.getInstance();
         try {
@@ -59,9 +68,25 @@ public class AutonMaster {
         //Add Auton Options Here
         autonChooser.addOption("TestPath", AutoBuilder.buildAuto("TestAuto"));
     }
+    
+
+    public static AutonMaster getInstance() {
+        if (mInstance == null) {
+            mInstance = new AutonMaster();
+        }
+        return mInstance;
+    }
 
     public void configureNamedCommands() {
        
+    }
+
+    public Command getTestPathFindingCommand() {
+        PathConstraints pathFindConstraints = new PathConstraints(3.00, 3.00, 9.42478, 12.5664);
+        Translation2d pathFindGoalPoseTranslation = new Translation2d(1.202, 2.169);
+        Rotation2d pathFindGoalPoseRotation = Rotation2d.fromDegrees(0);
+        Pose2d pathFindGoalPose = new Pose2d(pathFindGoalPoseTranslation, pathFindGoalPoseRotation);
+        return AutoBuilder.pathfindToPose(pathFindGoalPose, pathFindConstraints);
     }
 
     public SendableChooser<Command> getAutonSelector() {
