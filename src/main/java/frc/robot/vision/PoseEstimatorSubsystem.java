@@ -235,8 +235,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     return VisionConfig.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
   }
 
-  public void estimatorChecker(PhotonRunnable estamator) {
-    var cameraPose = estamator.grabLatestEstimatedPose();
+  public void estimatorChecker(PhotonRunnable estimator) {
+    var cameraPose = estimator.grabLatestEstimatedPose();
     if (cameraPose != null) {
       // New pose from vision
       var pose2d = cameraPose.estimatedPose.toPose2d();
