@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 
-public class PoseEstimator extends SubsystemBase {
+public class PoseEstimatorSubsystem extends SubsystemBase {
 
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
@@ -54,7 +54,10 @@ public class PoseEstimator extends SubsystemBase {
   });
 
   private OriginPosition originPosition = kBlueAllianceWallRightSide;
-  public PoseEstimator(Supplier<Rotation2d> rotationSupplier,
+
+  private static PoseEstimatorSubsystem mInstance;
+
+  public PoseEstimatorSubsystem(Supplier<Rotation2d> rotationSupplier,
       Supplier<SwerveModulePosition[]> modulePositionSupplier) {
     this.rotationSupplier = rotationSupplier;
     this.modulePositionSupplier = modulePositionSupplier;
@@ -81,6 +84,14 @@ public class PoseEstimator extends SubsystemBase {
     // backNotifier.setName("backRunnable");
     // backNotifier.startPeriodic(0.02);
 
+  }
+
+  public static PoseEstimatorSubsystem getInstance() {
+    if(mInstance == null) {
+      CommandSwerveDrivetrain mDrivetrain = CommandSwerveDrivetrain.getInstance();
+      mInstance = new PoseEstimatorSubsystem(mDrivetrain::getGyroRotation, mDrivetrain::getSwerveModulePositions);
+    }
+    return mInstance;
   }
 
   public void addDashboardWidgets(ShuffleboardTab tab) {

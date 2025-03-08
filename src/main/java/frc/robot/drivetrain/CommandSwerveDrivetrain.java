@@ -2,6 +2,7 @@ package frc.robot.drivetrain;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
@@ -294,8 +296,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    public Rotation2d getGyroRotation() {
+        return mGyro.getRotation2d();
+    }
+
     public void zeroHeading() {
         // seedFieldCentric();
+    }
+
+    public SwerveModulePosition[] getSwerveModulePositions() {
+        return getState().ModulePositions;
+        // return Arrays.stream(swerveModules).map(module -> module.getPosition()).toArray(SwerveModulePosition[]::new);
     }
 
     private void startSimThread() {

@@ -18,11 +18,11 @@ public class Operator extends Gamepad {
         static final double kDeadzone = 0.1;
     }
 
-   ExpCurve stickCurve;
-   ExpCurve shooterPivotManualCurve;
-   ExpCurve intakePivotManualCurve;
-   ExpCurve positionTestCurve;
-   ExpCurve elevatorCurve;
+    ExpCurve stickCurve;
+    ExpCurve shooterPivotManualCurve;
+    ExpCurve intakePivotManualCurve;
+    ExpCurve positionTestCurve;
+    ExpCurve elevatorCurve;
     private static Operator mInstance;
 
     ExpCurve shooterManualCurve;
