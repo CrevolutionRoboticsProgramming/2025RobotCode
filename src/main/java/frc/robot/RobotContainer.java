@@ -22,7 +22,6 @@ import frc.robot.elevator.ElevatorSubsystem;
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import frc.robot.operator.OperatorXbox;
-// import frc.robot.vision.PhotonRunnable;
 import frc.robot.vision.VisionConfig;
 
 
@@ -38,17 +37,6 @@ public class RobotContainer {
     
     public static boolean modeFast = true;
 
-    // private final Thread photonThread = new Thread(
-    //     new PhotonRunnable (
-    //         VisionConfig.CAM_NAMES,
-    //         VisionConfig.ROBOT_TO_CAM_TRANSFORMS,
-    //         CommandSwerveDrivetrain.getInstance()::addVisionMeasurement,
-    //         () -> CommandSwerveDrivetrain.getInstance().getState().Pose
-    //     )
-
-    // );
-
-
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(kMaxVelocity * 0.1)
@@ -61,10 +49,6 @@ public class RobotContainer {
     public RobotContainer() {
         mAutonChooser = mAutonMaster.getAutonSelector();
         setDefaultCommands();
-
-        // photonThread.setName("PhotonVision");
-        // photonThread.setDaemon(true);
-        // photonThread.start();
 
         ShuffleboardTab autonTab = Shuffleboard.getTab("Auton Chooser");
         autonTab.add(mAutonChooser);
