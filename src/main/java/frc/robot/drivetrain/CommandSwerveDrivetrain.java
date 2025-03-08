@@ -18,9 +18,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -63,6 +67,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
+    private Field2d field2d = new Field2d();
+
+    // StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault().getStructTopic("MyPose2d", Pose2d.struct).publish();
 
 
 
@@ -266,10 +273,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             m_hasAppliedOperatorPerspective = true;
         }
 
-        SmartDashboard.putNumber("Encoder Pos FL", getState().ModulePositions[0].angle.getRotations());
-        SmartDashboard.putNumber("Encoder Pos FR", getState().ModulePositions[1].angle.getRotations());
-        SmartDashboard.putNumber("Encoder Pos BL", getState().ModulePositions[2].angle.getRotations());
-        SmartDashboard.putNumber("Encoder Pos BR", getState().ModulePositions[3].angle.getRotations());
+        // SmartDashboard.putNumber("Encoder Pos FL", getState().ModulePositions[0].angle.getRotations());
+        // SmartDashboard.putNumber("Encoder Pos FR", getState().ModulePositions[1].angle.getRotations());
+        // SmartDashboard.putNumber("Encoder Pos BL", getState().ModulePositions[2].angle.getRotations());
+        // SmartDashboard.putNumber("Encoder Pos BR", getState().ModulePositions[3].angle.getRotations());
+
+        // posePublisher.set(getState().Pose);
+        // SmartDashboard.putData(field2d);
+        // field2d.setRobotPose(getState().Pose);
+        // SmartDashboard.putNumber("POSE x", getPose().getX());
 
     }
     
