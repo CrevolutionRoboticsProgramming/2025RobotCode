@@ -10,24 +10,23 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 
 public class SetAngleAlgaePivot extends Command {
     AlgaeSubsystem mAlgaeSubsystem;
-    AlgaeSubsystem.State targetState;
     Rotation2d targetAngle;
 
     public SetAngleAlgaePivot(AlgaeSubsystem.State targetState) {
         mAlgaeSubsystem = AlgaeSubsystem.getInstance();   
-        this.targetState = targetState;
+        targetAngle = targetState.pos;
         addRequirements(mAlgaeSubsystem);
     }
 
-    // public SetAngleAlgaePivot(Supplier<Rotation2d> angleSupplier) {
-    //     mAlgaeSubsystem = AlgaeSubsystem.getInstance();   
-    //     targetAngle = angle;
-    //     addRequirements(mAlgaeSubsystem);
-    // }
+    public SetAngleAlgaePivot(Supplier<Rotation2d> angleSupplier) {
+        mAlgaeSubsystem = AlgaeSubsystem.getInstance();   
+        targetAngle = angleSupplier.get();
+        addRequirements(mAlgaeSubsystem);
+    }
 
     @Override
     public void initialize() {
-        mAlgaeSubsystem.setTargetState(targetState);
+        mAlgaeSubsystem.setTargetPosition(targetAngle);;
 
     }
 
