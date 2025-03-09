@@ -99,10 +99,23 @@ public class VisionConfig {
 
 
     public class AlignmentConfig {
+        public static final double THETA_kP = 3.0;
+        public static final double THETA_kI = 0.0;
+        public static final double THETA_kD = 0.0;
+    
+        public static final double X_kP = 5.0;
+        public static final double X_kI = 0.0;
+        public static final double X_kD = 0.0;
+    
+        public static final double Y_kP = 5.0;
+        public static final double Y_kI = 0.0;
+        public static final double Y_kD = 0.0;
+    
+
         public static final Distance ALIGNMENT_TOLERANCE = Inches.of(0.5); //inches
         public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(2);
         public static final LinearAcceleration MAX_ALIGN_TRANSLATION_ACCELERATION = MetersPerSecondPerSecond.of(6.0);
-        public static final AngularVelocity MAX_ALIGH_ANGULAR_VELOCITY = RotationsPerSecond.of(1.25).times(0.75);
+        public static final AngularVelocity MAX_ALIGN_ANGULAR_VELOCITY = RotationsPerSecond.of(1.25).times(0.75);
         public static final AngularAcceleration MAX_ALIGN_ANGULAR_ACCELERATION = RadiansPerSecondPerSecond.of(6.0 * Math.PI);
     
         //TODO: MIGHT NEED TO PLAY AROUND WITH ALL THE POSES BELOW
