@@ -2,7 +2,7 @@ package frc.robot.rushinator;
 
 public class RushinatorConfig {
     
-    public class RushinatorArmConfig {
+    public class RushinatorPivotConfig {
 
     }
 
@@ -11,7 +11,7 @@ public class RushinatorConfig {
     }
 
     public class RushinatorRollersConfig {
-        
+
     }
 
 }
