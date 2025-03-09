@@ -10,4 +10,8 @@ public class RushinatorConfig {
         
     }
 
+    public class RushinatorRollersConfig {
+        
+    }
+
 }
