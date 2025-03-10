@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.RobotContainer;
 import frc.robot.drivetrain.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -47,7 +47,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public static CommandSwerveDrivetrain mInstance;
 
-    public static Pigeon2 mGyro = new Pigeon2(TunerConstants.kPigeonId, "Canivore");
+    public Pigeon2 mGyro = new Pigeon2(TunerConstants.kPigeonId, "Canivore");
 
     public static TalonFX FrontLeftSteerMotor = new TalonFX(TunerConstants.kFrontLeftSteerMotorId, "Canbus");
     public static TalonFX FrontRightSteerMotor = new TalonFX(TunerConstants.kFrontRightSteerMotorId, "Canbus");
@@ -298,6 +298,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Rotation2d getGyroRotation() {
         return mGyro.getRotation2d();
+    }
+
+    public void stopSwerve() {
+        applyRequest(() -> {
+            return RobotContainer.drive.withVelocityX(0.0)
+            .withVelocityY(0.0)
+            .withRotationalRate(0.0);
+        });
     }
 
     public void zeroHeading() {
