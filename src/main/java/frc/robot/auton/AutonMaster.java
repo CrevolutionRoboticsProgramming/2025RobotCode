@@ -68,6 +68,7 @@ public class AutonMaster {
         
         //Add Auton Options Here
         autonChooser.addOption("TestPath", AutoBuilder.buildAuto("TestAuto"));
+        autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("L-3C-F"));
     }
     
 
