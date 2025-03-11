@@ -203,12 +203,12 @@ public class TunerConstants {
         );
     }
 
-        public static final SwerveModulePosition[] K_SWERVE_MODULE_POSITIONS = new SwerveModulePosition[]{
-        new SwerveModulePosition(kFrontLeftXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.FrontLeftSteerMotor.getPosition().getValueAsDouble())),
-        new SwerveModulePosition(kFrontRightXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.FrontRightSteerMotor.getPosition().getValueAsDouble())),
-        new SwerveModulePosition(kBackLeftXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.BackLeftSteerMotor.getPosition().getValueAsDouble())),
-        new SwerveModulePosition(kBackRightXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.BackRightSteerMotor.getPosition().getValueAsDouble()))
-    };
+    // public static final SwerveModulePosition[] K_SWERVE_MODULE_POSITIONS = new SwerveModulePosition[]{
+    //     new SwerveModulePosition(kFrontLeftXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.FrontLeftSteerMotor.getPosition().getValueAsDouble())),
+    //     new SwerveModulePosition(kFrontRightXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.FrontRightSteerMotor.getPosition().getValueAsDouble())),
+    //     new SwerveModulePosition(kBackLeftXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.BackLeftSteerMotor.getPosition().getValueAsDouble())),
+    //     new SwerveModulePosition(kBackRightXPos, Rotation2d.fromDegrees(CommandSwerveDrivetrain.BackRightSteerMotor.getPosition().getValueAsDouble()))
+    // };
 
     /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected device types.
