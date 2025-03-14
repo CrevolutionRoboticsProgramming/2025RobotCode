@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RushinatorWrist extends SubsystemBase {
@@ -58,6 +59,15 @@ public class RushinatorWrist extends SubsystemBase {
         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
     }
 
+    private static RushinatorWrist mInstance;
+    public static RushinatorWrist getInstance() {
+        if (mInstance == null) {
+            mInstance = new RushinatorWrist();
+        }
+        return mInstance;
+    }
+
+
     @Override
     public void periodic() {
         double currentAngle = mWristCancoder.getAbsolutePosition().getValueAsDouble();
@@ -81,4 +91,37 @@ public class RushinatorWrist extends SubsystemBase {
         return mPPIDController.atGoal();
     }
 
+    public State getCurrentWristState() {
+        return kLastState;
+    }
+
+    public static class ToggleWristAngle extends Command {
+        State mCurrentState = RushinatorWrist.getInstance().getCurrentWristState();
+        State mTargetState;
+        public ToggleWristAngle(State targetWristState) {
+            mTargetState = targetWristState;
+            addRequirements(RushinatorWrist.getInstance());
+        }
+
+        @Override
+        public void initialize() {
+            RushinatorWrist.getInstance().setTargetState(mTargetState);
+        }
+
+        @Override
+        public void execute() {
+            
+        }
+
+        @Override
+        public boolean isFinished() {
+            return RushinatorWrist.getInstance().atSetpoint();
+        }
+
+        @Override
+        public void end(boolean interrupted) {
+            
+        }
+
+    }
 }
