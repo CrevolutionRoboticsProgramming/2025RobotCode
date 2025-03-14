@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotContainer;
 import frc.robot.drivetrain.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.vision.PoseEstimatorSubsystem;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -49,10 +50,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Pigeon2 mGyro = new Pigeon2(TunerConstants.kPigeonId, "Canivore");
 
-    public static TalonFX FrontLeftSteerMotor = new TalonFX(TunerConstants.kFrontLeftSteerMotorId, "Canbus");
-    public static TalonFX FrontRightSteerMotor = new TalonFX(TunerConstants.kFrontRightSteerMotorId, "Canbus");
-    public static TalonFX BackLeftSteerMotor = new TalonFX(TunerConstants.kBackLeftSteerMotorId, "Canbus");
-    public static TalonFX BackRightSteerMotor = new TalonFX(TunerConstants.kBackRightSteerMotorId, "Canbus");
+    // public static TalonFX FrontLeftSteerMotor = new TalonFX(TunerConstants.kFrontLeftSteerMotorId, "Canbus");
+    // public static TalonFX FrontRightSteerMotor = new TalonFX(TunerConstants.kFrontRightSteerMotorId, "Canbus");
+    // public static TalonFX BackLeftSteerMotor = new TalonFX(TunerConstants.kBackLeftSteerMotorId, "Canbus");
+    // public static TalonFX BackRightSteerMotor = new TalonFX(TunerConstants.kBackRightSteerMotorId, "Canbus");
 
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -229,7 +230,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        System.out.println("YAY Motor is being CALLEEDD!!!! ;)))))");
+        // System.out.println("YAY Motor is being CALLEEDD!!!! ;)))))");
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
@@ -274,6 +275,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
             m_hasAppliedOperatorPerspective = true;
         }
+
+        System.out.println("Estimated Pose X: " + PoseEstimatorSubsystem.getInstance().getCurrentPose().getX());
+        System.out.println("Estimated Pose Y: " + PoseEstimatorSubsystem.getInstance().getCurrentPose().getY());
 
         // SmartDashboard.putNumber("Encoder Pos FL", getState().ModulePositions[0].angle.getRotations());
         // SmartDashboard.putNumber("Encoder Pos FR", getState().ModulePositions[1].angle.getRotations());

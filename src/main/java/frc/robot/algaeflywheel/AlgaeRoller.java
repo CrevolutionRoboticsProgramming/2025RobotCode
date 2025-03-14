@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /** Add your docs here. */
 public class AlgaeRoller extends SubsystemBase{
-     public static class Settings {
+    public static class Settings {
         static final int kLeftID = 15;
         static final int kRightID = 16;
         static final int kIndexID = 17;

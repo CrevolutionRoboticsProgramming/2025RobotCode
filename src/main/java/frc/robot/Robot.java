@@ -14,6 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -108,6 +109,8 @@ public class Robot extends LoggedRobot {
       
   }
 
+  Timer m_gcTimer = new Timer();
+
   /**
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
@@ -120,6 +123,8 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
         m_autonomousCommand.schedule();
     }
+
+    // m_gcTimer.start();
     
   }
 
@@ -154,8 +159,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousPeriodic() {
-
+    // if (m_gcTimer.advanceIfElapsed(5)) {
+    //   System.gc();
+    // }
   }
+
 
   @Override
   public void teleopInit() {
@@ -164,6 +172,7 @@ public class Robot extends LoggedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     resetCommandsAndButtons();
+    // m_gcTimer.start();
   }
 
   /**
@@ -171,6 +180,9 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    // if (m_gcTimer.advanceIfElapsed(0)) {
+    //   System.gc();
+    // }
   }
 
   @Override
