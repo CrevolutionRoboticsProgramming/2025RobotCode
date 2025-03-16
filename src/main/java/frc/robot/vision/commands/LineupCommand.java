@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.vision.VisionConfig;
@@ -58,7 +59,7 @@ public class LineupCommand extends Command {
         //set tolerances of all PID controllers
         xDistanceController.setTolerance(VisionConfig.AlignmentConfig.DISTANCE_TOLERANCE.in(Meters));
         yDistanceController.setTolerance(VisionConfig.AlignmentConfig.LATERAL_TOLERANCE.in(Meters));
-        thetaController.setTolerance(VisionConfig.AlignmentConfig.THETA_TOLERANCE);
+        thetaController.enableContinuousInput(Units.degreesToRadians(-180), Units.degreesToRadians(180));
 
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
 

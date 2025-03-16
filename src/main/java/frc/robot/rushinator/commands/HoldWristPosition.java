@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.rushinator.RushinatorWrist;
 
 public class HoldWristPosition extends Command {
+    private double baselineCancoderRadians;
+
     public HoldWristPosition() {
         addRequirements(RushinatorWrist.getInstance());
     }
@@ -13,6 +15,7 @@ public class HoldWristPosition extends Command {
     public void initialize() {
         // On initialization, hold the last commanded state if available;
         // otherwise, use the current sensor reading to set the goal.
+        baselineCancoderRadians = RushinatorWrist.getInstance().getCurrentAngle();
         if (RushinatorWrist.getInstance().getCurrentWristState() != null) {
             RushinatorWrist.getInstance().setTargetState(RushinatorWrist.getInstance().getCurrentWristState());
         } else {
@@ -23,10 +26,9 @@ public class HoldWristPosition extends Command {
 
     @Override
     public void execute() {
-        double compensation = 0.0; // TODO: Replace with actual arm sensor reading/calculation.
-
         double desiredWristRadians = RushinatorWrist.getInstance().getCurrentWristState().pos.getRadians();
-        double compensatedGoal = desiredWristRadians - compensation;
+        double delta = RushinatorWrist.getInstance().getCurrentAngle() - baselineCancoderRadians;
+        double compensatedGoal = desiredWristRadians - delta;
         RushinatorWrist.getInstance().setTargetPosition(new Rotation2d(compensatedGoal));
     }
 
