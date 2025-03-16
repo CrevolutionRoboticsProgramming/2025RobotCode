@@ -120,4 +120,7 @@ public class OperatorXbox extends XboxGamepad {
         return -stickCurve.calculate(-controller.getRightX());
     }
 
+    public double getLeftY() { 
+        return controller.getLeftY();
+    }
 }

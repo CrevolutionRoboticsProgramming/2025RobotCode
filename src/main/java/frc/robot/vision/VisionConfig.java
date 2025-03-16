@@ -110,7 +110,10 @@ public class VisionConfig {
         public static final double Y_kP = 5.0;
         public static final double Y_kI = 0.0;
         public static final double Y_kD = 0.0;
-    
+        
+        public static final Distance DISTANCE_TOLERANCE = Inches.of(0.5);
+        public static final Distance LATERAL_TOLERANCE = Inches.of(1.0);
+        public static final double THETA_TOLERANCE = 0.03;
 
         public static final Distance ALIGNMENT_TOLERANCE = Inches.of(0.5); //inches
         public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(2);

@@ -95,33 +95,8 @@ public class RushinatorWrist extends SubsystemBase {
         return kLastState;
     }
 
-    public static class ToggleWristAngle extends Command {
-        State mCurrentState = RushinatorWrist.getInstance().getCurrentWristState();
-        State mTargetState;
-        public ToggleWristAngle(State targetWristState) {
-            mTargetState = targetWristState;
-            addRequirements(RushinatorWrist.getInstance());
-        }
-
-        @Override
-        public void initialize() {
-            RushinatorWrist.getInstance().setTargetState(mTargetState);
-        }
-
-        @Override
-        public void execute() {
-            
-        }
-
-        @Override
-        public boolean isFinished() {
-            return RushinatorWrist.getInstance().atSetpoint();
-        }
-
-        @Override
-        public void end(boolean interrupted) {
-            
-        }
-
+    public double getCurrentAngle() {
+        return mWristCancoder.getAbsolutePosition().getValueAsDouble();
     }
+    
 }

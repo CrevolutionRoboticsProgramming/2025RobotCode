@@ -71,8 +71,6 @@ public class DriverXbox extends XboxGamepad {
         final var xComponent = translationStickCurve.calculate(controller.getLeftX());
         final var yComponent = translationStickCurve.calculate(controller.getLeftY());
         // Components are reversed because field coordinates are opposite of joystick coordinates
-        
-        
         return new Translation2d(yComponent, xComponent);
     }
 

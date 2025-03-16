@@ -25,6 +25,8 @@ import frc.robot.operator.OperatorXbox;
 import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig;
 
+import frc.robot.rushinator.*;
+import frc.robot.rushinator.commands.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -91,6 +93,10 @@ public class RobotContainer {
                 }
             })
         );
+
+        // RushinatorWrist.getInstance().setDefaultCommand(new HoldWristPosition());
+        RushinatorWrist.getInstance().setDefaultCommand(new ManualWristControl(() -> operator.getLeftY()));
+        
 
         // CommandSwerveDrivetrain.getInstance().setDefaultCommand(
         //     CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
