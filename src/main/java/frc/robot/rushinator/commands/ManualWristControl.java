@@ -10,13 +10,6 @@ public class ManualWristControl extends Command {
     private final DoubleSupplier joystickInput;
     private double manualTarget; // target angle in radians
 
-    /**
-     * Creates a new ManualWristControl command.
-     *
-     * @param wrist The wrist subsystem.
-     * @param joystickInput A DoubleSupplier that provides joystick axis input.
-     *                      Positive values will increment the target angle while negative values decrement it.
-     */
     public ManualWristControl(DoubleSupplier joystickInput) {
         this.joystickInput = joystickInput;
         addRequirements(RushinatorWrist.getInstance());
