@@ -7,13 +7,14 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RushinatorWrist extends SubsystemBase {
     public static class Settings {
-        static final int kTalonWristID = 98; //TODO
-        static final int kCancoderWristID = 99; //TODO
+        static final int kTalonWristID = 12; 
+        static final int kCancoderWristID = 24; 
 
         static final double kG = 0.19; // V
         static final double kS = 0.0; // V / rad
@@ -29,8 +30,9 @@ public class RushinatorWrist extends SubsystemBase {
     }
 
     public enum State {
-        kGroundWrist(Rotation2d.fromDegrees(180)),
-        kScoreWrist(Rotation2d.fromDegrees(90));
+        kGroundWrist(Rotation2d.fromDegrees(-36.0)),
+        kScoreWrist(Rotation2d.fromDegrees(-124.8)),
+        kHumanPlayer(Rotation2d.fromDegrees(46.0));
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -76,6 +78,8 @@ public class RushinatorWrist extends SubsystemBase {
         double ffOutput = mFFController.calculate(currentAngle, setpoint.velocity);
         double totalOutputVoltage = pidOutput + ffOutput;
         mWristTalon.setVoltage(totalOutputVoltage);
+
+        SmartDashboard.putNumber("Coral Wrist Current Angle (Degrees)", getCurrentAngle());
     }
 
     public void setTargetState(State targetState) {
@@ -96,7 +100,8 @@ public class RushinatorWrist extends SubsystemBase {
     }
 
     public double getCurrentAngle() {
-        return mWristCancoder.getAbsolutePosition().getValueAsDouble();
+        Rotation2d pos = Rotation2d.fromRotations(mWristCancoder.getAbsolutePosition().getValueAsDouble());
+        return pos.getDegrees();
     }
     
 }

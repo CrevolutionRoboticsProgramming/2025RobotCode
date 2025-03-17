@@ -21,8 +21,8 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 
 public class RushinatorPivot extends SubsystemBase {
     public static class Settings {
-        static final int kTalonPivotID = 14;
-        static final int kCANcoderPivotID = 25;
+        static final int kTalonPivotID = 11;
+        static final int kCANcoderPivotID = 23;
 
         static final double kG = 0.19; // V
         static final double kS = 0.0; // V / rad
@@ -35,11 +35,11 @@ public class RushinatorPivot extends SubsystemBase {
         static final double kI = 0.0;
         static final double kD = 0;
 
-        static final double kZeroOffset = 0.3225; // rotations
+        static final double kZeroOffset = 0.353271  ; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.04);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.23);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.423828);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.089111);
     }
 
     public enum State {
@@ -49,7 +49,7 @@ public class RushinatorPivot extends SubsystemBase {
         kScoreL2(Rotation2d.fromRotations(0.15)),
         kScoreL3(Rotation2d.fromRotations(0.15)),
         kScoreL4(Rotation2d.fromRotations(0.15)),
-        kStow(Rotation2d.fromRotations(0.18)),
+        kStow(Rotation2d.fromRotations(0.112061)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
@@ -123,11 +123,11 @@ public class RushinatorPivot extends SubsystemBase {
         mTalonPivot.setVoltage(voltage);
 
         // Telemetry
-        SmartDashboard.putNumber("Algae Pivot Pos (rotations)", getArmPosition().getRotations());
-        SmartDashboard.putNumber("Algae Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
-        SmartDashboard.putNumber("Algae Pivot Vel (rotations / sec)", getArmVelocity().getRotations());
-        SmartDashboard.putNumber("Algae Pivot Target Vel (rotations / sec)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
-        SmartDashboard.putNumber("Algae Pivot Applied Voltage", voltage);
+        SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getArmPosition().getRotations());
+        SmartDashboard.putNumber("Coral Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
+        SmartDashboard.putNumber("Coral Pivot Vel (rotations / sec)", getArmVelocity().getRotations());
+        SmartDashboard.putNumber("Coral Pivot Target Vel (rotations / sec)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
+        SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
     }
 
     public static class DefaultCommand extends Command {

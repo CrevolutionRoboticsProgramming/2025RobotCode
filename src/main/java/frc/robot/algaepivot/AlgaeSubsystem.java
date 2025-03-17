@@ -40,8 +40,8 @@ public class AlgaeSubsystem extends SubsystemBase {
         static final double kZeroOffset = 0.3225; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.04);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.23);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.069580078125);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.264893);
     }
 
     public enum State {
@@ -49,7 +49,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         kProcessor(Rotation2d.fromRotations(0.06)),
         kReefIntake(Rotation2d.fromRotations(0)),
         kScore(Rotation2d.fromRotations(0.15)),
-        kStow(Rotation2d.fromRotations(0.18)),
+        kStow(Rotation2d.fromRotations(0.248046875)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
