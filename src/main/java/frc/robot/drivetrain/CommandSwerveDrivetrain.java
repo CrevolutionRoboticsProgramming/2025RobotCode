@@ -276,8 +276,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             m_hasAppliedOperatorPerspective = true;
         }
 
-        System.out.println("Estimated Pose X: " + PoseEstimatorSubsystem.getInstance().getCurrentPose().getX());
-        System.out.println("Estimated Pose Y: " + PoseEstimatorSubsystem.getInstance().getCurrentPose().getY());
+        // System.out.println("Estimated Pose X: " + PoseEstimatorSubsystem.getInstance().getCurrentPose().getX());
+        // System.out.println("Estimated Pose Y: " + PoseEstimatorSubsystem.getInstance().getCurrentPose().getY());
 
         // SmartDashboard.putNumber("Encoder Pos FL", getState().ModulePositions[0].angle.getRotations());
         // SmartDashboard.putNumber("Encoder Pos FR", getState().ModulePositions[1].angle.getRotations());
