@@ -10,6 +10,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -28,7 +29,7 @@ public class PhotonRunnable implements Runnable {
     this.photonCamera = cameraName;
     PhotonPoseEstimator photonPoseEstimator = null;
     try {
-      var layout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
+      var layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
       // PV estimates will always be blue, they'll get flipped by robot thread
       layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
       if (photonCamera != null) {
@@ -47,19 +48,22 @@ public class PhotonRunnable implements Runnable {
   public void run() {
     // Get AprilTag data
     if (photonPoseEstimator != null && photonCamera != null) {
-      var photonResults = photonCamera.getLatestResult();
-      if (photonResults.hasTargets()
-          && (photonResults.targets.size() > 1
-              || photonResults.targets.get(0).getPoseAmbiguity() < AMBIGUITY_THRESHOLD)) {
-        photonPoseEstimator.update(photonResults).ifPresent(estimatedRobotPose -> {
-          var estimatedPose = estimatedRobotPose.estimatedPose;
-          // Make sure the measurement is on the field
-          if (estimatedPose.getX() > 0.0 && estimatedPose.getX() <= VisionConfig.FIELD_LENGTH_METERS
-              && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= VisionConfig.FIELD_WIDTH_METERS) {
-            atomicEstimatedRobotPose.set(estimatedRobotPose);
-          }
-        });
+      var photonResults = photonCamera.getAllUnreadResults();
+      for(var result : photonResults) {
+          if (result.hasTargets()
+          && (result.targets.size() > 1
+              || result.targets.get(0).getPoseAmbiguity() < AMBIGUITY_THRESHOLD)) {
+          photonPoseEstimator.update(result).ifPresent(estimatedRobotPose -> {
+            var estimatedPose = estimatedRobotPose.estimatedPose;
+            // Make sure the measurement is on the field
+            if (estimatedPose.getX() > 0.0 && estimatedPose.getX() <= VisionConfig.FIELD_LENGTH_METERS
+                && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= VisionConfig.FIELD_WIDTH_METERS) {
+              atomicEstimatedRobotPose.set(estimatedRobotPose);
+            }
+          });
+        }
       }
+      
     }
   }
 

@@ -110,7 +110,10 @@ public class VisionConfig {
         public static final double Y_kP = 5.0;
         public static final double Y_kI = 0.0;
         public static final double Y_kD = 0.0;
-    
+        
+        public static final Distance DISTANCE_TOLERANCE = Inches.of(0.5);
+        public static final Distance LATERAL_TOLERANCE = Inches.of(1.0);
+        public static final double THETA_TOLERANCE = 0.03;
 
         public static final Distance ALIGNMENT_TOLERANCE = Inches.of(0.5); //inches
         public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(2);
@@ -321,6 +324,40 @@ public class VisionConfig {
 
         public static final Distance LATERAL_TARGET_L4_LEFT = Meters.of(0.05);
         public static final Distance LATERAL_TARGET_L4_RIGHT = Meters.of(0.02);
+
+
+
+        //Joey's Pose Constants for the Reef Locations
+        public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
+
+        public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0));
+        public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
+        public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
+        public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
+        public static final Pose2d Eblue = new Pose2d(5.000, 2.825, Rotation2d.fromDegrees(120));
+        public static final Pose2d Fblue = new Pose2d(5.285, 2.975, Rotation2d.fromDegrees(120));
+        public static final Pose2d Gblue = new Pose2d(5.8, 3.850, Rotation2d.fromDegrees(180));
+        public static final Pose2d Hblue = new Pose2d(5.8, 4.175, Rotation2d.fromDegrees(180));
+        public static final Pose2d Iblue = new Pose2d(5.285, 5.075, Rotation2d.fromDegrees(240));
+        public static final Pose2d Jblue = new Pose2d(5.000, 5.230, Rotation2d.fromDegrees(240));
+        public static final Pose2d Kblue = new Pose2d(3.975, 5.230, Rotation2d.fromDegrees(300));
+        public static final Pose2d Lblue = new Pose2d(3.685, 5.075, Rotation2d.fromDegrees(300));
+
+        public static final double fieldFlip = 17.5;
+        public static final double fieldFlipy = 8;
+
+        public static final Pose2d Ared = new Pose2d(fieldFlip - 3.180, fieldFlipy - 4.175, Rotation2d.fromDegrees(180));
+        public static final Pose2d Bred = new Pose2d(fieldFlip - 3.180, fieldFlipy - 3.850, Rotation2d.fromDegrees(180));
+        public static final Pose2d Cred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 2.975, Rotation2d.fromDegrees(-120));
+        public static final Pose2d Dred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 2.825, Rotation2d.fromDegrees(-120));
+        public static final Pose2d Ered = new Pose2d(fieldFlip - 5.000, fieldFlipy - 2.825, Rotation2d.fromDegrees(-60));
+        public static final Pose2d Fred = new Pose2d(fieldFlip - 5.285, fieldFlipy - 2.975, Rotation2d.fromDegrees(-60));
+        public static final Pose2d Gred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 3.850, Rotation2d.fromDegrees(0));
+        public static final Pose2d Hred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 4.175, Rotation2d.fromDegrees(0));
+        public static final Pose2d Ired = new Pose2d(fieldFlip - 5.285, fieldFlipy - 5.075, Rotation2d.fromDegrees(-300));
+        public static final Pose2d Jred = new Pose2d(fieldFlip - 5.000, fieldFlipy - 5.230, Rotation2d.fromDegrees(-300));
+        public static final Pose2d Kred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 5.230, Rotation2d.fromDegrees(-240));
+        public static final Pose2d Lred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 5.075, Rotation2d.fromDegrees(-240));
 
     }
 

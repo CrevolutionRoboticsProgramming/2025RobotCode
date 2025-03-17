@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start_F"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F_Load"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Load_D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D_Load"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Load_C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C_Load"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
