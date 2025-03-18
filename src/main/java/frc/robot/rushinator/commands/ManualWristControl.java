@@ -17,7 +17,7 @@ public class ManualWristControl extends Command {
 
     @Override
     public void initialize() {
-        manualTarget = RushinatorWrist.getInstance().getCurrentAngle();
+        manualTarget = RushinatorWrist.getInstance().getCurrentPos().getRadians();
         RushinatorWrist.getInstance().setTargetPosition(new Rotation2d(manualTarget));
     }
 
@@ -32,7 +32,7 @@ public class ManualWristControl extends Command {
 
         RushinatorWrist.getInstance().setTargetPosition(new Rotation2d(manualTarget));
 
-        double currentAngleDegrees = Math.toDegrees(RushinatorWrist.getInstance().getCurrentAngle());
+        double currentAngleDegrees = Math.toDegrees(RushinatorWrist.getInstance().getCurrentPos().getRadians());
         double manualTargetDegrees = Math.toDegrees(manualTarget);
         System.out.println("Current Wrist Angle: " + currentAngleDegrees 
             + "°, Manual Target: " + manualTargetDegrees + "°");

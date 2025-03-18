@@ -57,6 +57,8 @@ public class RobotContainer {
         autonTab.add(mAutonChooser);
         SmartDashboard.putData(mAutonChooser);
 
+        var mRushPivot = RushinatorPivot.getInstance();
+
         // ShuffleboardTab visionTab = Shuffleboard.getTab("Vision Pose Estimator");
         // PoseEstimatorSubsystem.getInstance().addDashboardWidgets(visionTab);
     }
@@ -95,7 +97,7 @@ public class RobotContainer {
         );
 
         // RushinatorWrist.getInstance().setDefaultCommand(new HoldWristPosition());
-        RushinatorWrist.getInstance().setDefaultCommand(new ManualWristControl(() -> operator.getLeftY()));
+        // RushinatorWrist.getInstance().setDefaultCommand(new ManualWristControl(() -> operator.getLeftY()));
         
 
         // CommandSwerveDrivetrain.getInstance().setDefaultCommand(
@@ -114,9 +116,9 @@ public class RobotContainer {
         // ElevatorSubsystem.getInstance().setDefaultCommand(
         //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
         // );
-        AlgaeSubsystem.getInstance().setDefaultCommand(
-            new AlgaeSubsystem.DefaultCommand()
-        );
+        // AlgaeSubsystem.getInstance().setDefaultCommand(
+        //     new AlgaeSubsystem.DefaultCommand()
+        // );
         // CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
         // CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
         // AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
