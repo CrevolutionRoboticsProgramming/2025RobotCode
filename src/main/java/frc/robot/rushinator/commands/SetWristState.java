@@ -80,9 +80,9 @@ public class SetWristState extends Command {
     public SetWristState(RushinatorWrist.State targetWristState) {
         mRushinatorWrist = RushinatorWrist.getInstance();
 
-        mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, new TrapezoidProfile.Constraints(
-                            Settings.kMaxVelocity.getRadians(),
-                            Settings.kMaxAcceleration.getRadians()
+        mPPIDController = new ProfiledPIDController(RushinatorWrist.Settings.kP, RushinatorWrist.Settings.kI, RushinatorWrist.Settings.kD, new TrapezoidProfile.Constraints(
+                            RushinatorWrist.Settings.kMaxVelocity.getRadians(),
+                            RushinatorWrist.Settings.kMaxAcceleration.getRadians()
                     ));
         mPPIDController.setTolerance(1); //degrees of tolerance
 
