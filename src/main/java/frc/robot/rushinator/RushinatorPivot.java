@@ -101,6 +101,11 @@ public class RushinatorPivot extends SubsystemBase {
         setTargetPosition(targetState.pos);
     }
 
+    public Rotation2d getPivotAngle() {
+        return Rotation2d.fromRotations(mCANcoderPivot.getAbsolutePosition().getValueAsDouble());
+    }
+
+
     public void setTargetPosition(Rotation2d targetPosition) {
         // NOTE: Use radians for target goal to align with re:calc constant units
         mPPIDController.setGoal(targetPosition.getRadians());

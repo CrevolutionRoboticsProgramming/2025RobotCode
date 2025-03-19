@@ -1,5 +1,7 @@
 package frc.robot.rushinator;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -88,14 +90,18 @@ public class RushinatorWrist extends SubsystemBase {
         return mInstance;
     }
 
+    public Rotation2d getWristAngle() {
+        return Rotation2d.fromRotations(mWristCancoder.getAbsolutePosition().getValueAsDouble());
+    }
+
 
     @Override
     public void periodic() {
-        double currentAngle = mWristCancoder.getAbsolutePosition().getValueAsDouble();
-        double pidOutput = mPPIDController.calculate(currentAngle);
-        TrapezoidProfile.State setpoint = mPPIDController.getSetpoint();
-        double ffOutput = mFFController.calculate(currentAngle, setpoint.velocity);
-        double totalOutputVoltage = pidOutput + ffOutput;
+        // double currentAngle = mWristCancoder.getAbsolutePosition().getValueAsDouble();
+        // double pidOutput = mPPIDController.calculate(currentAngle);
+        // TrapezoidProfile.State setpoint = mPPIDController.getSetpoint();
+        // double ffOutput = mFFController.calculate(currentAngle, setpoint.velocity);
+        // double totalOutputVoltage = pidOutput + ffOutput;
         // mWristTalon.setVoltage(totalOutputVoltage);
         
 
