@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 
@@ -81,6 +82,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     allNotifier.setName("runAll");
     allNotifier.startPeriodic(0.02);
 
+    SmartDashboard.putData("Field Pose Estimation", field2d);
     // backNotifier.setName("backRunnable");
     // backNotifier.startPeriodic(0.02);
 
@@ -149,6 +151,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       dashboardPose = flipAlliance(dashboardPose);
     }
     field2d.setRobotPose(dashboardPose);
+    SmartDashboard.putString("Pose Formatted", getFomattedPose());
+    
   }
 
   private String getFomattedPose() {
