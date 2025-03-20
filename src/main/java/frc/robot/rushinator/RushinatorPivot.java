@@ -31,7 +31,7 @@ public class RushinatorPivot extends SubsystemBase {
 
         static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300);
         static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
-        static final double kP = 1.0;
+        static final double kP = 10.0;
         static final double kI = 0.0;
         static final double kD = 0;
 
@@ -126,10 +126,15 @@ public class RushinatorPivot extends SubsystemBase {
 
     @Override
     public void periodic() {
-        var voltage = mPPIDController.calculate(getArmPosition().getRadians());
-        // voltage += mFFController.calculate(getArmPosition().getRadians(), mPPIDController.getSetpoint().velocity);
-        mTalonPivot.setVoltage(voltage);
+        double voltage;
+        if (kLastState != null) {
+            voltage = mPPIDController.calculate(getArmPosition().getRadians());
+            // voltage += mFFController.calculate(getArmPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        } else {
+            voltage = 0.0;
+        }
 
+        mTalonPivot.setVoltage(voltage);
         // System.out.println("This Periodic is bieng called");
         // Telemetry
         SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getArmPosition().getRotations());

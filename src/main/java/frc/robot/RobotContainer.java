@@ -57,8 +57,6 @@ public class RobotContainer {
         autonTab.add(mAutonChooser);
         SmartDashboard.putData(mAutonChooser);
 
-        var mRushPivot = RushinatorPivot.getInstance();
-
         var mPoseEstimator = PoseEstimatorSubsystem.getInstance();
 
         // ShuffleboardTab visionTab = Shuffleboard.getTab("Vision Pose Estimator");
@@ -116,7 +114,7 @@ public class RobotContainer {
         // );
 
         // ElevatorSubsystem.getInstance().setDefaultCommand(
-        //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
+        //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutpu%t)
         // );
         AlgaeSubsystem.getInstance().setDefaultCommand(
             new AlgaeSubsystem.DefaultCommand()

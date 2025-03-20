@@ -11,22 +11,19 @@ import frc.robot.rushinator.RushinatorWrist;
 
 public class SetArmState extends Command{
     RushinatorPivot mRushinatorPivot;
-    RushinatorRollers mRushinatorRollers;
     RushinatorWrist mRushinatorWrist;
     Rotation2d targetAngle;
 
     public SetArmState(RushinatorPivot.State targetState) {
         mRushinatorPivot = RushinatorPivot.getInstance();   
-        mRushinatorRollers = RushinatorRollers.getInstance();
         targetAngle = targetState.pos;
-        addRequirements(getRequirements());
+        addRequirements(mRushinatorPivot);
     }
 
     public SetArmState(Supplier<Rotation2d> angleSupplier) {
         mRushinatorPivot = RushinatorPivot.getInstance();   
-        mRushinatorRollers = RushinatorRollers.getInstance();
         targetAngle = angleSupplier.get();
-        addRequirements(getRequirements());
+        addRequirements(mRushinatorPivot);
     }
 
     @Override

@@ -116,8 +116,14 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        var voltage = mPPIDController.calculate(getWristPosition().getRadians());
-//        voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        double voltage;
+        if (kLastState != null) {
+            voltage = mPPIDController.calculate(getWristPosition().getRadians());
+            // voltage += mFFController.calculate(getWristPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        } else {
+            voltage = 0.0;
+        }
+
         mTalonPivot.setVoltage(voltage);
 
         // Telemetry
@@ -136,13 +142,11 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         @Override
         public void execute() {
-            // if (kLastState == State.kTuck) {
-            //     AlgaeSubsystem.getInstance().setTargetState(State.kTuck);
-            // } else {
-            //     AlgaeSubsystem.getInstance().setTargetState(State.kStow);
-            // }
-
-            AlgaeSubsystem.getInstance().setTargetState(State.kStow);
+            if (kLastState == State.kTuck) {
+                AlgaeSubsystem.getInstance().setTargetState(State.kTuck);
+            } else {
+                AlgaeSubsystem.getInstance().setTargetState(State.kStow);
+            }
         }
 
     }
