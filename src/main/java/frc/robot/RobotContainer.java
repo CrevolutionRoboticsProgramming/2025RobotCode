@@ -118,9 +118,9 @@ public class RobotContainer {
         // ElevatorSubsystem.getInstance().setDefaultCommand(
         //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
         // );
-        // AlgaeSubsystem.getInstance().setDefaultCommand(
-        //     new AlgaeSubsystem.DefaultCommand()
-        // );
+        AlgaeSubsystem.getInstance().setDefaultCommand(
+            new AlgaeSubsystem.DefaultCommand()
+        );
         // CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
         // CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
         // AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));

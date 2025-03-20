@@ -35,21 +35,21 @@ public class AlgaeSubsystem extends SubsystemBase {
         static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
         static final double kP = 15.0;
         static final double kI = 0.0;
-        static final double kD = 0;
+        static final double kD = 0.0;
 
         static final double kZeroOffset = 0.3225; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.069580078125);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.264893);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.06640625);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.267);
     }
 
     public enum State {
         kFloorIntake(Settings.kMinPos),
-        kProcessor(Rotation2d.fromRotations(0.06)),
-        kReefIntake(Rotation2d.fromRotations(0)),
-        kScore(Rotation2d.fromRotations(0.15)),
-        kStow(Rotation2d.fromRotations(0.248046875)),
+        kProcessor(Rotation2d.fromRotations(0.047119140625)),
+        kReefIntake(Rotation2d.fromRotations(0.021728515625)),
+        kScore(Rotation2d.fromRotations(0.161376953125)),
+        kStow(Rotation2d.fromRotations(0.22021484375)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
@@ -83,8 +83,6 @@ public class AlgaeSubsystem extends SubsystemBase {
                 Settings.kMaxVelocity.getRadians(),
                 Settings.kMaxAcceleration.getRadians()
         ));
-
-        setTargetState(State.kTuck);
     }
 
 
@@ -138,11 +136,13 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         @Override
         public void execute() {
-            if (kLastState == State.kTuck) {
-                AlgaeSubsystem.getInstance().setTargetState(State.kTuck);
-            } else {
-                AlgaeSubsystem.getInstance().setTargetState(State.kStow);
-            }
+            // if (kLastState == State.kTuck) {
+            //     AlgaeSubsystem.getInstance().setTargetState(State.kTuck);
+            // } else {
+            //     AlgaeSubsystem.getInstance().setTargetState(State.kStow);
+            // }
+
+            AlgaeSubsystem.getInstance().setTargetState(State.kStow);
         }
 
     }

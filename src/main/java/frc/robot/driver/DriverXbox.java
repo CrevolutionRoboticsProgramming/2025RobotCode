@@ -11,8 +11,11 @@ import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.auton.AutonMaster;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.indexer.commands.IndexerCommands;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.rushinator.commands.SetArmState;
+import frc.robot.rushinator.commands.SetWristState;
 
 
 public class DriverXbox extends XboxGamepad {
@@ -57,11 +60,20 @@ public class DriverXbox extends XboxGamepad {
         controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
         controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
 
+        /*Algae Pivot TEsting */
+        // controller.a().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
+        // controller.b().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kProcessor));
+        // controller.x().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kReefIntake));
+        // controller.y().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kScore));
+
+        /*Coral Arm Pivot TEsting */
+        controller.y().onTrue(new SetArmState(RushinatorPivot.State.kStowTravel));
+        controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
+
+        /*Wrist TEsting*/
         // controller.x().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
-        
-        // controller.y().onTrue(new SetWristState(RushinatorWrist.State.kHumanPlayer));
+        // controller.y().onTrue(new SetWristState(RushinatorWrist.State.kPickUp));
         // controller.b().onTrue(new SetWristState(RushinatorWrist.State.kScoreRightWrist));
-        // controller.a().onTrue(new SetWristState(RushinatorWrist.State.kGroundWrist));
 
         // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         

@@ -78,8 +78,6 @@ import frc.robot.rushinator.RushinatorWrist.State;
 public class SetWristState extends Command {
     private final RushinatorWrist mRushinatorWrist;
     private final RushinatorPivot mRushinatorPivot;
-    private final ProfiledPIDController mPPIDController;
-    private final SimpleMotorFeedforward mFFController;
     private final RushinatorWrist.State mTargetState;
     private final RushinatorPivot.State mTargetArmState;
     private double setpointAngle;
@@ -87,15 +85,8 @@ public class SetWristState extends Command {
     public SetWristState(RushinatorWrist.State targetWristState) {
         mRushinatorWrist = RushinatorWrist.getInstance();
 
-        mPPIDController = new ProfiledPIDController(RushinatorWrist.Settings.kP, RushinatorWrist.Settings.kI, RushinatorWrist.Settings.kD, new TrapezoidProfile.Constraints(
-                            RushinatorWrist.Settings.kMaxVelocity.getRadians(),
-                            RushinatorWrist.Settings.kMaxAcceleration.getRadians()
-                    ));
-
         mTargetState = targetWristState;
         mTargetArmState = null;
-
-        mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
 
         mRushinatorPivot = RushinatorPivot.getInstance();
 
@@ -105,15 +96,8 @@ public class SetWristState extends Command {
     public SetWristState(RushinatorWrist.State targetWristState, RushinatorPivot.State targetArmState) {
         mRushinatorWrist = RushinatorWrist.getInstance();
 
-        mPPIDController = new ProfiledPIDController(RushinatorWrist.Settings.kP, RushinatorWrist.Settings.kI, RushinatorWrist.Settings.kD, new TrapezoidProfile.Constraints(
-                            RushinatorWrist.Settings.kMaxVelocity.getRadians(),
-                            RushinatorWrist.Settings.kMaxAcceleration.getRadians()
-                    ));
-
         mTargetState = targetWristState;
         mTargetArmState= targetArmState;
-
-        mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
 
         mRushinatorPivot = RushinatorPivot.getInstance();
 
@@ -122,39 +106,35 @@ public class SetWristState extends Command {
 
     @Override
     public void initialize() {
-        // setpointAngle = mTargetState.pos.getRadians() - mRushinatorWrist.getCurrentRelativePos().getRadians();
         /*neW Version of grabbing pos (Should work?) */
         // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStow.pos.getRadians() - mTargetArmState.pos.getRadians());
-        setpointAngle = mTargetState.pos.getRadians();
-        // setpointAngle = mTargetState.pos.getRadians() - mRushinatorPivot.getPivotAngle().getRadians();
+        setpointAngle = mTargetState.pos.getRotations();
+        mRushinatorWrist.setTargetState(mTargetState);
+        
         SmartDashboard.putNumber("Current Arm Pivot (Radians)", setpointAngle);
         SmartDashboard.putNumber("Actual Setpoint (Rotations)", Units.radiansToRotations(setpointAngle));
-        // SmartDashboard.putNumber("Setpoint Angle [Degrees]", Units.radiansToDegrees(setpointAngle));
-        mPPIDController.setGoal(setpointAngle);
+        
     }
 
     @Override
     public void execute() {
-        var pidVoltage = mPPIDController.calculate(mRushinatorWrist.getCurrentRelativePos().getRadians());
-        // var pidVoltage = 0.0;
-        var ffVoltage = mFFController.calculate(mPPIDController.getSetpoint().velocity);
+        double Voltage;
 
-        var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRadians();
-
-        if (error <= 1.0) {
-            ffVoltage = 0.0;
+        if (mTargetState.pos.getRotations() > mRushinatorWrist.getCurrentRelativePos().getRotations()) {
+            Voltage = 3.0;
+        } else {
+            Voltage = -3.0;
         }
-        // var ffVoltage = 0.0;
-        var totalVoltage = ffVoltage + pidVoltage;
-        mRushinatorWrist.setVoltage(totalVoltage);
+
+        var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRotations();
+        if (-0.75 <= error && error <= 0.75) {
+            Voltage = 0.0;
+        }
+        
+        mRushinatorWrist.setVoltage(Voltage);
 
         SmartDashboard.putNumber("Error (radians)", error);
-        SmartDashboard.putBoolean("At Wrist Target", mPPIDController.atGoal());
-        SmartDashboard.putNumber("PID Error", mPPIDController.getPositionError());
-        SmartDashboard.putNumber("PID Setpoint", mPPIDController.getSetpoint().position);
-        SmartDashboard.putNumber("PID Output Voltage", pidVoltage);
-        SmartDashboard.putNumber("FF Output Voltage", ffVoltage);
-        SmartDashboard.putNumber("Total Voltage", totalVoltage);
+        SmartDashboard.putNumber("Total Voltage", Voltage);
     }
 
     @Override
@@ -166,6 +146,99 @@ public class SetWristState extends Command {
     public void end(boolean interrupted) {
         mRushinatorWrist.setVoltage(0);
     }
+
+
+// public class SetWristState extends Command {
+//     private final RushinatorWrist mRushinatorWrist;
+//     private final RushinatorPivot mRushinatorPivot;
+//     private final ProfiledPIDController mPPIDController;
+//     private final SimpleMotorFeedforward mFFController;
+//     private final RushinatorWrist.State mTargetState;
+//     private final RushinatorPivot.State mTargetArmState;
+//     private double setpointAngle;
+
+//     public SetWristState(RushinatorWrist.State targetWristState) {
+//         mRushinatorWrist = RushinatorWrist.getInstance();
+
+//         mPPIDController = new ProfiledPIDController(RushinatorWrist.Settings.kP, RushinatorWrist.Settings.kI, RushinatorWrist.Settings.kD, new TrapezoidProfile.Constraints(
+//                             RushinatorWrist.Settings.kMaxVelocity.getRadians(),
+//                             RushinatorWrist.Settings.kMaxAcceleration.getRadians()
+//                     ));
+
+//         mTargetState = targetWristState;
+//         mTargetArmState = null;
+
+//         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
+
+//         mRushinatorPivot = RushinatorPivot.getInstance();
+
+//         addRequirements(mRushinatorWrist);
+//     }
+
+//     public SetWristState(RushinatorWrist.State targetWristState, RushinatorPivot.State targetArmState) {
+//         mRushinatorWrist = RushinatorWrist.getInstance();
+
+//         mPPIDController = new ProfiledPIDController(RushinatorWrist.Settings.kP, RushinatorWrist.Settings.kI, RushinatorWrist.Settings.kD, new TrapezoidProfile.Constraints(
+//                             RushinatorWrist.Settings.kMaxVelocity.getRadians(),
+//                             RushinatorWrist.Settings.kMaxAcceleration.getRadians()
+//                     ));
+
+//         mTargetState = targetWristState;
+//         mTargetArmState= targetArmState;
+
+//         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
+
+//         mRushinatorPivot = RushinatorPivot.getInstance();
+
+//         addRequirements(mRushinatorWrist);
+//     }
+
+//     @Override
+//     public void initialize() {
+//         // setpointAngle = mTargetState.pos.getRadians() - mRushinatorWrist.getCurrentRelativePos().getRadians();
+//         /*neW Version of grabbing pos (Should work?) */
+//         // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStow.pos.getRadians() - mTargetArmState.pos.getRadians());
+//         setpointAngle = mTargetState.pos.getRadians();
+//         // setpointAngle = mTargetState.pos.getRadians() - mRushinatorPivot.getPivotAngle().getRadians();
+//         SmartDashboard.putNumber("Current Arm Pivot (Radians)", setpointAngle);
+//         SmartDashboard.putNumber("Actual Setpoint (Rotations)", Units.radiansToRotations(setpointAngle));
+//         // SmartDashboard.putNumber("Setpoint Angle [Degrees]", Units.radiansToDegrees(setpointAngle));
+//         mPPIDController.setGoal(setpointAngle);
+//     }
+
+//     @Override
+//     public void execute() {
+//         var pidVoltage = mPPIDController.calculate(mRushinatorWrist.getCurrentRelativePos().getRadians());
+//         // var pidVoltage = 0.0;
+//         var ffVoltage = mFFController.calculate(mPPIDController.getSetpoint().velocity);
+
+//         var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRadians();
+
+//         if (error <= 1.0) {
+//             ffVoltage = 0.0;
+//         }
+//         // var ffVoltage = 0.0;
+//         var totalVoltage = ffVoltage + pidVoltage;
+//         mRushinatorWrist.setVoltage(totalVoltage);
+
+//         SmartDashboard.putNumber("Error (radians)", error);
+//         SmartDashboard.putBoolean("At Wrist Target", mPPIDController.atGoal());
+//         SmartDashboard.putNumber("PID Error", mPPIDController.getPositionError());
+//         SmartDashboard.putNumber("PID Setpoint", mPPIDController.getSetpoint().position);
+//         SmartDashboard.putNumber("PID Output Voltage", pidVoltage);
+//         SmartDashboard.putNumber("FF Output Voltage", ffVoltage);
+//         SmartDashboard.putNumber("Total Voltage", totalVoltage);
+//     }
+
+//     @Override
+//     public boolean isFinished() {
+//         return false;
+//     }
+
+//     @Override
+//     public void end(boolean interrupted) {
+//         mRushinatorWrist.setVoltage(0);
+//     }
 
 // public class SetWristState extends Command {
 //     private final RushinatorWrist mRushinatorWrist;

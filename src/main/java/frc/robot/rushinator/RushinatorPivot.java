@@ -31,26 +31,26 @@ public class RushinatorPivot extends SubsystemBase {
 
         static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300);
         static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
-        static final double kP = 0.0;
+        static final double kP = 1.0;
         static final double kI = 0.0;
         static final double kD = 0;
 
-        static final double kZeroOffset = 0.14331054687; // rotations
+        static final double kZeroOffset = 0.1171875; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.3837890625);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.0417480468);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.02392578125);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.357421875);
     }
 
     public enum State {
         kFloorIntake(Settings.kMinPos),
         kHPIntake(Rotation2d.fromRotations(0.06)),
         kScoreL1(Rotation2d.fromRotations(0)),
-        kTestPos(Rotation2d.fromRotations(0.28466796875)),
+        kTestPos(Rotation2d.fromRotations(0.281005859375)),
         kScoreL2(Rotation2d.fromRotations(0.15)),
         kScoreL3(Rotation2d.fromRotations(0.15)),
         kScoreL4(Rotation2d.fromRotations(0.15)),
-        kStow(Rotation2d.fromRotations(0.112061)),
+        kStowTravel(Rotation2d.fromRotations(0.3)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
@@ -84,8 +84,6 @@ public class RushinatorPivot extends SubsystemBase {
                 Settings.kMaxVelocity.getRadians(),
                 Settings.kMaxAcceleration.getRadians()
         ));
-
-        setTargetState(State.kTuck);
     }
 
 
@@ -129,8 +127,8 @@ public class RushinatorPivot extends SubsystemBase {
     @Override
     public void periodic() {
         var voltage = mPPIDController.calculate(getArmPosition().getRadians());
-        voltage += mFFController.calculate(getArmPosition().getRadians(), mPPIDController.getSetpoint().velocity);
-        // mTalonPivot.setVoltage(voltage);
+        // voltage += mFFController.calculate(getArmPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+        mTalonPivot.setVoltage(voltage);
 
         // System.out.println("This Periodic is bieng called");
         // Telemetry
@@ -154,7 +152,7 @@ public class RushinatorPivot extends SubsystemBase {
             if (kLastState == State.kTuck) {
                 RushinatorPivot.getInstance().setTargetState(State.kTuck);
             } else {
-                RushinatorPivot.getInstance().setTargetState(State.kStow);
+                RushinatorPivot.getInstance().setTargetState(State.kStowTravel);
             }
         }
 

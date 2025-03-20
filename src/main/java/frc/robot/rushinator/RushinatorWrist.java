@@ -27,24 +27,23 @@ public class RushinatorWrist extends SubsystemBase {
 
         public static final double kG = 0.0; // V
         public static final double kS = 0.0; // V / rad
-        public static final double kV = 0.06; // V * sec / rad
+        public static final double kV = 1.6; // V * sec / rad
         public static final double kA = 0.0; // V * sec^2 / rad
 
         public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(10);
         public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(100);
-        public static final double kP = 0.001;
+        public static final double kP = 0.05;
         public static final double kI = 0.0;
-        public static final double kD = 0.0001;
+        public static final double kD = 0.05;
 
         public static final double kZeroOffset = 0.0; // rotations
 
     }
 //-1.69580078125
     public enum State {
-        kGroundWrist(Rotation2d.fromRotations(22.52197265625)),
-        kScoreLeftWrist(Rotation2d.fromRotations(0.5)),
-        kScoreRightWrist(Rotation2d.fromRotations(-48.0478515625)),
-        kHumanPlayer(Rotation2d.fromRotations(-24.2724609375));
+        kScoreLeftWrist(Rotation2d.fromRotations(-0.05078125)),
+        kScoreRightWrist(Rotation2d.fromRotations(46.162109375)),
+        kPickUp(Rotation2d.fromRotations(23.0));
 
         State(Rotation2d pos) {
             this.pos = pos;
