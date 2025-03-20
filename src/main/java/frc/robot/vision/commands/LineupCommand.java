@@ -67,10 +67,17 @@ public class LineupCommand extends Command {
     public LineupCommand() {
         //set tolerances of all PID controllers
         xDistanceController.setTolerance(VisionConfig.AlignmentConfig.DISTANCE_TOLERANCE.in(Meters));
+        xDistanceController.setIntegratorRange(-.15, .15);
         yDistanceController.setTolerance(VisionConfig.AlignmentConfig.LATERAL_TOLERANCE.in(Meters));
+        yDistanceController.setIntegratorRange(-.15, .15);
         thetaController.enableContinuousInput(Units.degreesToRadians(-180), Units.degreesToRadians(180));
 
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
+        Pose2d targetPose = getTargetReefPose(true);
+
+        xDistanceController.reset(0);
+        yDistanceController.reset(0);
+        thetaController.reset(0);
 
         addRequirements(CommandSwerveDrivetrain.getInstance());
     }
@@ -82,7 +89,12 @@ public class LineupCommand extends Command {
 
     @Override
     public void execute() {
-        
+        currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
+        ChassisSpeeds currentSpeeds = CommandSwerveDrivetrain.getInstance().getState().Speeds;
+        double xPose = currentPose.getTranslation().getX();
+        double yPose = currentPose.getTranslation().getY();
+
+
     }
 
     @Override
@@ -107,6 +119,7 @@ public class LineupCommand extends Command {
         var currAlliance = DriverStation.getAlliance();
 
         //TODO: map currentPose to a Reef Zone and then finding closest lineup based on heading
+        //joey... what the actual god-loving heck is this
 
         if(currAlliance.get() == Alliance.Blue) {
 
