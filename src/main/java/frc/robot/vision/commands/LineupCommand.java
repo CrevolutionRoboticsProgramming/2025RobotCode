@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.vision.VisionConfig;
+import frc.robot.RobotContainer;
 import frc.robot.drivetrain.*;
 import frc.robot.vision.PoseEstimatorSubsystem;
 
@@ -63,6 +65,7 @@ public class LineupCommand extends Command {
         
 
     private static Pose2d currentPose;
+    private static Pose2d targetPose;
 
     public LineupCommand() {
         //set tolerances of all PID controllers
@@ -73,7 +76,7 @@ public class LineupCommand extends Command {
         thetaController.enableContinuousInput(Units.degreesToRadians(-180), Units.degreesToRadians(180));
 
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
-        Pose2d targetPose = getTargetReefPose(true);
+        targetPose = getTargetReefPose(true);
 
         xDistanceController.reset(0);
         yDistanceController.reset(0);
@@ -91,15 +94,34 @@ public class LineupCommand extends Command {
     public void execute() {
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
         ChassisSpeeds currentSpeeds = CommandSwerveDrivetrain.getInstance().getState().Speeds;
-        double xPose = currentPose.getTranslation().getX();
-        double yPose = currentPose.getTranslation().getY();
+        double Xpos = currentPose.getTranslation().getX();
+        double Ypos = currentPose.getTranslation().getY();
+        double Xvel = currentSpeeds.vxMetersPerSecond;
+        double Yvel = currentSpeeds.vyMetersPerSecond;
+        double XOutput = 0.15 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(Xpos, targetPose.getX());
+        double YOutput = 0.15 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(Ypos, targetPose.getY());
+        double thetaOutput = 0.15 * RotationsPerSecond.of(0.75).in(RadiansPerSecond) * thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
+        if (DriverStation.getAlliance().get() == Alliance.Blue){
+            CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+                RobotContainer.drive.withVelocityX(XOutput)
+                     .withVelocityY(YOutput)
+                     .withRotationalRate(thetaOutput)
+            ).execute();
+        } else {
+            CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+            RobotContainer.drive.withVelocityX(-XOutput)
+                     .withVelocityY(-YOutput)
+                     .withRotationalRate(thetaOutput)   
+            ).execute();
+        }
 
     }
+    
 
     @Override
     public boolean isFinished() {
-        return false;
+        return xDistanceController.atSetpoint() && yDistanceController.atSetpoint() && thetaController.atSetpoint();
     }
 
     @Override
