@@ -16,6 +16,7 @@ import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
+import frc.robot.vision.commands.LineupCommand;
 
 
 public class DriverXbox extends XboxGamepad {
@@ -59,6 +60,7 @@ public class DriverXbox extends XboxGamepad {
 
         controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
         controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
+        controller.leftBumper().onTrue(new LineupCommand());
 
         /*Algae Pivot TEsting */
         // controller.a().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
