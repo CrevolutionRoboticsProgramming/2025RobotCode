@@ -25,26 +25,26 @@ public class RushinatorWrist extends SubsystemBase {
         static final int kTalonWristID = 12; 
         static final int kCancoderWristID = 24; 
 
-        public static final double kG = 0.01; // V
+        public static final double kG = 0.0; // V
         public static final double kS = 0.0; // V / rad
-        public static final double kV = 1.77; // V * sec / rad
+        public static final double kV = 0.06; // V * sec / rad
         public static final double kA = 0.0; // V * sec^2 / rad
 
-        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(100);
+        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(10);
         public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(100);
-        public static final double kP = 0.1;
+        public static final double kP = 0.001;
         public static final double kI = 0.0;
-        public static final double kD = 0.0;
+        public static final double kD = 0.0001;
 
-        public static final double kZeroOffset = 0.10498; // rotations
+        public static final double kZeroOffset = 0.0; // rotations
 
     }
-
+//-1.69580078125
     public enum State {
-        kGroundWrist(Rotation2d.fromRotations(24.08789)),
-        kScoreLeftWrist(Rotation2d.fromRotations(0.45)),
-        kScoreRightWrits(Rotation2d.fromRotations(-45.13037109375)),
-        kHumanPlayer(Rotation2d.fromRotations(-22.8662109375));
+        kGroundWrist(Rotation2d.fromRotations(22.52197265625)),
+        kScoreLeftWrist(Rotation2d.fromRotations(0.5)),
+        kScoreRightWrist(Rotation2d.fromRotations(-48.0478515625)),
+        kHumanPlayer(Rotation2d.fromRotations(-24.2724609375));
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -54,7 +54,7 @@ public class RushinatorWrist extends SubsystemBase {
 
 
     private final CANcoder mWristCancoder;
-    private final TalonFX mWristTalon;
+    public TalonFX mWristTalon;
     private final ProfiledPIDController mPPIDController;
     private final SimpleMotorFeedforward mFFController;
     
@@ -64,7 +64,7 @@ public class RushinatorWrist extends SubsystemBase {
         mWristTalon = new TalonFX(Settings.kTalonWristID);
         mWristTalon.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.CounterClockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Coast)
+                .withNeutralMode(NeutralModeValue.Brake)
         ));
 
         mWristCancoder =  new CANcoder(Settings.kCancoderWristID);
@@ -125,6 +125,10 @@ public class RushinatorWrist extends SubsystemBase {
         mWristTalon.setVoltage(voltage);
     }
 
+    public double getMotorOutputVoltage() {
+        return mWristTalon.getMotorVoltage().getValueAsDouble();
+    }
+
     public boolean atSetpoint() {
         return mPPIDController.atGoal();
     }
@@ -134,6 +138,10 @@ public class RushinatorWrist extends SubsystemBase {
     }
 
     public Rotation2d getCurrentPos() {
+        return Rotation2d.fromRotations(mWristCancoder.getPosition().getValueAsDouble());
+    }
+
+    public Rotation2d getCurrentRelativePos() {
         return Rotation2d.fromRotations(mWristTalon.getPosition().getValueAsDouble());
     }
 

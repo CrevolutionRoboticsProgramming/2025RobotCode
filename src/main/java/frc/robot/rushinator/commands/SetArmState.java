@@ -9,20 +9,20 @@ import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorRollers;
 import frc.robot.rushinator.RushinatorWrist;
 
-public class SetScoreRushinator extends Command{
+public class SetArmState extends Command{
     RushinatorPivot mRushinatorPivot;
     RushinatorRollers mRushinatorRollers;
     RushinatorWrist mRushinatorWrist;
     Rotation2d targetAngle;
 
-    public SetScoreRushinator(RushinatorPivot.State targetState) {
+    public SetArmState(RushinatorPivot.State targetState) {
         mRushinatorPivot = RushinatorPivot.getInstance();   
         mRushinatorRollers = RushinatorRollers.getInstance();
         targetAngle = targetState.pos;
         addRequirements(getRequirements());
     }
 
-    public SetScoreRushinator(Supplier<Rotation2d> angleSupplier) {
+    public SetArmState(Supplier<Rotation2d> angleSupplier) {
         mRushinatorPivot = RushinatorPivot.getInstance();   
         mRushinatorRollers = RushinatorRollers.getInstance();
         targetAngle = angleSupplier.get();
@@ -31,8 +31,7 @@ public class SetScoreRushinator extends Command{
 
     @Override
     public void initialize() {
-        mRushinatorPivot.setTargetPosition(targetAngle);;
-
+        mRushinatorPivot.setTargetPosition(targetAngle);
     }
 
     @Override

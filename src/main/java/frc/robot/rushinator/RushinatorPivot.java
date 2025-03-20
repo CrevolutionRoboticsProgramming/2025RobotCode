@@ -35,17 +35,18 @@ public class RushinatorPivot extends SubsystemBase {
         static final double kI = 0.0;
         static final double kD = 0;
 
-        static final double kZeroOffset = 0.353271  ; // rotations
+        static final double kZeroOffset = 0.14331054687; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.423828);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.089111);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.3837890625);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.0417480468);
     }
 
     public enum State {
         kFloorIntake(Settings.kMinPos),
         kHPIntake(Rotation2d.fromRotations(0.06)),
         kScoreL1(Rotation2d.fromRotations(0)),
+        kTestPos(Rotation2d.fromRotations(0.28466796875)),
         kScoreL2(Rotation2d.fromRotations(0.15)),
         kScoreL3(Rotation2d.fromRotations(0.15)),
         kScoreL4(Rotation2d.fromRotations(0.15)),
@@ -74,7 +75,7 @@ public class RushinatorPivot extends SubsystemBase {
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);
         mCANcoderPivot.getConfigurator().apply(new CANcoderConfiguration().withMagnetSensor(new MagnetSensorConfigs().
-                withSensorDirection(SensorDirectionValue.Clockwise_Positive).
+                withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).
                 withMagnetOffset(Settings.kZeroOffset)
         ));
 
@@ -102,7 +103,7 @@ public class RushinatorPivot extends SubsystemBase {
     }
 
     public Rotation2d getPivotAngle() {
-        return Rotation2d.fromRotations(mCANcoderPivot.getAbsolutePosition().getValueAsDouble());
+        return Rotation2d.fromRotations(mCANcoderPivot.getAbsolutePosition().getValueAsDouble() * 96);
     }
 
 
@@ -114,6 +115,10 @@ public class RushinatorPivot extends SubsystemBase {
     public Rotation2d getArmPosition() {
         var pos = mCANcoderPivot.getAbsolutePosition().getValueAsDouble();
         return Rotation2d.fromRotations(pos);
+    }
+
+    public Rotation2d getArmRelativePos() {
+        return Rotation2d.fromRotations(mTalonPivot.getPosition().getValueAsDouble());
     }
 
     public Rotation2d getArmVelocity() {
@@ -130,6 +135,8 @@ public class RushinatorPivot extends SubsystemBase {
         // System.out.println("This Periodic is bieng called");
         // Telemetry
         SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getArmPosition().getRotations());
+        SmartDashboard.putNumber("Coral Arm Pivot * 96 (Roations)", getPivotAngle().getRotations());
+        SmartDashboard.putNumber("Coral Arm Pivot Relative (Rotations)", mTalonPivot.getPosition().getValueAsDouble());
         // SmartDashboard.putNumber("Coral Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
         // SmartDashboard.putNumber("Coral Pivot Vel (rotations / sec)", getArmVelocity().getRotations());
         // SmartDashboard.putNumber("Coral Pivot Target Vel (rotations / sec)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());

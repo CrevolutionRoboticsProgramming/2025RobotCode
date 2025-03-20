@@ -2,6 +2,12 @@ package frc.robot.rushinator.commands;
 
 import java.lang.invoke.VolatileCallSite;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ControlModeValue;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -75,6 +81,7 @@ public class SetWristState extends Command {
     private final ProfiledPIDController mPPIDController;
     private final SimpleMotorFeedforward mFFController;
     private final RushinatorWrist.State mTargetState;
+    private final RushinatorPivot.State mTargetArmState;
     private double setpointAngle;
 
     public SetWristState(RushinatorWrist.State targetWristState) {
@@ -84,9 +91,27 @@ public class SetWristState extends Command {
                             RushinatorWrist.Settings.kMaxVelocity.getRadians(),
                             RushinatorWrist.Settings.kMaxAcceleration.getRadians()
                     ));
-        mPPIDController.setTolerance(1); //degrees of tolerance
 
         mTargetState = targetWristState;
+        mTargetArmState = null;
+
+        mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
+
+        mRushinatorPivot = RushinatorPivot.getInstance();
+
+        addRequirements(mRushinatorWrist);
+    }
+
+    public SetWristState(RushinatorWrist.State targetWristState, RushinatorPivot.State targetArmState) {
+        mRushinatorWrist = RushinatorWrist.getInstance();
+
+        mPPIDController = new ProfiledPIDController(RushinatorWrist.Settings.kP, RushinatorWrist.Settings.kI, RushinatorWrist.Settings.kD, new TrapezoidProfile.Constraints(
+                            RushinatorWrist.Settings.kMaxVelocity.getRadians(),
+                            RushinatorWrist.Settings.kMaxAcceleration.getRadians()
+                    ));
+
+        mTargetState = targetWristState;
+        mTargetArmState= targetArmState;
 
         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
 
@@ -97,18 +122,36 @@ public class SetWristState extends Command {
 
     @Override
     public void initialize() {
-        setpointAngle = mTargetState.pos.getRadians() + mRushinatorPivot.getPivotAngle().getRadians();
-        SmartDashboard.putNumber("Setpoint Angle [Degrees]", Units.radiansToDegrees(setpointAngle));
+        // setpointAngle = mTargetState.pos.getRadians() - mRushinatorWrist.getCurrentRelativePos().getRadians();
+        /*neW Version of grabbing pos (Should work?) */
+        // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStow.pos.getRadians() - mTargetArmState.pos.getRadians());
+        setpointAngle = mTargetState.pos.getRadians();
+        // setpointAngle = mTargetState.pos.getRadians() - mRushinatorPivot.getPivotAngle().getRadians();
+        SmartDashboard.putNumber("Current Arm Pivot (Radians)", setpointAngle);
+        SmartDashboard.putNumber("Actual Setpoint (Rotations)", Units.radiansToRotations(setpointAngle));
+        // SmartDashboard.putNumber("Setpoint Angle [Degrees]", Units.radiansToDegrees(setpointAngle));
         mPPIDController.setGoal(setpointAngle);
     }
 
     @Override
     public void execute() {
-        var pidVoltage = mPPIDController.calculate(mRushinatorWrist.getWristAngle().getRadians());
+        var pidVoltage = mPPIDController.calculate(mRushinatorWrist.getCurrentRelativePos().getRadians());
+        // var pidVoltage = 0.0;
         var ffVoltage = mFFController.calculate(mPPIDController.getSetpoint().velocity);
-        var totalVoltage = pidVoltage + ffVoltage;
+
+        var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRadians();
+
+        if (error <= 1.0) {
+            ffVoltage = 0.0;
+        }
+        // var ffVoltage = 0.0;
+        var totalVoltage = ffVoltage + pidVoltage;
         mRushinatorWrist.setVoltage(totalVoltage);
 
+        SmartDashboard.putNumber("Error (radians)", error);
+        SmartDashboard.putBoolean("At Wrist Target", mPPIDController.atGoal());
+        SmartDashboard.putNumber("PID Error", mPPIDController.getPositionError());
+        SmartDashboard.putNumber("PID Setpoint", mPPIDController.getSetpoint().position);
         SmartDashboard.putNumber("PID Output Voltage", pidVoltage);
         SmartDashboard.putNumber("FF Output Voltage", ffVoltage);
         SmartDashboard.putNumber("Total Voltage", totalVoltage);
@@ -123,4 +166,91 @@ public class SetWristState extends Command {
     public void end(boolean interrupted) {
         mRushinatorWrist.setVoltage(0);
     }
+
+// public class SetWristState extends Command {
+//     private final RushinatorWrist mRushinatorWrist;
+//     private final TalonFX mWristMotor; // Use TalonFX motor controller
+//     private final RushinatorWrist.State mTargetState;
+//     private double setpointAngle;
+
+//     public SetWristState(RushinatorWrist.State targetWristState) {
+//         mRushinatorWrist = RushinatorWrist.getInstance();
+//         mWristMotor = mRushinatorWrist.mWristTalon; // Get the TalonFX motor instance
+//         mTargetState = targetWristState;
+
+//         // Add requirements for the wrist subsystem
+//         addRequirements(mRushinatorWrist);
+//     }
+
+//     @Override
+//     public void initialize() {
+//         // Calculate the setpoint angle relative to the current wrist position
+//         // setpointAngle = mTargetState.pos.getRadians() - mRushinatorWrist.getCurrentRelativePos().getRadians();
+//         setpointAngle = mTargetState.pos.getRadians();
+
+//         // Log the calculated setpoint for debugging
+//         SmartDashboard.putNumber("Setpoint Angle (Radians)", setpointAngle);
+//         SmartDashboard.putNumber("Setpoint Angle (Degrees)", Units.radiansToDegrees(setpointAngle));
+
+//         // Configure the TalonFX PID and Motion Magic settings using Slot0
+//         TalonFXConfiguration config = new TalonFXConfiguration();
+
+//         // Set the PID constants (P, I, D)
+//         config.Slot0.kP = Settings.kP;
+//         config.Slot0.kI = Settings.kI;
+//         config.Slot0.kD = Settings.kD;
+
+//         // Set Feedforward constants (if any) for the motor
+//         config.Slot0.kG = Settings.kG;
+//         config.Slot0.kS = Settings.kS;
+//         config.Slot0.kV = Settings.kV;
+//         config.Slot0.kA = Settings.kA;
+
+//         // Set Motion Magic specific settings like velocity and acceleration in degrees
+//         config.MotionMagic.MotionMagicCruiseVelocity = Units.radiansToDegrees(Settings.kMaxVelocity.getRadians());
+//         config.MotionMagic.MotionMagicAcceleration = Units.radiansToDegrees(Settings.kMaxAcceleration.getRadians());
+
+//         // Apply the configuration to the TalonFX motor
+//         mWristMotor.getConfigurator().apply(config);
+        
+//         final MotionMagicVoltage mRequest = new MotionMagicVoltage(0);
+//         // final MotionMagicDutyCycle mRequest = new MotionMagicDutyCycle(0.0);
+//         // Set the target position (Motion Magic mode)
+//         mWristMotor.setControl(mRequest.withPosition(setpointAngle));
+
+//     }
+
+//     @Override
+//     public void execute() {
+//         // Log the current position, target position, and error
+//         double currentPosition = Units.radiansToDegrees(mRushinatorWrist.getCurrentRelativePos().getRadians());
+//         double targetPosition = Units.radiansToDegrees(setpointAngle);
+//         double error = targetPosition - currentPosition;
+
+//         // Log relevant information to SmartDashboard
+//         SmartDashboard.putNumber("Current Wrist Position (Rotations)", Units.degreesToRotations(currentPosition));
+//         SmartDashboard.putNumber("Target Wrist Position (Rotations)", Units.degreesToRotations(targetPosition));
+//         SmartDashboard.putNumber("Position Error (Rotations)", Units.degreesToRotations(error));
+//         SmartDashboard.putNumber("Wrist Motor Output Voltage", RushinatorWrist.getInstance().getMotorOutputVoltage());
+
+//         // Check if the motor has reached the target using the Motion Magic `getClosedLoopError`
+//         if (Math.abs(error) < 2.0) { // You can adjust the tolerance here as needed
+//             SmartDashboard.putBoolean("At Target", true);
+//         } else {
+//             SmartDashboard.putBoolean("At Target", false);
+//         }
+//     }
+
+//     @Override
+//     public boolean isFinished() {
+//         // The command will finish when the wrist is at the target position
+//         return false;
+//         // return Math.abs(Units.radiansToDegrees(mRushinatorWrist.getCurrentRelativePos().getRadians()) - Units.radiansToDegrees(setpointAngle)) < 2.0; // Adjust tolerance
+//     }
+
+//     @Override
+//     public void end(boolean interrupted) {
+//         // Stop the wrist motor when the command ends
+//         mWristMotor.setVoltage(0.0);
+//     }
 }

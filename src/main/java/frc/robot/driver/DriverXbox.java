@@ -11,7 +11,9 @@ import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.auton.AutonMaster;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 
 
@@ -57,9 +59,13 @@ public class DriverXbox extends XboxGamepad {
         controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
         controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
 
-        controller.x().onTrue(new SetWristState(RushinatorWrist.State.kGroundWrist));
-        controller.b().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
-        controller.a().onTrue(new SetWristState(RushinatorWrist.State.kHumanPlayer));
+        controller.x().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
+        
+        controller.y().onTrue(new SetWristState(RushinatorWrist.State.kHumanPlayer));
+        controller.b().onTrue(new SetWristState(RushinatorWrist.State.kScoreRightWrist));
+        controller.a().onTrue(new SetWristState(RushinatorWrist.State.kGroundWrist));
+
+        // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         
         // controller.leftBumper().onTrue(AutonMaster.getInstance().getTestPathFindingCommand());
 
