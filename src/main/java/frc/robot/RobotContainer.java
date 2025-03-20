@@ -59,6 +59,8 @@ public class RobotContainer {
 
         var mRushPivot = RushinatorPivot.getInstance();
 
+        var mPoseEstimator = PoseEstimatorSubsystem.getInstance();
+
         // ShuffleboardTab visionTab = Shuffleboard.getTab("Vision Pose Estimator");
         // PoseEstimatorSubsystem.getInstance().addDashboardWidgets(visionTab);
     }
