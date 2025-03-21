@@ -11,11 +11,12 @@ import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 
 public class RobotCommands {
-    public static Command coralPrime(RushinatorPivot.State armState, ElevatorSubsystem.State eleState) {
+    public static Command coralPrime(RushinatorPivot.State armState, ElevatorSubsystem.State eleState, RushinatorWrist.State wristState) {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new SetElevatorState(eleState),
-                new SetArmState(armState)
+                new SetArmState(armState),
+                new SetWristState(wristState)
             )
         );
     }

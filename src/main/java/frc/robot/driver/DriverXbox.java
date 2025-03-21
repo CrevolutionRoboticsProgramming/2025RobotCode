@@ -10,9 +10,12 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.auton.AutonMaster;
+import frc.robot.commands.RobotCommands;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.ElevatorCommands;
+import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.indexer.commands.IndexerCommands;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
@@ -59,10 +62,10 @@ public class DriverXbox extends XboxGamepad {
     public void setupTeleopButtons() {
         /*COMP BINDINGS */
         // Spit Coral
-        // controller.y().whileTrue(new SetRollersVoltage(4.0));
+        // controller.y().whileTrue(new SetRollersVoltage(1.0));
 
         //Score Coral
-        // controller.a().whileTrue(new SetRollersVoltage(-4.0));
+        // controller.a().whileTrue(new SetRollersVoltage(-1.0));
 
         // Pulse Alage
         // controller.x().whileTrue(new AlgaeRoller.IntakeCommand());
@@ -92,8 +95,15 @@ public class DriverXbox extends XboxGamepad {
 
         /*TESTING BINDINGS */
 
-        controller.povLeft().whileTrue(new LineupCommand(true));
-        controller.povRight().whileTrue(new LineupCommand(false));
+        
+
+        /*Elevator TEst Commands */
+        // controller.a().onTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
+        // controller.x().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL3));
+        // controller.y().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL4));
+
+        // controller.povLeft().whileTrue(new LineupCommand(true));
+        // controller.povRight().whileTrue(new LineupCommand(false));
 
         // controller.rightTrigger().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
         // controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
@@ -110,13 +120,22 @@ public class DriverXbox extends XboxGamepad {
         // controller.y().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kScore));
 
         /*Coral Arm Pivot TEsting */
-        controller.y().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
-        controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos2));
+        // controller.y().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
+        // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos2));
+        controller.y().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelMid)
+        );
+        
+        controller.a().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
+        );
+        controller.a().whileTrue(new SetRollersVoltage(4.0));
 
+        controller.leftBumper().whileTrue(new SetRollersVoltage(-1.5));
         /*Wrist TEsting*/
-        // controller.x().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
-        // controller.y().onTrue(new SetWristState(RushinatorWrist.State.kPickUp));
-        // controller.b().onTrue(new SetWristState(RushinatorWrist.State.kScoreRightWrist));
+        // controller.povLeft().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
+        // controller.povUp().onTrue(new SetWristState(RushinatorWrist.State.kPickUp));
+        // controller.povRight().onTrue(new SetWristState(RushinatorWrist.State.kScoreRightWrist));
 
         // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         

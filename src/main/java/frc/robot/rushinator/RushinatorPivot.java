@@ -26,32 +26,30 @@ public class RushinatorPivot extends SubsystemBase {
 
         static final double kG = 0.1; // V
         static final double kS = 0.0; // V / rad
-        static final double kV = 1.5; // V * sec / rad
+        static final double kV = 1.0; // V * sec / rad
         static final double kA = 0.01; // V * sec^2 / rad
 
         static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300);
         static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
-        static final double kP = 2.0;
-        static final double kI = 1.0;
-        static final double kD = 0.01;
+        static final double kP = 5.0;
+        static final double kI = 0.0;
+        static final double kD = 0.0;
 
-        static final double kZeroOffset = 0.1171875; // rotations
+        static final double kZeroOffset = 0.08; // rotations
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.02392578125);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.357421875);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.02128);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.3218);
     }
 
     public enum State {
-        kFloorIntake(Settings.kMinPos),
-        kHPIntake(Rotation2d.fromRotations(0.06)),
+        kFloorIntake(Rotation2d.fromRotations(-0.0185546875)),
+        kHPIntake(Rotation2d.fromRotations(0.201171875)),
         kScoreL1(Rotation2d.fromRotations(0)),
         kTestPos(Rotation2d.fromRotations(0.281005859375)),
         kTestPos2(Rotation2d.fromRotations(0.10302734375)),
-        kScoreL2(Rotation2d.fromRotations(0.15)),
-        kScoreL3(Rotation2d.fromRotations(0.15)),
-        kScoreL4(Rotation2d.fromRotations(0.15)),
-        kStowTravel(Rotation2d.fromRotations(0.3)),
+        kScore(Rotation2d.fromRotations(0.209228515625)),
+        kStowTravel(Rotation2d.fromRotations(0.25122)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
@@ -85,11 +83,12 @@ public class RushinatorPivot extends SubsystemBase {
                 Settings.kMaxVelocity.getRadians(),
                 Settings.kMaxAcceleration.getRadians()
         ));
+        mPPIDController.setTolerance(0.01);
 
-        // if (kLastState == null) {
-        //     kLastState = State.kStowTravel;
-        // }
-        // mPPIDController.setGoal(kLastState.pos.getRadians());
+        if (kLastState == null) {
+            kLastState = State.kStowTravel;
+        }
+        mPPIDController.setGoal(kLastState.pos.getRadians());
     }
 
 

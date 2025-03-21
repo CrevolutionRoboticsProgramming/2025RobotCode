@@ -79,35 +79,48 @@ public class SetWristState extends Command {
     private final RushinatorWrist mRushinatorWrist;
     private final RushinatorPivot mRushinatorPivot;
     private final RushinatorWrist.State mTargetState;
-    private final RushinatorPivot.State mTargetArmState;
-    private double setpointAngle;
+    private final RushinatorPivot.State mArmTargetState;
+    private double setpointAngle, targetArmRadian;
 
     public SetWristState(RushinatorWrist.State targetWristState) {
         mRushinatorWrist = RushinatorWrist.getInstance();
 
         mTargetState = targetWristState;
-        mTargetArmState = null;
+        mArmTargetState = null;
 
         mRushinatorPivot = RushinatorPivot.getInstance();
 
         addRequirements(mRushinatorWrist);
     }
 
-    public SetWristState(RushinatorWrist.State targetWristState, RushinatorPivot.State targetArmState) {
+    public SetWristState(RushinatorWrist.State targetWristState, double targetArmRadian) {
         mRushinatorWrist = RushinatorWrist.getInstance();
 
         mTargetState = targetWristState;
-        mTargetArmState= targetArmState;
+        this.targetArmRadian = targetArmRadian;
+        mArmTargetState = null;
 
         mRushinatorPivot = RushinatorPivot.getInstance();
 
         addRequirements(mRushinatorWrist);
     }
+
+    // public SetWristState(RushinatorWrist.State targetWristState, RushinatorPivot.State mState) {
+    //     mRushinatorWrist = RushinatorWrist.getInstance();
+
+    //     mTargetState = targetWristState;
+    //     mArmTargetState = mState;
+
+    //     mRushinatorPivot = RushinatorPivot.getInstance();
+
+    //     addRequirements(mRushinatorWrist);
+    //     addRequirements(mRushinatorPivot);
+    // }
 
     @Override
     public void initialize() {
         /*neW Version of grabbing pos (Should work?) */
-        // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStow.pos.getRadians() - mTargetArmState.pos.getRadians());
+        
         setpointAngle = mTargetState.pos.getRotations();
         mRushinatorWrist.setTargetState(mTargetState);
         
@@ -118,12 +131,15 @@ public class SetWristState extends Command {
 
     @Override
     public void execute() {
+        // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStowTravel.pos.getRadians() - targetArmRadian);
+        // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.getInstance().getArmRelativePos().getRadians() - mArmTargetState.pos.getRadians());
+        Rotation2d targetPoint = Rotation2d.fromRadians(setpointAngle);
         double Voltage;
 
         if (mTargetState.pos.getRotations() > mRushinatorWrist.getCurrentRelativePos().getRotations()) {
-            Voltage = 3.0;
+            Voltage = 2.0;
         } else {
-            Voltage = -3.0;
+            Voltage = -2.0;
         }
 
         var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRotations();
@@ -132,7 +148,7 @@ public class SetWristState extends Command {
         }
         
         mRushinatorWrist.setVoltage(Voltage);
-
+        SmartDashboard.putNumber("Adjusted Target (Rotations)", targetPoint.getRotations());
         SmartDashboard.putNumber("Error (radians)", error);
         SmartDashboard.putNumber("Total Voltage", Voltage);
     }

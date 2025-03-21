@@ -19,6 +19,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.rushinator.commands.SetWristState;
 
 public class RushinatorWrist extends SubsystemBase {
     public static class Settings {
@@ -41,9 +42,18 @@ public class RushinatorWrist extends SubsystemBase {
     }
 //-1.69580078125
     public enum State {
-        kScoreLeftWrist(Rotation2d.fromRotations(-0.05078125)),
-        kScoreRightWrist(Rotation2d.fromRotations(46.162109375)),
-        kPickUp(Rotation2d.fromRotations(23.5));
+        kScoreLeftWrist(Rotation2d.fromRotations(15.87744140625 - 23.0)),
+        kScoreRightWrist(Rotation2d.fromRotations(15.87744140625 + 23.0)),
+        kScoreMid(Rotation2d.fromRotations(15.87744140625)),
+        kHPLeft(Rotation2d.fromRotations(22.658203125 - 23)),
+        kHPRight(Rotation2d.fromRotations(22.658203125 + 23)),
+        kHPMid(Rotation2d.fromRotations(22.658203125)),
+        kGroundLeft(Rotation2d.fromRotations(-4.62841796875 - 23)),
+        kGroundRight(Rotation2d.fromRotations(-4.62841796875 + 23)),
+        kGroundMid(Rotation2d.fromRotations(-4.62841796875)),
+        kTravelLeft(Rotation2d.fromRotations(18.87939453125 - 23)),
+        kTravelRight(Rotation2d.fromRotations(18.87939453125 + 23)),
+        kTravelMid(Rotation2d.fromRotations(18.87939453125));
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -79,6 +89,11 @@ public class RushinatorWrist extends SubsystemBase {
         mPPIDController.setTolerance(1); //degrees of tolerance
 
         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
+
+        if (kLastState == null) {
+            kLastState = State.kScoreLeftWrist;
+        }
+        mPPIDController.setGoal(kLastState.pos.getRadians());
     }
 
     private static RushinatorWrist mInstance;
@@ -144,6 +159,19 @@ public class RushinatorWrist extends SubsystemBase {
         return Rotation2d.fromRotations(mWristTalon.getPosition().getValueAsDouble());
     }
 
-    
-    
+    public static class DefaultCommand extends Command {
+        RushinatorWrist subsystem;
+        RushinatorPivot mRushinatorPivot;
+        public DefaultCommand() {
+            this.subsystem = RushinatorWrist.getInstance();
+            mRushinatorPivot = RushinatorPivot.getInstance();
+            addRequirements(subsystem);
+            addRequirements(mRushinatorPivot);
+        }
+
+        @Override
+        public void execute() {
+            new SetWristState(kLastState);
+        }
+    }
 }

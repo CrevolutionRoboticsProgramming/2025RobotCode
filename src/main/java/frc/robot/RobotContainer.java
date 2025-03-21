@@ -119,9 +119,16 @@ public class RobotContainer {
         AlgaeSubsystem.getInstance().setDefaultCommand(
             new AlgaeSubsystem.DefaultCommand()
         );
-        // CoralRollerSubsystem.getInstance().setDefaultCommand(new CoralRollerSubsystem.SetVoltageCommand(0));
-        // CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.DefaultCommand());
-        // AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
+        RushinatorPivot.getInstance().setDefaultCommand(
+            new RushinatorPivot.DefaultCommand()
+        );
+        RushinatorRollers.getInstance().setDefaultCommand(
+            new RushinatorRollers.DefaultCommand()
+        );
+        // RushinatorWrist.getInstance().setDefaultCommand(
+        //     new RushinatorWrist.DefaultCommand()
+        // );
+        // AlgaeRoller.getInstance() .setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
         
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }

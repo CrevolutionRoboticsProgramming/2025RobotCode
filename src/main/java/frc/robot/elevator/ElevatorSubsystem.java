@@ -25,13 +25,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         static final int kCanCoderId = 6;
 
-        static final double kGLow = 0.01; // V
-        static final double kGHigh = 0.01; // V
+        static final double kGLow = 0.2; // V
+        static final double kGHigh = 0.25; // V
         static final double kS = 0.0;  // V / rad
-        static final double kV = 0.2; // V * sec / rad
+        static final double kV = 0.125; // V * sec / rad
         static final double kA = 0.0; // V * sec^2 / rad
 
-        static final double kP = 0.0;
+        static final double kP = 0.15;
         static final double kI = 0.0;
         static final double kD = 0.0;
 
@@ -40,7 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         static final double kMaxVelocity = 25.0f;
         static final double kMaxAcceleration = 100.0f;
 
-        static final double kCrossoverPoint = 18.0f;
+        static final double kCrossoverPoint = 17.2939453125;
     }
 
     private static ElevatorSubsystem mInstance;
@@ -52,12 +52,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     private Supplier<Double> mVelocitySupplier;
 
     public enum State {
-        kCoralL1(19.934082),
-        kCoralL2(25.77832),
-        kCoralL3(37.401367),
-        kCoralL4(0.0),
-        kAlgaeL2(23.348633),
-        kAlgaeL3(35.089355),
+        kCoralL1(0.0),
+        kCoralL2(0.0),
+        kCoralL3(18.3505859375),
+        kCoralL4(34.92138671875),
+        kAlgaeL2(15.3125),
+        kAlgaeL3(24.580078125),
         kZero(0.0);
 
         State(double pos) {
