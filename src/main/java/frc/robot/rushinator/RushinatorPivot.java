@@ -142,6 +142,7 @@ public class RushinatorPivot extends SubsystemBase {
         mTalonPivot.setVoltage(voltage);
         // System.out.println("This Periodic is bieng called");
         // Telemetry
+        SmartDashboard.putString("KLastState Arm Pivot", kLastState.name());
         SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getArmPosition().getRotations());
         SmartDashboard.putNumber("Coral Arm Pivot * 96 (Roations)", getPivotAngle().getRotations());
         SmartDashboard.putNumber("Coral Arm Pivot Relative (Rotations)", mTalonPivot.getPosition().getValueAsDouble());

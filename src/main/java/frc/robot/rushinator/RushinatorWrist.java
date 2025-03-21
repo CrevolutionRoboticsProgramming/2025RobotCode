@@ -91,7 +91,7 @@ public class RushinatorWrist extends SubsystemBase {
         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
 
         if (kLastState == null) {
-            kLastState = State.kScoreLeftWrist;
+            kLastState = State.kTravelLeft;
         }
         mPPIDController.setGoal(kLastState.pos.getRadians());
     }
@@ -122,6 +122,7 @@ public class RushinatorWrist extends SubsystemBase {
         // SmartDashboard.putNumber("PID Output", pidOutput);
         // SmartDashboard.putNumber("FF Output", ffOutput);
         // SmartDashboard.putNumber("Output Voltage", totalOutputVoltage);
+        SmartDashboard.putString("KLastState Wrist Pivot", kLastState.name());
         SmartDashboard.putNumber("Coral Wrist Current Angle (Rotations)", getCurrentPos().getRotations());
         SmartDashboard.putNumber("Coral Wrist Pivot (Rotations Relavtive)", mWristTalon.getPosition().getValueAsDouble());
     }

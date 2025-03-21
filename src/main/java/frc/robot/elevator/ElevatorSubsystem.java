@@ -59,6 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         kCoralL4(34.92138671875),
         kAlgaeL2(15.3125),
         kAlgaeL3(24.580078125),
+        kAlgaeIntake(1.5),
         kZero(0.0);
 
         State(double pos) {
@@ -161,6 +162,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (mVelocitySupplier != null) {
             SmartDashboard.putNumber("Elevator Target Position", mPPIDController.getSetpoint().position);
         }
+
+        SmartDashboard.putString("KLastState Elevator", kLastState.name());
         SmartDashboard.putNumber("Elevator Target Velocity", mPPIDController.getSetpoint().velocity);
         SmartDashboard.putNumber("Elevator Applied Voltage", voltage);
         SmartDashboard.putString("Elevator Mode", (mVelocitySupplier == null) ? "PPID" : "Manual");

@@ -62,7 +62,7 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
-        /*COMP BINDINGS */
+/*COMP BINDINGS */
         // Spit Coral
         // controller.y().whileTrue(new SetRollersVoltage(1.0));
 
@@ -76,15 +76,21 @@ public class DriverXbox extends XboxGamepad {
         // controller.b().whileTrue(new AlgaeRoller.ShootCommand());
 
         // Coral Ground Intake
-        // controller.rightTrigger().whileTrue(null);
+        // controller.rightTrigger().whileTrue(RobotCommands.coralPrime(
+        //     RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
+        // );
+        // controller.rightTrigger().whileTrue(new SetRollersVoltage(4.0));
 
         // Coral HP Intake
-        // controller.rightBumper().whileTrue(null);
+        // controller.rightBumper().whileTrue(RobotCommands.coralPrime(
+        //     RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid)
+        // );
+        // controller.rightBumper().whileTrue(new SetRollersVoltage(4.0));
 
         // Algae Ground Intake
         // controller.leftTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
         // controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
-        // controller.leftTrigger().whileTrue(null);
+        // controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
         // ELevator Setting Position ^^^^
 
         // Zero Elevator
@@ -125,7 +131,7 @@ public class DriverXbox extends XboxGamepad {
         // controller.y().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos2));
         controller.y().whileTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelMid)
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelLeft)
         );
 
         controller.x().onTrue(new ConditionalCommand(
