@@ -60,7 +60,7 @@ public class DriverXbox extends XboxGamepad {
 
         controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
         controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
-        controller.leftBumper().onTrue(new LineupCommand());
+        // controller.leftBumper().onTrue(new LineupCommand());
 
         /*Algae Pivot TEsting */
         // controller.a().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
@@ -69,8 +69,8 @@ public class DriverXbox extends XboxGamepad {
         // controller.y().onTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kScore));
 
         /*Coral Arm Pivot TEsting */
-        controller.y().onTrue(new SetArmState(RushinatorPivot.State.kStowTravel));
-        controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
+        controller.y().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
+        controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos2));
 
         /*Wrist TEsting*/
         // controller.x().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
@@ -82,7 +82,7 @@ public class DriverXbox extends XboxGamepad {
         // controller.leftBumper().onTrue(AutonMaster.getInstance().getTestPathFindingCommand());
 
         // controller.y().onTrue(new InstantCommand(() -> CommandSwerveDrivetrain.getInstance().zeroHeading()));
-        controller.y().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
+        // controller.y().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
     }
 
     @Override

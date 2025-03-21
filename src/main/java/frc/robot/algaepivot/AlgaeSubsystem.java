@@ -83,6 +83,11 @@ public class AlgaeSubsystem extends SubsystemBase {
                 Settings.kMaxVelocity.getRadians(),
                 Settings.kMaxAcceleration.getRadians()
         ));
+        
+        if (kLastState == null) {
+            kLastState = State.kStow;
+        }
+        mPPIDController.setGoal(kLastState.pos.getRadians());
     }
 
 

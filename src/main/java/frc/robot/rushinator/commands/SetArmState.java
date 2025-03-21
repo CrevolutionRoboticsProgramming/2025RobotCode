@@ -13,22 +13,24 @@ public class SetArmState extends Command{
     RushinatorPivot mRushinatorPivot;
     RushinatorWrist mRushinatorWrist;
     Rotation2d targetAngle;
+    RushinatorPivot.State kTargetState;
 
     public SetArmState(RushinatorPivot.State targetState) {
-        mRushinatorPivot = RushinatorPivot.getInstance();   
-        targetAngle = targetState.pos;
+        mRushinatorPivot = RushinatorPivot.getInstance();  
+        kTargetState = targetState; 
+        // targetAngle = targetState.pos;
         addRequirements(mRushinatorPivot);
     }
 
-    public SetArmState(Supplier<Rotation2d> angleSupplier) {
-        mRushinatorPivot = RushinatorPivot.getInstance();   
-        targetAngle = angleSupplier.get();
-        addRequirements(mRushinatorPivot);
-    }
+    // public SetArmState(Supplier<Rotation2d> angleSupplier) {
+    //     mRushinatorPivot = RushinatorPivot.getInstance();   
+    //     targetAngle = angleSupplier.get();
+    //     addRequirements(mRushinatorPivot);
+    // }
 
     @Override
     public void initialize() {
-        mRushinatorPivot.setTargetPosition(targetAngle);
+        mRushinatorPivot.setTargetState(kTargetState);
     }
 
     @Override
