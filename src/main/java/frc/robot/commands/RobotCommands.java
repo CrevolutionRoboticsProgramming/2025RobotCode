@@ -24,17 +24,38 @@ public class RobotCommands {
     }
 
     public static Command toggleWristState() {
-        if(RushinatorPivot.kLastState == RushinatorPivot.State.kScore) {
-            RushinatorWrist.State toggledWristState = (RushinatorWrist.kLastState == State.kScoreLeftWrist) ? State.kScoreRightWrist : State.kScoreLeftWrist;
-            return coralPrime(RushinatorPivot.kLastState, ElevatorSubsystem.kLastState, toggledWristState);
+        System.out.println("Last State in Toggle Wrist" + RushinatorWrist.kLastState.name());
+        if(RushinatorWrist.kLastState == State.kScoreLeftWrist) {
+            System.out.println("First If");
+            return new SetWristState(RushinatorWrist.State.kScoreRightWrist);
         }
-        else if(RushinatorPivot.kLastState == RushinatorPivot.State.kStowTravel) {
-            RushinatorWrist.State toggledWristState = (RushinatorWrist.kLastState == State.kTravelLeft) ? State.kTravelRight : State.kTravelLeft;
-            return coralPrime(RushinatorPivot.kLastState, ElevatorSubsystem.kLastState, toggledWristState);
+        else if(RushinatorWrist.kLastState == State.kScoreRightWrist) {
+            System.out.println("2nd If");
+            return new SetWristState(RushinatorWrist.State.kScoreLeftWrist);
+        }
+        else if(RushinatorWrist.kLastState == State.kTravelLeft) {
+            System.out.println("3rd If");
+            return new SetWristState(RushinatorWrist.State.kTravelRight);
+        }
+        else if(RushinatorWrist.kLastState == State.kTravelRight) {
+            System.out.println("Fourth If");
+            return new SetWristState(RushinatorWrist.State.kTravelLeft);
         }
         else {
-            return coralPrime(RushinatorPivot.kLastState, ElevatorSubsystem.kLastState, RushinatorWrist.kLastState);
+            System.out.println("Else");
+            return new SetWristState(RushinatorWrist.kLastState);
         }
+        // if(RushinatorPivot.kLastState == RushinatorPivot.State.kScore) {
+        //     RushinatorWrist.State toggledWristState = (RushinatorWrist.kLastState == State.kScoreLeftWrist) ? State.kScoreRightWrist : State.kScoreLeftWrist;
+        //     return new SetWristState(toggledWristState);
+        // }
+        // else if(RushinatorPivot.kLastState == RushinatorPivot.State.kStowTravel) {
+        //     RushinatorWrist.State toggledWristState = (RushinatorWrist.kLastState == State.kTravelLeft) ? State.kTravelRight : State.kTravelLeft;
+        //     return new SetWristState(toggledWristState);
+        // }
+        // else {
+        //     return new SetWristState(RushinatorWrist.kLastState);
+        // }
     }
 
     public static Command algaePrime(AlgaeSubsystem.State algaeState, ElevatorSubsystem.State eleState) {
