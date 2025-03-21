@@ -1,9 +1,11 @@
 package frc.robot.driver;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.XboxGamepad;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
@@ -125,6 +127,14 @@ public class DriverXbox extends XboxGamepad {
         controller.y().whileTrue(RobotCommands.coralPrime(
             RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelMid)
         );
+
+        controller.x().onTrue(new ConditionalCommand(
+            RobotCommands.coralPrime(RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreLeftWrist), 
+            RobotCommands.coralPrime(RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreRightWrist), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelLeft)
+        );
+
+        controller.b().onTrue(RobotCommands.toggleWristState());
         
         controller.a().whileTrue(RobotCommands.coralPrime(
             RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)

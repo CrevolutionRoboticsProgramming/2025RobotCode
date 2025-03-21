@@ -51,6 +51,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private Supplier<Double> mVelocitySupplier;
 
+
     public enum State {
         kCoralL1(0.0),
         kCoralL2(0.0),
@@ -66,6 +67,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         public final double pos;
     }
+
+    public static State kLastState;
 
     private ElevatorSubsystem() {
         mTalonLeft = new TalonFX(Settings.kTalonLeftID);
@@ -88,6 +91,10 @@ public class ElevatorSubsystem extends SubsystemBase {
                 Settings.kMaxAcceleration
         ));
 
+        if(kLastState == null) {
+            kLastState = State.kZero;
+        }
+
         mVelocitySupplier = null;
     }
 
@@ -97,6 +104,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setTargetState(State targetState) {
+        kLastState = targetState;
         setTargetPosition(targetState.pos);
     }
 
