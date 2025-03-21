@@ -55,6 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         kCoralL1(19.934082),
         kCoralL2(25.77832),
         kCoralL3(37.401367),
+        kCoralL4(0.0),
         kAlgaeL2(23.348633),
         kAlgaeL3(35.089355),
         kZero(0.0);
@@ -132,17 +133,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // if (mVelocitySupplier == null) {
+        //     voltage = mPPIDController.calculate(getPosition());
+        //     targetVelocity = mPPIDController.getSetpoint().velocity;
+        //     voltage += getFeedforwardOutput(targetVelocity);
+        // } else {
+        //     targetVelocity = mVelocitySupplier.get();
+        //     voltage = getFeedforwardOutput(targetVelocity);
+        // }
+
         double voltage = 0.0;
-        double targetVelocity;
-        if (mVelocitySupplier == null) {
-            voltage = mPPIDController.calculate(getPosition());
-            targetVelocity = mPPIDController.getSetpoint().velocity;
-            voltage += getFeedforwardOutput(targetVelocity);
-        } else {
-            targetVelocity = mVelocitySupplier.get();
-            voltage = getFeedforwardOutput(targetVelocity);
-        }
-//        setVoltage(voltage);
+        voltage = mPPIDController.calculate(getPosition());
+        voltage += getFeedforwardOutput(mPPIDController.getSetpoint().velocity);
+        setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Elevator Position", getPosition());
@@ -150,7 +153,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (mVelocitySupplier != null) {
             SmartDashboard.putNumber("Elevator Target Position", mPPIDController.getSetpoint().position);
         }
-        SmartDashboard.putNumber("Elevator Target Velocity", targetVelocity);
+        SmartDashboard.putNumber("Elevator Target Velocity", mPPIDController.getSetpoint().velocity);
         SmartDashboard.putNumber("Elevator Applied Voltage", voltage);
         SmartDashboard.putString("Elevator Mode", (mVelocitySupplier == null) ? "PPID" : "Manual");
     }
@@ -195,41 +198,41 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
-    public static class VelocityCommand extends Command {
-        private ElevatorSubsystem subsystem;
-        private Supplier<Double> percentSupplier;
+    // public static class VelocityCommand extends Command {
+    //     private ElevatorSubsystem subsystem;
+    //     private Supplier<Double> percentSupplier;
 
-        private final double kMaxPosition = 40.0f;
+    //     private final double kMaxPosition = 40.0f;
 
-        public VelocityCommand(ElevatorSubsystem subsystem, Supplier<Double> percentSupplier) {
-            this.subsystem = subsystem;
-            this.percentSupplier = percentSupplier;
-            addRequirements(subsystem);
-        }
+    //     public VelocityCommand(ElevatorSubsystem subsystem, Supplier<Double> percentSupplier) {
+    //         this.subsystem = subsystem;
+    //         this.percentSupplier = percentSupplier;
+    //         addRequirements(subsystem);
+    //     }
 
-        private double getTargetVelocity() {
-            var targetVelocity = percentSupplier.get() * Settings.kMaxVelocity;
-            if (subsystem.getPosition() <= 0 && targetVelocity < 0) {
-                targetVelocity = 0.0;
-            }
-            if (subsystem.getPosition() >= kMaxPosition && targetVelocity > 0) {
-                targetVelocity = 0.0;
-            }
-            return targetVelocity;
-        }
+    //     private double getTargetVelocity() {
+    //         var targetVelocity = percentSupplier.get() * Settings.kMaxVelocity;
+    //         if (subsystem.getPosition() <= 0 && targetVelocity < 0) {
+    //             targetVelocity = 0.0;
+    //         }
+    //         if (subsystem.getPosition() >= kMaxPosition && targetVelocity > 0) {
+    //             targetVelocity = 0.0;
+    //         }
+    //         return targetVelocity;
+    //     }
 
-        @Override
-        public void initialize() {
-            subsystem.setVelocitySupplier(this::getTargetVelocity);
-        }
+    //     @Override
+    //     public void initialize() {
+    //         subsystem.setVelocitySupplier(this::getTargetVelocity);
+    //     }
 
-        @Override
-        public void end(boolean interrupted) {
-            // By setting the velocity supplier to null, we re-enable the default PID controller.
-            // We should also update the setpoint to the current position to avoid sending the elevator shooting to the
-            // previous setpoint.
-            subsystem.setTargetPosition(subsystem.getPosition());
-            subsystem.setVelocitySupplier(null);
-        }
-    }
+    //     @Override
+    //     public void end(boolean interrupted) {
+    //         // By setting the velocity supplier to null, we re-enable the default PID controller.
+    //         // We should also update the setpoint to the current position to avoid sending the elevator shooting to the
+    //         // previous setpoint.
+    //         subsystem.setTargetPosition(subsystem.getPosition());
+    //         subsystem.setVelocitySupplier(null);
+    //     }
+    // }
 }

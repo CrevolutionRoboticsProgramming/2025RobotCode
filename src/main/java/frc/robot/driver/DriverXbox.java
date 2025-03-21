@@ -8,14 +8,17 @@ import frc.robot.RobotContainer;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
+import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.auton.AutonMaster;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.elevator.commands.ElevatorCommands;
 import frc.robot.indexer.commands.IndexerCommands;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
+import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.vision.commands.LineupCommand;
 
 
@@ -54,6 +57,41 @@ public class DriverXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
+        /*COMP BINDINGS */
+        // Spit Coral
+        controller.y().whileTrue(new SetRollersVoltage(4.0));
+
+        //Score Coral
+        controller.a().whileTrue(new SetRollersVoltage(-4.0));
+
+        // Pulse Alage
+        controller.x().whileTrue(new AlgaeRoller.IntakeCommand());
+
+        // Spit Algae
+        controller.b().whileTrue(new AlgaeRoller.ShootCommand());
+
+        // Coral Ground Intake
+        controller.rightTrigger().whileTrue(null);
+
+        // Coral HP Intake
+        controller.rightBumper().whileTrue(null);
+
+        // Algae Ground Intake
+        controller.leftTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
+        controller.leftTrigger().whileTrue(null);
+        // ELevator Setting Position ^^^^
+
+        // Zero Elevator
+        controller.leftBumper().onTrue(null);
+
+        // Zero Drivetrain
+        controller.start().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
+        controller.leftStick().toggleOnTrue(RushinatorWrist.getInstance().runOnce(() -> new SetWristState(RushinatorWrist.State.kScoreLeftWrist)));
+        controller.leftStick().toggleOnFalse(RushinatorWrist.getInstance().runOnce(() -> new SetWristState(RushinatorWrist.State.kScoreRightWrist)));
+
+        /*TESTING BINDINGS */
+
         // controller.rightTrigger().whileTrue(AlgaePivotCommands.setAlgaePivotAngle(AlgaeSubsystem.State.kFloorIntake));
         // controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
         // controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
