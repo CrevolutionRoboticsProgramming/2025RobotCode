@@ -66,8 +66,9 @@ public class LineupCommand extends Command {
 
     private static Pose2d currentPose;
     private static Pose2d targetPose;
+    private static boolean leftReefLineup;
 
-    public LineupCommand() {
+    public LineupCommand(boolean left) {
         //set tolerances of all PID controllers
         xDistanceController.setTolerance(VisionConfig.AlignmentConfig.DISTANCE_TOLERANCE.in(Meters));
         xDistanceController.setIntegratorRange(-.15, .15);
@@ -76,11 +77,13 @@ public class LineupCommand extends Command {
         thetaController.enableContinuousInput(Units.degreesToRadians(-180), Units.degreesToRadians(180));
 
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
-        targetPose = getTargetReefPose(true);
+        targetPose = getTargetReefPose(left);
 
         xDistanceController.reset(0);
         yDistanceController.reset(0);
         thetaController.reset(0);
+
+        leftReefLineup = left;
 
         addRequirements(CommandSwerveDrivetrain.getInstance());
     }
