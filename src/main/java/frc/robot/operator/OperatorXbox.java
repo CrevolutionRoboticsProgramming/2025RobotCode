@@ -23,6 +23,7 @@ import frc.robot.coralArm.CoralSubsystem;
 import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.ElevatorSubsystem.State;
+import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.indexer.commands.IndexerCommands;
 
 public class OperatorXbox extends XboxGamepad {
@@ -57,6 +58,25 @@ public class OperatorXbox extends XboxGamepad {
 
     @Override
     public void setupTeleopButtons() {
+        /*Comp Bindings */
+
+        // Jogging the ELevator Up and Down
+        controller.povUp().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() + 5.0));
+        controller.povDown().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0));
+
+        // Algae (Elevator) Barge Shot 
+        controller.leftBumper().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL4));
+        controller.leftBumper().onTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kStow));
+
+        controller.rightTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
+
+        controller.rightBumper().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.ProcessShootCommand());
+        controller.rightBumper().whileTrue(new AlgaeRoller.ShootCommand());
+
+        
+
+        /*TEsting Bindings */
+
 //        controller.leftBumper().whileTrue(IndexerCommands.setOutput(() -> -1.0));
 //
 //        controller.leftTrigger().whileTrue(RobotCommands.primeShoot());

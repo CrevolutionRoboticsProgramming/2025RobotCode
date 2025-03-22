@@ -66,60 +66,59 @@ public class DriverXbox extends XboxGamepad {
     public void setupTeleopButtons() {
 /*COMP BINDINGS */
         // Spit Coral
-        // controller.y().whileTrue(new SetRollersVoltage(1.0));
+        controller.y().whileTrue(new SetRollersVoltage(3.5));
 
         //Score Coral
-        // controller.a().whileTrue(new SetRollersVoltage(-1.0));
-        // controller.x().onTrue(new ConditionalCommand(
-        //     RobotCommands.coralPrime(RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreLeftWrist), 
-        //     RobotCommands.coralPrime(RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreRightWrist), 
-        //     () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelLeft)
-        // );
+        controller.a().whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
 
         // Pulse Alage
-        // controller.x().whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.x().whileTrue(new AlgaeRoller.IntakeCommand());
 
         // Spit Algae
-        // controller.b().whileTrue(new AlgaeRoller.ShootCommand());
+        controller.b().whileTrue(new AlgaeRoller.ShootCommand());
 
         // Coral Ground Intake
-        // controller.rightTrigger().whileTrue(RobotCommands.coralPrime(
-        //     RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
-        // );
-        // controller.rightTrigger().whileTrue(new SetRollersVoltage(4.0));
+        controller.rightTrigger().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
+        );
+        controller.rightTrigger().whileTrue(new SetRollersVoltage(4.0));
 
         // Coral HP Intake
-        // controller.rightBumper().whileTrue(RobotCommands.coralPrime(
-        //     RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid)
-        // );
-        // controller.rightBumper().whileTrue(new SetRollersVoltage(4.0));
+        controller.rightBumper().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid)
+        );
+        controller.rightBumper().whileTrue(new SetRollersVoltage(4.0));
 
         // Algae Ground Intake
-        // controller.leftTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
-        // controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
-        // controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
-        // ELevator Setting Position ^^^^
+        controller.leftTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
+        controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
         // Toggle Wrist Left and Right
-        // controller.povLeft().onTrue(new ConditionalCommand(
-        //     new SetWristState(RushinatorWrist.State.kTravelLeft), 
-        //     new SetWristState(RushinatorWrist.State.kGroundMid), 
-        //     () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
-        // );
+        controller.povLeft().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            new SetWristState(RushinatorWrist.State.kGroundMid), 
+            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        );
 
-        // controller.povRight().onTrue(new ConditionalCommand(
-        //     new SetWristState(RushinatorWrist.State.kTravelRight), 
-        //     new SetWristState(RushinatorWrist.State.kGroundMid), 
-        //     () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
-        // );
+        controller.povRight().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kGroundMid), 
+            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        );
 
         // Zero Elevator
-        // controller.leftBumper().onTrue(null);
+        controller.leftBumper().onTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
 
         // Zero Drivetrain
-        // controller.start().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
-        // controller.leftStick().toggleOnTrue(RushinatorWrist.getInstance().runOnce(() -> new SetWristState(RushinatorWrist.State.kScoreLeftWrist)));
-        // controller.leftStick().toggleOnFalse(RushinatorWrist.getInstance().runOnce(() -> new SetWristState(RushinatorWrist.State.kScoreRightWrist)));
+        controller.start().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
 
         /*TESTING BINDINGS */
 
@@ -189,12 +188,12 @@ public class DriverXbox extends XboxGamepad {
         );
         // controller.rightBumper().whileTrue(new SetRollersVoltage(0.0));
 
-        controller.a().whileTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
-        );
-        controller.a().whileTrue(new SetRollersVoltage(4.0));
+        // controller.a().whileTrue(RobotCommands.coralPrime(
+        //     RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
+        // );
+        // controller.a().whileTrue(new SetRollersVoltage(4.0));
 
-        controller.leftBumper().whileTrue(new SetRollersVoltage(-1.5));
+        // controller.leftBumper().whileTrue(new SetRollersVoltage(-1.5));
 
         // controller.b().onTrue(new ToggleWristState());
         // controller.povLeft().onTrue(new ConditionalCommand(

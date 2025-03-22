@@ -227,6 +227,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
+    public static class applyJog extends Command {
+        private ElevatorSubsystem mElevatorSubsystem;
+        private double target;
+        public applyJog(double targetPos) {
+            mElevatorSubsystem = ElevatorSubsystem.getInstance();
+            target = targetPos;
+            addRequirements(mElevatorSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            mElevatorSubsystem.setTargetPosition(target);
+        }
+    }
+
     // public static class VelocityCommand extends Command {
     //     private ElevatorSubsystem subsystem;
     //     private Supplier<Double> percentSupplier;
