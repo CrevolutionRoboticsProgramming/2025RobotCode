@@ -42,9 +42,9 @@ public class RushinatorWrist extends SubsystemBase {
     }
 //-1.69580078125
     public enum State {
-        kScoreLeftWrist(Rotation2d.fromRotations(-9.8 + 46.0)),
-        kScoreRightWrist(Rotation2d.fromRotations(-9.8)),
-        kScoreMid(Rotation2d.fromRotations(-11.693359375 + 6)),
+        kScoreLeftWrist(Rotation2d.fromRotations(-11.693359375 + 46.0)),
+        kScoreRightWrist(Rotation2d.fromRotations(-11.693359375)),
+        kScoreMid(Rotation2d.fromRotations(-11.693359375 + 23)),
         kHPLeft(Rotation2d.fromRotations(22.658203125 + 23)),
         kHPRight(Rotation2d.fromRotations(22.658203125 - 23)),
         kHPMid(Rotation2d.fromRotations(22.658203125)),

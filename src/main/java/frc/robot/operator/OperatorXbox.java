@@ -93,7 +93,7 @@ public class OperatorXbox extends XboxGamepad {
 
         // Score Prime L1
         controller.a().onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelMid)
+            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreMid)
         );
 
         // Score Prime L2
