@@ -69,7 +69,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Coast)
+                .withNeutralMode(NeutralModeValue.Brake)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);

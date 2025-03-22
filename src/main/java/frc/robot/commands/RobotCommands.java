@@ -23,6 +23,15 @@ public class RobotCommands {
         );
     }
 
+    public static Command coralPrimeShoot(RushinatorPivot.State armState, RushinatorWrist.State wristState) {
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new SetArmState(armState),
+                new SetWristState(wristState)
+            )
+        );
+    }
+
     public static Command toggleWristState() {
         System.out.println("Last State in Toggle Wrist" + RushinatorWrist.kLastState.name());
         if(RushinatorWrist.kLastState == State.kScoreLeftWrist) {

@@ -42,17 +42,17 @@ public class RushinatorWrist extends SubsystemBase {
     }
 //-1.69580078125
     public enum State {
-        kScoreLeftWrist(Rotation2d.fromRotations(15.87744140625 - 23.0)),
-        kScoreRightWrist(Rotation2d.fromRotations(15.87744140625 + 23.0)),
-        kScoreMid(Rotation2d.fromRotations(15.87744140625)),
-        kHPLeft(Rotation2d.fromRotations(22.658203125 - 23)),
-        kHPRight(Rotation2d.fromRotations(22.658203125 + 23)),
+        kScoreLeftWrist(Rotation2d.fromRotations(-9.8 + 46.0)),
+        kScoreRightWrist(Rotation2d.fromRotations(-9.8)),
+        kScoreMid(Rotation2d.fromRotations(-11.693359375 + 6)),
+        kHPLeft(Rotation2d.fromRotations(22.658203125 + 23)),
+        kHPRight(Rotation2d.fromRotations(22.658203125 - 23)),
         kHPMid(Rotation2d.fromRotations(22.658203125)),
-        kGroundLeft(Rotation2d.fromRotations(-4.62841796875 - 23)),
-        kGroundRight(Rotation2d.fromRotations(-4.62841796875 + 23)),
+        kGroundLeft(Rotation2d.fromRotations(-4.62841796875 + 23)),
+        kGroundRight(Rotation2d.fromRotations(-4.62841796875 - 23)),
         kGroundMid(Rotation2d.fromRotations(-4.62841796875)),
-        kTravelLeft(Rotation2d.fromRotations(18.87939453125 - 23)),
-        kTravelRight(Rotation2d.fromRotations(18.87939453125 + 23)),
+        kTravelLeft(Rotation2d.fromRotations(18.87939453125 + 23)),
+        kTravelRight(Rotation2d.fromRotations(18.87939453125 - 23)),
         kTravelMid(Rotation2d.fromRotations(18.87939453125));
 
         State(Rotation2d pos) {
@@ -91,7 +91,7 @@ public class RushinatorWrist extends SubsystemBase {
         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
 
         if (kLastState == null) {
-            kLastState = State.kTravelLeft;
+            kLastState = State.kTravelRight;
         }
         mPPIDController.setGoal(kLastState.pos.getRadians());
     }

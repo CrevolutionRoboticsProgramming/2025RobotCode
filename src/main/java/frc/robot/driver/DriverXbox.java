@@ -137,8 +137,8 @@ public class DriverXbox extends XboxGamepad {
         // controller.rightTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
         // controller.leftTrigger().whileTrue(new CoralRollerSubsystem.SetVoltageCommand(12));
 
-        controller.rightBumper().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
-        controller.rightBumper().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
+        controller.rightTrigger().whileTrue(new InstantCommand(() -> RobotContainer.modeFast = false));
+        controller.rightTrigger().whileFalse(new InstantCommand(() -> RobotContainer.modeFast = true));
         // controller.leftBumper().onTrue(new LineupCommand());
 
         /*Algae Pivot TEsting */
@@ -151,43 +151,50 @@ public class DriverXbox extends XboxGamepad {
         // controller.y().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos2));
 
-        // controller.x().onTrue(RobotCommands.coralPrime(
-        //     RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelLeft)
-        // );
+        controller.x().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelRight)
+        );
 
-        // controller.b().onTrue(RobotCommands.coralPrime(
-        //     RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL3, RushinatorWrist.State.kTravelLeft)
-        // );
+        controller.povUp().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelMid)
+        );
 
-        // controller.y().onTrue(RobotCommands.coralPrime(
-        //     RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL4, RushinatorWrist.State.kTravelLeft)
-        // );
+        controller.b().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL3, RushinatorWrist.State.kTravelRight)
+        );
 
-        // controller.povLeft().onTrue(new ConditionalCommand(
-        //     new SetWristState(RushinatorWrist.State.kTravelLeft), 
-        //     new SetWristState(RushinatorWrist.State.kGroundMid), 
-        //     () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
-        // );
+        controller.y().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL4, RushinatorWrist.State.kTravelRight)
+        );
 
-        // controller.povRight().onTrue(new ConditionalCommand(
-        //     new SetWristState(RushinatorWrist.State.kTravelRight), 
-        //     new SetWristState(RushinatorWrist.State.kGroundMid), 
-        //     () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
-        // );
+        controller.povLeft().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            new SetWristState(RushinatorWrist.State.kGroundMid), 
+            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        );
 
-        // controller.rightBumper().onTrue(new ConditionalCommand(
-        //     RobotCommands.coralPrime(RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreLeftWrist), 
-        //     RobotCommands.coralPrime(RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreRightWrist), 
-        //     () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelLeft)
-        // );
-        // controller.rightBumper().whileTrue(new SetRollersVoltage(-2.0));
+        controller.povRight().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kGroundMid), 
+            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        );
 
-        // controller.a().whileTrue(RobotCommands.coralPrime(
-        //     RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
-        // );
-        // controller.a().whileTrue(new SetRollersVoltage(3.0));
+        controller.rightBumper().whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+        // controller.rightBumper().whileTrue(new SetRollersVoltage(0.0));
 
-        // controller.leftBumper().whileTrue(new SetRollersVoltage(-1.5));
+        controller.a().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
+        );
+        controller.a().whileTrue(new SetRollersVoltage(4.0));
+
+        controller.leftBumper().whileTrue(new SetRollersVoltage(-1.5));
 
         // controller.b().onTrue(new ToggleWristState());
         // controller.povLeft().onTrue(new ConditionalCommand(
@@ -212,7 +219,7 @@ public class DriverXbox extends XboxGamepad {
         // controller.leftBumper().onTrue(AutonMaster.getInstance().getTestPathFindingCommand());
 
         // controller.y().onTrue(new InstantCommand(() -> CommandSwerveDrivetrain.getInstance().zeroHeading()));
-        // controller.y().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
+        controller.leftTrigger().onTrue(CommandSwerveDrivetrain.getInstance().runOnce(()-> CommandSwerveDrivetrain.getInstance().seedFieldCentric()));
     }
 
     @Override

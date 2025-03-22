@@ -48,7 +48,7 @@ public class RushinatorPivot extends SubsystemBase {
         kScoreL1(Rotation2d.fromRotations(0)),
         kTestPos(Rotation2d.fromRotations(0.281005859375)),
         kTestPos2(Rotation2d.fromRotations(0.10302734375)),
-        kScore(Rotation2d.fromRotations(0.209228515625)),
+        kScore(Rotation2d.fromRotations(0.17431640625)),
         kStowTravel(Rotation2d.fromRotations(0.25122)),
         kTuck(Settings.kMaxPos);
 
@@ -69,7 +69,7 @@ public class RushinatorPivot extends SubsystemBase {
         mTalonPivot = new TalonFX(Settings.kTalonPivotID);
         mTalonPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Coast)
+                .withNeutralMode(NeutralModeValue.Brake)
         ));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);

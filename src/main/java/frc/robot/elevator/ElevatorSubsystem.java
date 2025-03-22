@@ -22,6 +22,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         static final int kTalonLeftID = 9;
         static final int kTalonRightID = 10;
 
+        static final int kLowerLimitSwitch = 0;
+
         static final InvertedValue kElevatorInverted = InvertedValue.Clockwise_Positive;
 
         static final int kCanCoderId = 6;
@@ -57,7 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public enum State {
         kCoralL1(0.0),
         kCoralL2(0.0),
-        kCoralL3(18.3505859375),
+        kCoralL3(14.3505859375),
         kCoralL4(34.92138671875),
         kAlgaeL2(15.3125),
         kAlgaeL3(24.580078125),
@@ -87,7 +89,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
         mTalonRight.setPosition(0);
 
-        mLowerLimitSwitch = new DigitalInput(0);
+        // mLowerLimitSwitch = new DigitalInput(Settings.kLowerLimitSwitch);
 
         mFFLowController = new ElevatorFeedforward(Settings.kS, Settings.kGLow, Settings.kV, Settings.kA);
         mFFHighController = new ElevatorFeedforward(Settings.kS, Settings.kGHigh, Settings.kV, Settings.kA);
@@ -126,9 +128,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         return mTalonRight.getVelocity().getValueAsDouble();
     }
 
-     public void setVelocitySupplier(Supplier<Double> velocitySupplier) {
+    public void setVelocitySupplier(Supplier<Double> velocitySupplier) {
         mVelocitySupplier = velocitySupplier;
-     }
+    }
+
+    // public boolean getLowerLimitSwitch() {
+    //     return mLowerLimitSwitch.get();
+    // }
+
+    // public void resetRelEncoder() {
+    //     mTalonRight.setPosition(0.0);
+    // }
 
     public static ElevatorSubsystem getInstance() {
         if (mInstance == null) {
@@ -153,6 +163,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         // } else {
         //     targetVelocity = mVelocitySupplier.get();
         //     voltage = getFeedforwardOutput(targetVelocity);
+        // }
+
+        // if (getLowerLimitSwitch()) {
+        //     resetRelEncoder();
         // }
 
         double voltage = 0.0;
