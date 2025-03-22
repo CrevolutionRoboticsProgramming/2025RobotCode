@@ -50,7 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private TalonFX mTalonLeft, mTalonRight;
     private final ElevatorFeedforward mFFLowController, mFFHighController;
-    private final ProfiledPIDController mPPIDController;
+    public final ProfiledPIDController mPPIDController;
     private DigitalInput mLowerLimitSwitch;
 
     private Supplier<Double> mVelocitySupplier;
