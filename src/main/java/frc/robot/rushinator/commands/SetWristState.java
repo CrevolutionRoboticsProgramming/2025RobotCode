@@ -143,7 +143,7 @@ public class SetWristState extends Command {
         }
 
         var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRotations();
-        if (-0.6 <= error && error <= 0.60) {
+        if (-0.75 <= error && error <= 0.75) {
             Voltage = 0.0;
         }
         

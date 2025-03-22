@@ -44,13 +44,14 @@ public class RushinatorPivot extends SubsystemBase {
 
     public enum State {
         kFloorIntake(Rotation2d.fromRotations(-0.0185546875)),
-        kHPIntake(Rotation2d.fromRotations(0.201171875)),
+        kHPIntake(Rotation2d.fromRotations(0.2568359375)),
         kScore(Rotation2d.fromRotations(0.17431640625)),
         kStowTravel(Rotation2d.fromRotations(0.25122)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
             this.pos = pos;
+
         }
         public final Rotation2d pos;
     }
@@ -58,7 +59,7 @@ public class RushinatorPivot extends SubsystemBase {
     private final TalonFX mTalonPivot;
     private final CANcoder mCANcoderPivot;
     private final ArmFeedforward mFFController;
-    private final ProfiledPIDController mPPIDController;
+    public final ProfiledPIDController mPPIDController;
 
     public static State kLastState;
 

@@ -93,7 +93,7 @@ public class AutonMaster {
         NamedCommands.registerCommand("AutonScoreL2", RobotCommands.scoreCoralAutonL2());
         NamedCommands.registerCommand("AutonScoreL3", RobotCommands.scoreCoralAutonL3());
         NamedCommands.registerCommand("AutonScoreL4", RobotCommands.scoreCoralAutonL4());
-        NamedCommands.registerCommand("HPPickup", RobotCommands.coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid));
+        NamedCommands.registerCommand("HPPickup", RobotCommands.autoHPPickUp());
     }
 
     public Command getTestPathFindingCommand() {

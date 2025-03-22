@@ -33,20 +33,42 @@ public class RobotCommands {
         );
     }
 
+    public static Command autoHPPickUp() {
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid),
+                new SetRollersVoltage(4.5),
+                new WaitCommand(2)
+            )
+        );
+    }
+
     
     public static Command scoreCoralAutonL4(){
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
+                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetWristState(RushinatorWrist.State.kTravelRight),
+                new WaitCommand(2.0)
+            ),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kScore),
                 new SetWristState(RushinatorWrist.State.kScoreRightWrist),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
+                new WaitCommand(2.0)
             ),
-            new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0),
+            new ParallelRaceGroup(
+                new SetRollersVoltage(-1.0),
+                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetWristState(RushinatorWrist.State.kTravelRight),
+                new WaitCommand(1.5)
+            ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(5)
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new WaitCommand(2.0)
             )
         );
     }
@@ -55,52 +77,74 @@ public class RobotCommands {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL3),
-                new SetArmState(RushinatorPivot.State.kScore),
-                new SetWristState(RushinatorWrist.State.kScoreRightWrist),
+                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetWristState(RushinatorWrist.State.kTravelRight),
                 new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
             ),
-            new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kCoralL3),
+                new SetArmState(RushinatorPivot.State.kScore),
+                new SetWristState(RushinatorWrist.State.kScoreRightWrist),
+                new WaitCommand(2.0)
+            ),
+            new ParallelRaceGroup(
+                new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0),
+                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
+            ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(5)
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
             )
         );
     }
 
+
+    // FIgure it out later
     public static Command scoreCoralAutonL2(){
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetWristState(RushinatorWrist.State.kTravelRight),
+                new WaitUntilCommand(() -> RushinatorPivot.getInstance().mPPIDController.atGoal())
+            ),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
                 new SetArmState(RushinatorPivot.State.kScore),
                 new SetWristState(RushinatorWrist.State.kScoreRightWrist),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
+                new WaitCommand(2.0)
             ),
-            new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0),
+            new SetRollersVoltage(-2.0),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(5)
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
             )
         );
     }
 
+
+    // L! needs to be Adjuste
     public static Command scoreCoralAutonL1(){
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
                 new SetArmState(RushinatorPivot.State.kScore),
                 new SetWristState(RushinatorWrist.State.kScoreMid),
-                new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
+                new WaitCommand(1.5)
             ),
             new ParallelRaceGroup(
-                new SetRollersVoltage(3.5),
+                new SetRollersVoltage(-4.0),
                 new WaitCommand(2)
             ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(5)
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new WaitCommand(1.3)
             )
         );
     }

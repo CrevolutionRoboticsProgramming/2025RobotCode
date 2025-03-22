@@ -73,6 +73,7 @@ public class OperatorXbox extends XboxGamepad {
 
         // Primes the processor shooting
         controller.rightTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
+        controller.rightTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
 
         // Algae SCorring for Process & Barge
         controller.rightBumper().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.ProcessShootCommand());
