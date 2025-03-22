@@ -89,7 +89,7 @@ public class RobotCommands {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
-                new SetArmState(RushinatorPivot.State.kScoreL1),
+                new SetArmState(RushinatorPivot.State.kScore),
                 new SetWristState(RushinatorWrist.State.kScoreMid),
                 new WaitUntilCommand(() -> ElevatorSubsystem.getInstance().mPPIDController.atGoal())
             ),
