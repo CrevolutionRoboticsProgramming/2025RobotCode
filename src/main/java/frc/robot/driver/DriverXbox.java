@@ -166,18 +166,6 @@ public class DriverXbox extends XboxGamepad {
             RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL4, RushinatorWrist.State.kTravelRight)
         );
 
-        controller.povLeft().onTrue(new ConditionalCommand(
-            new SetWristState(RushinatorWrist.State.kTravelLeft), 
-            new SetWristState(RushinatorWrist.State.kGroundMid), 
-            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
-        );
-
-        controller.povRight().onTrue(new ConditionalCommand(
-            new SetWristState(RushinatorWrist.State.kTravelRight), 
-            new SetWristState(RushinatorWrist.State.kGroundMid), 
-            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
-        );
-
         controller.rightBumper().whileTrue(new ConditionalCommand(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 

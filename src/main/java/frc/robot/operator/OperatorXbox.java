@@ -25,6 +25,9 @@ import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.ElevatorSubsystem.State;
 import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.indexer.commands.IndexerCommands;
+import frc.robot.rushinator.RushinatorPivot;
+import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.rushinator.commands.SetWristState;
 
 public class OperatorXbox extends XboxGamepad {
     private static class Settings {
@@ -68,12 +71,51 @@ public class OperatorXbox extends XboxGamepad {
         controller.leftBumper().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL4));
         controller.leftBumper().onTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kStow));
 
+        // Primes the processor shooting
         controller.rightTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
 
+        // Algae SCorring for Process & Barge
         controller.rightBumper().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.ProcessShootCommand());
         controller.rightBumper().whileTrue(new AlgaeRoller.ShootCommand());
 
-        
+        // ADjusting Coral ORinetaiton
+        controller.povLeft().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            new SetWristState(RushinatorWrist.State.kGroundMid), 
+            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        );
+
+        controller.povRight().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kGroundMid), 
+            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        );
+
+        // Score Prime L1
+        controller.a().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelMid)
+        );
+
+        // Score Prime L2
+        controller.x().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelRight)
+        );
+
+        // Score Prime L3
+        controller.b().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL3, RushinatorWrist.State.kTravelRight)
+        );
+
+        // Score Prime L4
+        controller.y().onTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL4, RushinatorWrist.State.kTravelRight)
+        );
+
+        // Algae L3
+        controller.y().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3));
+
+        // Algae L2 
+        controller.b().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL2));
 
         /*TEsting Bindings */
 
