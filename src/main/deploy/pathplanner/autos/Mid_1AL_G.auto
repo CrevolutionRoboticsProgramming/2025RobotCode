@@ -11,15 +11,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "G_GH-Algae"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "GH-Algae_Score"
+            "name": "AutonScoreL2"
           }
         }
       ]

@@ -11,9 +11,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL2"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "F_Load"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HPPickup"
           }
         },
         {
@@ -23,9 +35,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL2"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "D_Load"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HPPickup"
           }
         },
         {
@@ -35,9 +59,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL2"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "C_Load"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HPPickup"
           }
         }
       ]
