@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutonScoreL2"
+            "name": "AutonScoreL1"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutonScoreL2"
+            "name": "AutonScoreL1"
           }
         },
         {
@@ -61,7 +61,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutonScoreL2"
+            "name": "AutonScoreL1"
           }
         },
         {

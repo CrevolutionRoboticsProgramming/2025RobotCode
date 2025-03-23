@@ -102,6 +102,10 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
+        controller.povLeft().whileTrue(new LineupCommand(true));
+        controller.povRight().whileTrue(new LineupCommand(false));
+
+
         // // Toggle Wrist Left and Right
         // controller.povLeft().onTrue(new ConditionalCommand(
         //     new SetWristState(RushinatorWrist.State.kTravelLeft), 
@@ -123,9 +127,9 @@ public class DriverXbox extends XboxGamepad {
 
         /*TESTING BINDINGS */
 
-        controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
-        controller.povDown().onTrue(RobotCommands.autoHPPickUp());
-        controller.povRight().onTrue(RobotCommands.scoreCoralAutonL1());
+        // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
+        // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
+        // controller.povRight().onTrue(RobotCommands.scoreCoralAutonL1());
 
         /*Elevator TEst Commands */
         // controller.a().onTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));

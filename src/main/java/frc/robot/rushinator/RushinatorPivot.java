@@ -46,6 +46,7 @@ public class RushinatorPivot extends SubsystemBase {
         kFloorIntake(Rotation2d.fromRotations(-0.0185546875)),
         kHPIntake(Rotation2d.fromRotations(0.2568359375)),
         kScore(Rotation2d.fromRotations(0.17431640625)),
+        kScoreL1(Rotation2d.fromRotations(0.140380859375)),
         kStowTravel(Rotation2d.fromRotations(0.25122)),
         kTuck(Settings.kMaxPos);
 

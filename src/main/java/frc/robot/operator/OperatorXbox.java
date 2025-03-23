@@ -63,6 +63,10 @@ public class OperatorXbox extends XboxGamepad {
     public void setupTeleopButtons() {
         /*Comp Bindings */
 
+        // Algae Reef Intake
+        controller.leftBumper().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.leftBumper().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kReefIntake));
+
         // Jogging the ELevator Up and Down
         controller.povUp().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() + 5.0));
         controller.povDown().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0));
@@ -94,7 +98,7 @@ public class OperatorXbox extends XboxGamepad {
 
         // Score Prime L1
         controller.a().onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreMid)
+            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreL1Mid)
         );
 
         // Score Prime L2

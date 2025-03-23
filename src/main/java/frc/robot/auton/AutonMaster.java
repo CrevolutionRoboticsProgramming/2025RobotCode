@@ -77,7 +77,7 @@ public class AutonMaster {
         autonChooser.addOption("RightStart3PieceCoralFeed", AutoBuilder.buildAuto("Right_3.5_FDC"));
         autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("Left_3.5_IKL"));
         autonChooser.addOption("MidStart1PieceCoral", AutoBuilder.buildAuto("Mid_1AL_G"));
-        
+        autonChooser.addOption("RightMoveSomeone", AutoBuilder.buildAuto("Right_Move_Someone"));
     }
     
 

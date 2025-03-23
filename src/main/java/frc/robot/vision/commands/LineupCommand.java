@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,12 @@ import frc.robot.drivetrain.*;
 import frc.robot.vision.PoseEstimatorSubsystem;
 
 public class LineupCommand extends Command {
+
+     double x;
+     double y;
+     double theta;
+     LinearVelocity kLineupSpeed = MetersPerSecond.of(.1);
+
     private static final TrapezoidProfile.Constraints TRANSLATION_CONSTRAINTS = new TrapezoidProfile.Constraints(
                                         VisionConfig.AlignmentConfig.MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond),
                                         VisionConfig.AlignmentConfig.MAX_ALIGN_TRANSLATION_ACCELERATION.in(MetersPerSecondPerSecond));
@@ -97,25 +104,26 @@ public class LineupCommand extends Command {
     public void execute() {
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
         ChassisSpeeds currentSpeeds = CommandSwerveDrivetrain.getInstance().getState().Speeds;
-        double Xpos = currentPose.getTranslation().getX();
-        double Ypos = currentPose.getTranslation().getY();
+        x = currentPose.getTranslation().getX();
+        y = currentPose.getTranslation().getY();
         double Xvel = currentSpeeds.vxMetersPerSecond;
         double Yvel = currentSpeeds.vyMetersPerSecond;
-        double XOutput = 0.15 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(Xpos, targetPose.getX());
-        double YOutput = 0.15 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(Ypos, targetPose.getY());
+        double XOutput = 0.15 * kLineupSpeed.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(x, targetPose.getX());
+        double YOutput = 0.15 * kLineupSpeed.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(y, targetPose.getY());
         double thetaOutput = 0.15 * RotationsPerSecond.of(0.75).in(RadiansPerSecond) * thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
         if (DriverStation.getAlliance().get() == Alliance.Blue){
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-                RobotContainer.drive.withVelocityX(XOutput)
-                     .withVelocityY(YOutput)
+                RobotContainer.drive.withVelocityX(-XOutput)
+                     .withVelocityY(-YOutput)
                      .withRotationalRate(thetaOutput)
+                     
             ).execute();
         } else {
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-            RobotContainer.drive.withVelocityX(-XOutput)
-                     .withVelocityY(-YOutput)
-                     .withRotationalRate(thetaOutput)   
+            RobotContainer.drive.withVelocityX(XOutput)
+                     .withVelocityY(YOutput)
+                     .withRotationalRate(-thetaOutput)   
             ).execute();
         }
 

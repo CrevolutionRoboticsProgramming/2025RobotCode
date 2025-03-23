@@ -134,17 +134,17 @@ public class RobotCommands {
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
                 new SetArmState(RushinatorPivot.State.kScore),
                 new SetWristState(RushinatorWrist.State.kScoreMid),
-                new WaitCommand(1.5)
+                new WaitCommand(0.75)
             ),
             new ParallelRaceGroup(
                 new SetRollersVoltage(-4.0),
-                new WaitCommand(2)
+                new WaitCommand(1)
             ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
-                new WaitCommand(1.3)
+                new WaitCommand(1.0)
             )
         );
     }
