@@ -35,10 +35,10 @@ import frc.robot.vision.PoseEstimatorSubsystem;
 
 public class LineupCommand extends Command {
 
-     double x;
-     double y;
-     double theta;
-     LinearVelocity kLineupSpeed = MetersPerSecond.of(.1);
+    double x;
+    double y;
+    double theta;
+    LinearVelocity kLineupSpeed = MetersPerSecond.of(.1);
 
     private static final TrapezoidProfile.Constraints TRANSLATION_CONSTRAINTS = new TrapezoidProfile.Constraints(
                                         VisionConfig.AlignmentConfig.MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond),
