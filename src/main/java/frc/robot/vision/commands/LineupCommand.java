@@ -25,6 +25,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.vision.VisionConfig;
@@ -103,11 +104,11 @@ public class LineupCommand extends Command {
     @Override
     public void execute() {
         currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
-        ChassisSpeeds currentSpeeds = CommandSwerveDrivetrain.getInstance().getState().Speeds;
+        // ChassisSpeeds currentSpeeds = CommandSwerveDrivetrain.getInstance().getState().Speeds;
         x = currentPose.getTranslation().getX();
         y = currentPose.getTranslation().getY();
-        double Xvel = currentSpeeds.vxMetersPerSecond;
-        double Yvel = currentSpeeds.vyMetersPerSecond;
+        // double Xvel = currentSpeeds.vxMetersPerSecond;
+        // double Yvel = currentSpeeds.vyMetersPerSecond;
         double XOutput = 0.15 * kLineupSpeed.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(x, targetPose.getX());
         double YOutput = 0.15 * kLineupSpeed.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(y, targetPose.getY());
         double thetaOutput = 0.15 * RotationsPerSecond.of(0.75).in(RadiansPerSecond) * thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
@@ -126,6 +127,8 @@ public class LineupCommand extends Command {
                      .withRotationalRate(-thetaOutput)   
             ).execute();
         }
+
+        SmartDashboard.putString("Target Pose X", targetPose.toString());
 
     }
     

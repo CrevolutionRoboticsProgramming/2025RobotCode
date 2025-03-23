@@ -325,12 +325,37 @@ public class VisionConfig {
         // public static final Distance LATERAL_TARGET_L4_LEFT = Meters.of(0.05);
         // public static final Distance LATERAL_TARGET_L4_RIGHT = Meters.of(0.02);
 
+        //April Tag IDs
+        public static final double id1 = 1;
+        public static final double id2 = 2;
+        public static final double id3 = 3;
+        public static final double id4 = 4;
+        public static final double id5 = 5;
+        public static final double id6 = 6;
+        public static final double id7 = 7;
+        public static final double id8 = 8;
+        public static final double id9 = 9;
+        public static final double id10 = 10;
+        public static final double id11 = 11;
+        public static final double id12 = 12;
+        public static final double id13 = 13;
+        public static final double id14 = 14;
+        public static final double id15 = 15;
+        public static final double id16 = 16;
+        public static final double id17 = 17;
+        public static final double id18 = 18;
+        public static final double id19 = 19;
+        public static final double id20 = 20;
+        public static final double id21 = 21;
+        public static final double id22 = 22;
+
+
 
 
         //Joey's Pose Constants for the Reef Locations
         public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
 
-        public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0));
+        public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0)); 
         public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
         public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
         public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
