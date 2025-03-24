@@ -115,14 +115,14 @@ public class LineupCommand extends Command {
 
         if (DriverStation.getAlliance().get() == Alliance.Blue){
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-                RobotContainer.drive.withVelocityX(-XOutput)
+                robotCentricRequest.withVelocityX(-XOutput)
                      .withVelocityY(-YOutput)
                      .withRotationalRate(thetaOutput)
                      
             ).execute();
         } else {
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-            RobotContainer.drive.withVelocityX(XOutput)
+                robotCentricRequest.withVelocityX(XOutput)
                      .withVelocityY(YOutput)
                      .withRotationalRate(-thetaOutput)   
             ).execute();
