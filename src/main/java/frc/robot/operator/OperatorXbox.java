@@ -19,8 +19,6 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.commands.RobotCommands;
-import frc.robot.coralArm.CoralSubsystem;
-import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.ElevatorSubsystem.State;
 import frc.robot.elevator.commands.SetElevatorState;
