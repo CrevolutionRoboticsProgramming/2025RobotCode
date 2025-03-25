@@ -57,8 +57,11 @@ public class DriveToPoseCommand extends Command {
    * @param drivetrainSubsystem drivetrain subsystem
    * @param goalPose goal pose to drive to
    */
-  public DriveToPoseCommand(CommandSwerveDrivetrain drivetrainSubsystem, Supplier<Pose2d> poseProvider) {
+  public DriveToPoseCommand(CommandSwerveDrivetrain drivetrainSubsystem, Supplier<Pose2d> poseProvider, Pose2d goalPose) {
     this(drivetrainSubsystem, poseProvider, DEFAULT_XY_CONSTRAINTS, DEFAULT_OMEGA_CONSTRAINTS);
+    thetaController.setGoal(goalPose.getRotation().getRadians());
+    xController.setGoal(goalPose.getX());
+    yController.setGoal(goalPose.getY());
   }
 
   /**
