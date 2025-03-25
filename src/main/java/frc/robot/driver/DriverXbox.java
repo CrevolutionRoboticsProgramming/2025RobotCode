@@ -1,5 +1,9 @@
 package frc.robot.driver;
 
+import static frc.robot.vision.VisionConfig.AlignmentConfig.Cblue;
+import static frc.robot.vision.VisionConfig.AlignmentConfig.Dblue;
+
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -16,6 +20,7 @@ import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.auton.AutonMaster;
 import frc.robot.commands.RobotCommands;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.drivetrain.commands.DriveToPoseCommand;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.ElevatorCommands;
 import frc.robot.elevator.commands.SetElevatorState;
@@ -26,6 +31,8 @@ import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 import frc.robot.rushinator.commands.ToggleWristState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
+import frc.robot.vision.PoseEstimatorSubsystem;
+import frc.robot.vision.VisionConfig;
 import frc.robot.vision.commands.AutoAlign;
 import frc.robot.vision.commands.LineupCommand;
 
@@ -102,8 +109,14 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
-        // controller.povLeft().whileTrue(new LineupCommand(true));
-        // controller.povRight().whileTrue(new LineupCommand(false));
+        //Align to Reef
+        controller.povLeft().whileTrue(new DriveToPoseCommand(
+            CommandSwerveDrivetrain.getInstance(), 
+            () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(), 
+            Cblue));
+        controller.povRight().whileTrue(new DriveToPoseCommand(CommandSwerveDrivetrain.getInstance(), 
+            () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(), 
+            Dblue));
 
 
         // // Toggle Wrist Left and Right
