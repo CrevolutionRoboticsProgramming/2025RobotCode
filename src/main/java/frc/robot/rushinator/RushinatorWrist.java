@@ -96,7 +96,7 @@ public class RushinatorWrist extends SubsystemBase {
         if (kLastState == null) {
             kLastState = State.kTravelRight;
         }
-        mPPIDController.setGoal(kLastState.pos.getRadians());
+        mPPIDController.setGoal(kLastState.pos.getRotations());
     }
 
     private static RushinatorWrist mInstance;
@@ -107,19 +107,17 @@ public class RushinatorWrist extends SubsystemBase {
         return mInstance;
     }
 
-    public Rotation2d getWristAngle() {
-        return Rotation2d.fromRotations(mWristCancoder.getAbsolutePosition().getValueAsDouble());
+    public Rotation2d getWristRelativePos() {
+        return Rotation2d.fromRotations(mWristTalon.getPosition().getValueAsDouble());
     }
 
 
     @Override
     public void periodic() {
-        // double currentAngle = mWristCancoder.getAbsolutePosition().getValueAsDouble();
-        // double pidOutput = mPPIDController.calculate(currentAngle);
-        // TrapezoidProfile.State setpoint = mPPIDController.getSetpoint();
-        // double ffOutput = mFFController.calculate(currentAngle, setpoint.velocity);
-        // double totalOutputVoltage = pidOutput + ffOutput;
-        // mWristTalon.setVoltage(totalOutputVoltage);
+        double pidOutput = mPPIDController.calculate(getWristRelativePos().getRotations());
+        double ffOutput = mFFController.calculate(getWristRelativePos().getRotations(), mPPIDController.getSetpoint().velocity);
+        double totalOutputVoltage = pidOutput + ffOutput;
+        mWristTalon.setVoltage(totalOutputVoltage);
         
 
         // SmartDashboard.putNumber("PID Output", pidOutput);
@@ -128,6 +126,10 @@ public class RushinatorWrist extends SubsystemBase {
         SmartDashboard.putString("KLastState Wrist Pivot", kLastState.name());
         SmartDashboard.putNumber("Coral Wrist Current Angle (Rotations)", getCurrentPos().getRotations());
         SmartDashboard.putNumber("Coral Wrist Pivot (Rotations Relavtive)", mWristTalon.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Coral WRist Current Vel", mWristTalon.getVelocity().getValueAsDouble());
+
+        SmartDashboard.putNumber("Coral Wrist Target Pos", mPPIDController.getSetpoint().position);
+        SmartDashboard.putNumber("Coral Wrist Target Vel", mPPIDController.getSetpoint().velocity);
     }
 
     public void setTargetState(State targetState) {

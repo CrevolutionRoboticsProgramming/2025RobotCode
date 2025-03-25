@@ -10,7 +10,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.rushinator.RushinatorPivot;
 
 public class Climber extends SubsystemBase{
     public static class Settings {
@@ -31,18 +33,34 @@ public class Climber extends SubsystemBase{
 
         public static final Rotation2d kMaxAngularVelocity = Rotation2d.fromDegrees(200); //120
         public static final Rotation2d kMaxAngularAcceleration = Rotation2d.fromDegrees(300);
-        public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(180);
-        public static final Rotation2d kMaxAnglePhysical = Rotation2d.fromDegrees(175);
+
+        public static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.8);
+        public static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0);
 
         public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
 
     }
+
+    public enum State {
+        kDeploy(Rotation2d.fromRotations(-0.0185546875)),
+        kRetract(Rotation2d.fromRotations(0.2568359375)),
+        kStow(Settings.kMinPos);
+
+        State(Rotation2d pos) {
+            this.pos = pos;
+
+        }
+        public final Rotation2d pos;
+    }
+
     public static Climber mInstance;
 
     private TalonFX ClimberPivot;
     private final ProfiledPIDController mPPIDController;
     private Constraints mConstraints;
     private final ArmFeedforward mAFFController;
+
+    public static State kLastState;
 
     public Climber() {
         ClimberPivot = new TalonFX(Settings.kClimberPivotId, "Canivore");
@@ -60,6 +78,10 @@ public class Climber extends SubsystemBase{
         mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
         mConstraints = new Constraints(Settings.kMaxAngularVelocity.getRadians(), Settings.kMaxAngularAcceleration.getRadians());
         
+        if (kLastState == null) {
+            kLastState = State.kStow;
+        }
+        mPPIDController.setGoal(kLastState.pos.getRotations());
     }
 
     public static Climber getInstance() {
@@ -69,41 +91,47 @@ public class Climber extends SubsystemBase{
         return mInstance;
     }
 
-    public void setTargetAngle(Rotation2d angle) {
-        mPPIDController.setGoal(angle.getRadians());
+    public void setTargetPos(Rotation2d pos) {
+        mPPIDController.setGoal(pos.getRotations());
     }
 
-    public Rotation2d getAngle() {
+    public Rotation2d getPos() {
         var pos = ClimberPivot.getPosition().getValueAsDouble();
 
-        return Rotation2d.fromDegrees(pos);
+        return Rotation2d.fromRotations(pos);
     }
 
     public Rotation2d getAngularVelocity() {
-        // Default counts per revolution of the CANCoder
-        double CPR = 4096.0;
-        var rawVel = ClimberPivot.getVelocity().getValueAsDouble(); 
-        var radps = (rawVel*20*Math.PI)/ CPR;
-    
-        return new Rotation2d(radps);
+        return Rotation2d.fromRotations(ClimberPivot.getVelocity().getValueAsDouble());
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Climber Pivot Angle (radians)", getAngle().getRadians());
-        SmartDashboard.putNumber("Climber Pivot Angular Velocity (radians / sec)", getAngularVelocity().getRadians());
+        SmartDashboard.putNumber("Climber Pivot Angle (Rotations)", getPos().getRotations());
+        SmartDashboard.putNumber("Climber Pivot Angular Velocity (Rotations / sec)", getAngularVelocity().getRotations());
 
-        SmartDashboard.putNumber("Climber Pivot Angle (degrees)", getAngle().getDegrees());
-        SmartDashboard.putNumber("Climber Pivot Angular Velocity (degrees / sec)", getAngularVelocity().getDegrees());
-
-        SmartDashboard.putNumber("Profilled PID Controller Vel", mPPIDController.getSetpoint().velocity);
+        SmartDashboard.putNumber("Climber Target Pos", mPPIDController.getSetpoint().position);
+        SmartDashboard.putNumber("Target Vel", mPPIDController.getSetpoint().velocity);
 
         // Method to run pivots
-        double speed = mPPIDController.calculate(getAngle().getRadians());
-        speed += mAFFController.calculate(getAngle().getRadians() - Settings.kAFFAngleOffset.getRadians(), mPPIDController.getSetpoint().velocity);
+        double speed = mPPIDController.calculate(getPos().getRotations());
+        speed += mAFFController.calculate(getPos().getRotations(), mPPIDController.getSetpoint().velocity);
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
 
         ClimberPivot.setVoltage(speed);
+    }
+
+    public static class DefaultCommand extends Command {
+
+        public DefaultCommand() {
+            addRequirements(RushinatorPivot.getInstance());
+        }
+
+        @Override
+        public void execute() {
+            Climber.getInstance().setTargetPos(State.kStow.pos);
+        }
+
     }
 }

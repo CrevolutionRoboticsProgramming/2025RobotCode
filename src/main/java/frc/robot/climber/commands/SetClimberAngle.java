@@ -10,27 +10,6 @@ public class SetClimberAngle extends Command{
     Climber mClimber;
     Supplier<Rotation2d> targetSupplier;
 
-    public enum Preset {
-        kZero(Rotation2d.fromDegrees(2)),
-        kClimbP2(Rotation2d.fromDegrees(5)),
-        kClimbP1(Rotation2d.fromDegrees(0)),
-        kStowed(Rotation2d.fromDegrees(170));
-
-        Rotation2d target;
-
-        Preset(Rotation2d target) {
-            this.target = target;
-        }
-
-        public double getDegrees() {
-            return target.getDegrees();
-        }
-
-        public Rotation2d getRotation2d() {
-            return target;
-        }
-    }
-
     public SetClimberAngle(Rotation2d angleIn) {
         mClimber = Climber.getInstance();   
         targetSupplier = ()-> angleIn;
@@ -42,13 +21,12 @@ public class SetClimberAngle extends Command{
 
     @Override
     public void initialize() {
-        
-
+        mClimber.setTargetPos(targetSupplier.get());
     }
 
     @Override
     public void execute() {
-        mClimber.setTargetAngle(targetSupplier.get());
+        mClimber.setTargetPos(targetSupplier.get());
     }
 
 

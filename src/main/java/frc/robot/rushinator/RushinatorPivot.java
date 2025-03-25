@@ -111,7 +111,7 @@ public class RushinatorPivot extends SubsystemBase {
 
     public void setTargetPosition(Rotation2d targetPosition) {
         // NOTE: Use radians for target goal to align with re:calc constant units
-        mPPIDController.setGoal(targetPosition.getRadians());
+        mPPIDController.setGoal(targetPosition.getRotations());
     }
 
     public Rotation2d getArmPosition() {
@@ -132,8 +132,8 @@ public class RushinatorPivot extends SubsystemBase {
     public void periodic() {
         double voltage;
         if (kLastState != null) {
-            voltage = mPPIDController.calculate(getArmPosition().getRadians());
-            voltage += mFFController.calculate(getArmPosition().getRadians(), mPPIDController.getSetpoint().velocity);
+            voltage = mPPIDController.calculate(getArmPosition().getRotations());
+            voltage += mFFController.calculate(getArmPosition().getRotations(), mPPIDController.getSetpoint().velocity);
         } else {
             voltage = 0.0;
         }
@@ -142,14 +142,18 @@ public class RushinatorPivot extends SubsystemBase {
         // System.out.println("This Periodic is bieng called");
         // Telemetry
         SmartDashboard.putString("KLastState Arm Pivot", kLastState.name());
+
         SmartDashboard.putNumber("Coral Pivot Pos (rotations)", getArmPosition().getRotations());
+        SmartDashboard.putNumber("Coral Pivot Vel (Rotations / sec)", getArmVelocity().getRotations());
+
         SmartDashboard.putNumber("Coral Arm Pivot * 96 (Roations)", getPivotAngle().getRotations());
         SmartDashboard.putNumber("Coral Arm Pivot Relative (Rotations)", mTalonPivot.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("PID Output (Coral Arm)", mPPIDController.calculate(getArmPosition().getRadians()));
         SmartDashboard.putNumber("FF Output (Coral Arm)", mFFController.calculate(getArmPosition().getRadians(), mPPIDController.getSetpoint().velocity));
-        // SmartDashboard.putNumber("Coral Pivot Target Pos (rotations)", Rotation2d.fromRadians(mPPIDController.getSetpoint().position).getRotations());
-        // SmartDashboard.putNumber("Coral Pivot Vel (rotations / sec)", getArmVelocity().getRotations());
-        // SmartDashboard.putNumber("Coral Pivot Target Vel (rotations / sec)", Rotation2d.fromRadians(mPPIDController.getSetpoint().velocity).getRotations());
+
+        SmartDashboard.putNumber("Coral Pivot Target Pos", mPPIDController.getSetpoint().position);
+        SmartDashboard.putNumber("Coral Pivot Target Vel", mPPIDController.getSetpoint().velocity);
+
         SmartDashboard.putNumber("Coral Pivot Applied Voltage", voltage);
     }
 
