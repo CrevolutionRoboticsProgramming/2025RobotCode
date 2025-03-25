@@ -1,5 +1,6 @@
 package frc.robot.climber;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -17,8 +18,6 @@ import frc.robot.rushinator.RushinatorPivot;
 public class Climber extends SubsystemBase{
     public static class Settings {
         static final int kClimberPivotId = 27;
-
-        static final int kCanCoderId = 2;
 
         static final InvertedValue kClimberPivotInverted = InvertedValue.Clockwise_Positive;
 
@@ -38,6 +37,8 @@ public class Climber extends SubsystemBase{
         public static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0);
 
         public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
+
+        static final double kCurrentLimit = 40.0;
 
     }
 
@@ -63,7 +64,7 @@ public class Climber extends SubsystemBase{
     public static State kLastState;
 
     public Climber() {
-        ClimberPivot = new TalonFX(Settings.kClimberPivotId, "Canivore");
+        ClimberPivot = new TalonFX(Settings.kClimberPivotId);
 
         var ElbowPivotConfigurator = ClimberPivot.getConfigurator();
 
@@ -77,6 +78,8 @@ public class Climber extends SubsystemBase{
         mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, mConstraints);
         mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
         mConstraints = new Constraints(Settings.kMaxAngularVelocity.getRadians(), Settings.kMaxAngularAcceleration.getRadians());
+
+        ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
         
         if (kLastState == null) {
             kLastState = State.kStow;

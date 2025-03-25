@@ -1,6 +1,7 @@
 package frc.robot.algaepivot;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -39,6 +40,8 @@ public class AlgaeSubsystem extends SubsystemBase {
 
         static final double kZeroOffset = 0.3225; // rotations
 
+        static final double kCurrentLimit = 40.0;
+
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
         static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.06640625);
         static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.267);
@@ -71,6 +74,7 @@ public class AlgaeSubsystem extends SubsystemBase {
                 .withInverted(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake)
         ));
+        mTalonPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
 
         mCANcoderPivot = new CANcoder(Settings.kCANcoderPivotID);
         mCANcoderPivot.getConfigurator().apply(new CANcoderConfiguration().withMagnetSensor(new MagnetSensorConfigs().

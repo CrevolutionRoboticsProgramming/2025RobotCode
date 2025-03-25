@@ -6,6 +6,7 @@ package frc.robot.algaeflywheel;
 
 import org.opencv.core.RotatedRect;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -22,6 +23,8 @@ public class AlgaeRoller extends SubsystemBase{
         static final int kRightID = 16;
         static final int kIndexID = 17;
 
+        static final double kCurrentLimit = 25.0;
+
         static final Rotation2d kMaxAngluarVelocity = Rotation2d.fromRotations(6000 / 60);
     }
 
@@ -32,6 +35,10 @@ public class AlgaeRoller extends SubsystemBase{
         mTalonShooterLeft = new TalonFX(Settings.kLeftID);
         mTalonShooterRight = new TalonFX(Settings.kRightID);
         mTalonIndexer = new TalonFX(Settings.kIndexID);
+
+        mTalonShooterLeft.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
+        mTalonShooterRight.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
+        mTalonIndexer.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
     }
 
     public static AlgaeRoller getInstance() {

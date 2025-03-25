@@ -1,5 +1,6 @@
 package frc.robot.elevator;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -40,6 +41,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 //        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300);
 //        static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
+
+        static final double kCurrentLimit = 40.0;
+
         static final double kMaxVelocity = 25.0f;
         static final double kMaxAcceleration = 100.0f;
 
@@ -84,10 +88,13 @@ public class ElevatorSubsystem extends SubsystemBase {
                 .withInverted(InvertedValue.CounterClockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake)
         );
+        mTalonLeft.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
+
         mTalonRight.getConfigurator().apply(new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake)
         );
+        mTalonRight.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
         mTalonRight.setPosition(0);
 
         // mLowerLimitSwitch = new DigitalInput(Settings.kLowerLimitSwitch);

@@ -3,6 +3,7 @@ package frc.robot.rushinator;
 import static edu.wpi.first.units.Units.Rotation;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -36,6 +37,8 @@ public class RushinatorWrist extends SubsystemBase {
         public static final double kP = 0.05;
         public static final double kI = 0.0;
         public static final double kD = 0.05;
+
+        static final double kCurrentLimit = 40.0;
 
         public static final double kZeroOffset = 0.0; // rotations
 
@@ -78,6 +81,7 @@ public class RushinatorWrist extends SubsystemBase {
                 .withInverted(InvertedValue.CounterClockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Brake)
         ));
+        mWristTalon.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
 
         mWristCancoder =  new CANcoder(Settings.kCancoderWristID);
         mWristCancoder.getConfigurator().apply(new CANcoderConfiguration().withMagnetSensor(new MagnetSensorConfigs().

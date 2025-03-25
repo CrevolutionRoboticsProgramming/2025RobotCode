@@ -1,5 +1,6 @@
 package frc.robot.rushinator;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -14,6 +15,7 @@ public class RushinatorRollers extends SubsystemBase {
     public static class Settings {
         static final int kTopID = 26;
 
+        static final double kCurrentLimit = 25.0;
         // RPS
         static final Rotation2d kMaxAngluarVelocity = Rotation2d.fromRotations(6000 / 60);
     }
@@ -23,6 +25,7 @@ public class RushinatorRollers extends SubsystemBase {
 
     private RushinatorRollers() {
         mTalonWheel = new TalonFX(Settings.kTopID);
+        mTalonWheel.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
     }
 
     public static RushinatorRollers getInstance() {
