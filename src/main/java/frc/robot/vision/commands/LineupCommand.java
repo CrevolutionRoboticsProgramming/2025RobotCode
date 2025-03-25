@@ -123,7 +123,7 @@ public class LineupCommand extends Command {
             ).execute();
         } else {
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-            robotCentricRequest.withVelocityX(XOutput)
+            RobotContainer.drive.withVelocityX(XOutput)
                      .withVelocityY(YOutput)
                      .withRotationalRate(-thetaOutput)   
             ).execute();

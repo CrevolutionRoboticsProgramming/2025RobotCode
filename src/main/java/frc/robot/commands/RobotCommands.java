@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.algaepivot.AlgaeSubsystem;
-import frc.robot.coralArm.CoralSubsystem;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.rushinator.RushinatorPivot;
