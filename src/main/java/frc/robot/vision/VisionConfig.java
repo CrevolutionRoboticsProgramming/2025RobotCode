@@ -98,7 +98,7 @@ public class VisionConfig {
     public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = VecBuilder.fill(0.025, 0.025, Units.degreesToRadians(2.5));
 
 
-    public class AlignmentConfig {
+    public static class AlignmentConfig {
         public static final double THETA_kP = 3.0;
         public static final double THETA_kI = 0.0;
         public static final double THETA_kD = 0.0;
