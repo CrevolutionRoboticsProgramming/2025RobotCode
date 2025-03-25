@@ -29,6 +29,7 @@ import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.rushinator.commands.SetRollersVoltage;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
@@ -78,6 +79,7 @@ public class AutonMaster {
         autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("Left_3.5_IKL"));
         autonChooser.addOption("MidStart1PieceCoral", AutoBuilder.buildAuto("Mid_1AL_G"));
         autonChooser.addOption("RightMoveSomeone", AutoBuilder.buildAuto("Right_Move_Someone"));
+
     }
     
 
@@ -94,6 +96,7 @@ public class AutonMaster {
         NamedCommands.registerCommand("AutonScoreL3", RobotCommands.scoreCoralAutonL3());
         NamedCommands.registerCommand("AutonScoreL4", RobotCommands.scoreCoralAutonL4());
         NamedCommands.registerCommand("HPPickup", RobotCommands.autoHPPickUp());
+        NamedCommands.registerCommand("StopRollers", new SetRollersVoltage(0.0));
     }
 
     public Command getTestPathFindingCommand() {

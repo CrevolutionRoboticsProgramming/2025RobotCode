@@ -19,8 +19,6 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.commands.RobotCommands;
-import frc.robot.coralArm.CoralSubsystem;
-import frc.robot.coralator.CoralRollerSubsystem;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.ElevatorSubsystem.State;
 import frc.robot.elevator.commands.SetElevatorState;
@@ -118,9 +116,13 @@ public class OperatorXbox extends XboxGamepad {
 
         // Algae L3
         controller.y().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3));
+        controller.y().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.y().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
 
         // Algae L2 
         controller.b().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL2));
+        controller.b().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.b().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
 
         /*TEsting Bindings */
 

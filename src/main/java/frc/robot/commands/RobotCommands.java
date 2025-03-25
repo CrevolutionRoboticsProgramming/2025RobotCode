@@ -50,25 +50,28 @@ public class RobotCommands {
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(2.0)
+                new WaitCommand(1.65)
             ),
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kScore),
                 new SetWristState(RushinatorWrist.State.kScoreRightWrist),
-                new WaitCommand(2.0)
+                new WaitCommand(1.0)
             ),
             new ParallelRaceGroup(
-                new SetRollersVoltage(-1.0),
-                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetElevatorState(ElevatorSubsystem.State.kCoralL4AutonScore),
+                new WaitCommand(1.0)
+            ),
+            new ParallelRaceGroup(
+                // new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(1.5)
+                new WaitCommand(1.0)
             ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
-                new WaitCommand(2.0)
+                new WaitCommand(1.65)
             )
         );
     }

@@ -1,5 +1,6 @@
 package frc.robot.vision.commands;
 
+import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
@@ -59,9 +60,12 @@ public class AutoAlign extends Command {
                                         VisionConfig.AlignmentConfig.THETA_kI,
                                         VisionConfig.AlignmentConfig.THETA_kD,
                                         THETA_CONSTRAINTS);    
-        
+
+                                        
+                                        
     private static Pose2d currentPose;
     private static Pose2d targetPose;
+    private static boolean commandRan = false;
 
     public AutoAlign(boolean left) {
         //set tolerances of all PID controllers
@@ -79,6 +83,188 @@ public class AutoAlign extends Command {
         thetaController.reset(0);
 
         addRequirements(CommandSwerveDrivetrain.getInstance());
+    }
+
+    
+    public double getDistanceFromTag(Pose2d goalPose) {
+        double xDiff = goalPose.getX() - currentPose.getX();
+        double yDiff = goalPose.getY() - currentPose.getY();
+        double distance = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+        return distance;
+    }
+
+    private Pose2d getTargetReefPose(boolean left){
+        var photonResult = leftCam.getAllUnreadResults();
+        var currAlliance = DriverStation.getAlliance();
+        
+        for (var result : photonResult){
+            if (result.hasTargets()){
+                tagID = result.getBestTarget().fiducialId;
+            }
+        }
+
+        if (currAlliance.get() == Alliance.Blue){
+            // IF(LEFT)
+            // {
+            //     CLOSESTDIST = NULL;
+            //     TARGETPOSE = A;
+            //     TEMPdIST = DISTANCE(CURPOS, TARGETPOSE);
+            //     CLOSESTDIST = TEMPDIST;
+            //     POSE = A
+
+            //     TARGETPOSE = C;
+            //     TEMPdIST = DISTANCE(CURPOS, TARGETPOSE)
+            //     IF(TEMPDIST < CLOSESTDIST)
+            //         POSE = C;
+                
+            // }
+            if (left) {
+                double min = getDistanceFromTag(Ablue);
+                targetPose = Ablue;
+                
+                if (min > getDistanceFromTag(Cblue)){
+                    min = getDistanceFromTag(Cblue);
+                    targetPose = Cblue;
+                } 
+                if (min > getDistanceFromTag(Kblue)) {
+                    min = getDistanceFromTag(Kblue);
+                    targetPose = Kblue;
+                }
+                if (min > getDistanceFromTag(Iblue)) {
+                    min = getDistanceFromTag(Iblue);
+                    targetPose = Iblue;
+                } 
+                if (min > getDistanceFromTag(Gblue)) {
+                    min = getDistanceFromTag(Gblue);
+                    targetPose = Gblue;
+                } 
+                if (min > getDistanceFromTag(Eblue)) {
+                    min = getDistanceFromTag(Eblue);
+                    targetPose = Eblue;
+                }
+            } else {
+                double min = getDistanceFromTag(Bblue);
+                targetPose = Ablue;
+                
+                if (min > getDistanceFromTag(Dblue)){
+                    min = getDistanceFromTag(Dblue);
+                    targetPose = Dblue;
+                } 
+                if (min > getDistanceFromTag(Lblue)) {
+                    min = getDistanceFromTag(Lblue);
+                    targetPose = Lblue;
+                }
+                if (min > getDistanceFromTag(Jblue)) {
+                    min = getDistanceFromTag(Jblue);
+                    targetPose = Jblue;
+                } 
+                if (min > getDistanceFromTag(Hblue)) {
+                    min = getDistanceFromTag(Hblue);
+                    targetPose = Hblue;
+                } 
+                if (min > getDistanceFromTag(Fblue)) {
+                    min = getDistanceFromTag(Fblue);
+                    targetPose = Fblue;
+                }
+            }
+
+            // //DISTANCE FROM 
+            // if (targetPose == Cblue){
+            //     if (left) {
+            //         return Cblue;
+            //     } else if (!left) {
+            //         return Dblue;
+            //     }
+            // } else if (getDistanceFromTag(Ablue) < getDistanceFromTag(Kblue)) {
+            //     if (left) {
+            //         return Ablue;
+            //     } else if (!left) {
+            //         return Bblue;
+            //     }
+            // } else if (getDistanceFromTag(Kblue) < getDistanceFromTag(Iblue)) {
+            //     if (left) {
+            //         return Kblue;
+            //     } else if (!left) {
+            //         return Lblue;
+            //     }
+            // } else if (getDistanceFromTag(Iblue) < getDistanceFromTag(Gblue)) {
+            //     if (left) {
+            //         return Iblue;
+            //     } else if (!left) {
+            //         return Jblue;
+            //     }
+            // } else if (getDistanceFromTag(Gblue) < getDistanceFromTag(Eblue)) {
+            //     if (left) {
+            //         return Gblue;
+            //     } else if (!left) {
+            //         return Hblue;
+            //     }
+            // } else if (getDistanceFromTag(Eblue) < getDistanceFromTag(Cblue)) {
+            //     if (left) {
+            //         return Eblue;
+            //     } else if (!left) {
+            //         return Fblue;
+            //     }
+            // }
+
+        } else if (currAlliance.get() == Alliance.Red){
+            if (left) {
+                double min = getDistanceFromTag(Ared);
+                targetPose = Ared;
+                
+                if (min > getDistanceFromTag(Cred)){
+                    min = getDistanceFromTag(Cred);
+                    targetPose = Cred;
+                } 
+                if (min > getDistanceFromTag(Kred)) {
+                    min = getDistanceFromTag(Kred);
+                    targetPose = Kblue;
+                }
+                if (min > getDistanceFromTag(Ired)) {
+                    min = getDistanceFromTag(Ired);
+                    targetPose = Ired;
+                } 
+                if (min > getDistanceFromTag(Gred)) {
+                    min = getDistanceFromTag(Gred);
+                    targetPose = Gred;
+                } 
+                if (min > getDistanceFromTag(Ered)) {
+                    min = getDistanceFromTag(Ered);
+                    targetPose = Ered;
+                }
+            } else {
+                double min = getDistanceFromTag(Bred);
+                targetPose = Ablue;
+                
+                if (min > getDistanceFromTag(Dred)){
+                    min = getDistanceFromTag(Dred);
+                    targetPose = Dred;
+                } 
+                if (min > getDistanceFromTag(Lred)) {
+                    min = getDistanceFromTag(Lred);
+                    targetPose = Lred;
+                }
+                if (min > getDistanceFromTag(Jred)) {
+                    min = getDistanceFromTag(Jred);
+                    targetPose = Jred;
+                } 
+                if (min > getDistanceFromTag(Hred)) {
+                    min = getDistanceFromTag(Hred);
+                    targetPose = Hred;
+                } 
+                if (min > getDistanceFromTag(Fred)) {
+                    min = getDistanceFromTag(Fred);
+                    targetPose = Fred;
+                }
+            }
+
+        } else if (currAlliance.get() != Alliance.Red && currAlliance.get() != Alliance.Blue){
+            System.out.println("ERROR: There's no such thing as purple alliance");
+        } 
+
+        System.out.println("Error: no suitable target pose found (Lineup Command)");
+        return targetPose;
+
     }
 
     @Override
@@ -107,117 +293,26 @@ public class AutoAlign extends Command {
                      .withRotationalRate(-thetaOutput)   
             ).execute();
         }
-
+        
+        commandRan = true;
+        SmartDashboard.putBoolean("command ran", commandRan);
         SmartDashboard.putString("Target Pose X", targetPose.toString());
+        SmartDashboard.putBoolean("X at target", xDistanceController.atSetpoint());
+        SmartDashboard.putBoolean("Y at target", yDistanceController.atSetpoint());
+        SmartDashboard.putBoolean("Theta at target", thetaController.atSetpoint());
+        //SmartDashboard.putNumber("TAG ID", tagID);
 
     }
 
     @Override
     public boolean isFinished() {
-        return xDistanceController.atSetpoint() && yDistanceController.atSetpoint() && thetaController.atSetpoint();
+        return commandRan;
+        // return xDistanceController.atSetpoint() && yDistanceController.atSetpoint() && thetaController.atSetpoint();
     }
 
     @Override
     public void end(boolean interrupted) {
         
-    }
-
-    private Pose2d getTargetReefPose(boolean left){
-        var photonResult = leftCam.getAllUnreadResults();
-        var currAlliance = DriverStation.getAlliance();
-        
-        for (var result : photonResult){
-            if (result.hasTargets()){
-                tagID = result.getBestTarget().fiducialId;
-            }
-        }
-
-        if (currAlliance.get() == Alliance.Blue){
-
-            if (tagID == 17){
-                if (left) {
-                    return Cblue;
-                } else if (!left) {
-                    return Dblue;
-                }
-            } else if (tagID == 18) {
-                if (left) {
-                    return Ablue;
-                } else if (!left) {
-                    return Bblue;
-                }
-            } else if (tagID == 19) {
-                if (left) {
-                    return Kblue;
-                } else if (!left) {
-                    return Lblue;
-                }
-            } else if (tagID == 20) {
-                if (left) {
-                    return Iblue;
-                } else if (!left) {
-                    return Jblue;
-                }
-            } else if (tagID == 21) {
-                if (left) {
-                    return Gblue;
-                } else if (!left) {
-                    return Hblue;
-                }
-            } else if (tagID == 22) {
-                if (left) {
-                    return Eblue;
-                } else if (!left) {
-                    return Fblue;
-                }
-            }
-
-        } else if (currAlliance.get() == Alliance.Red){
-            if (tagID == 7){
-                if (left) {
-                    return Ared;
-                } else if (!left) {
-                    return Bred;
-                }
-            } else if (tagID == 8) {
-                if (left) {
-                    return Cred;
-                } else if (!left) {
-                    return Dred;
-                }
-            } else if (tagID == 9) {
-                if (left) {
-                    return Ered;
-                } else if (!left) {
-                    return Fred;
-                }
-            } else if (tagID == 10) {
-                if (left) {
-                    return Gred;
-                } else if (!left) {
-                    return Hred;
-                }
-            } else if (tagID == 11) {
-                if (left) {
-                    return Ired;
-                } else if (!left) {
-                    return Jred;
-                }
-            } else if (tagID == 6) {
-                if (left) {
-                    return Kred;
-                } else if (!left) {
-                    return Lred;
-                }
-            }
-
-        } else if (currAlliance.get() != Alliance.Red && currAlliance.get() != Alliance.Blue){
-            System.out.println("ERROR: There's no such thing as purple alliance");
-        }
-
-        System.out.println("Error: no suitable target pose found (Lineup Command)");
-        return currentPose;
-
     }
 
 

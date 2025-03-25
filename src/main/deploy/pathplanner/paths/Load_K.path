@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.74525,
-        "y": 7.34975
+        "x": 1.6965000000000001,
+        "y": 7.31075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0292910978272434,
-        "y": 7.134447697193834
+        "x": 1.9805410978272435,
+        "y": 7.095447697193833
       },
       "isLocked": false,
       "linkedName": "LeftLoad"
     },
     {
       "anchor": {
-        "x": 3.9319672131147536,
-        "y": 5.409579918032787
+        "x": 3.9195000000000007,
+        "y": 5.38025
       },
       "prevControl": {
-        "x": 2.0433816248782475,
-        "y": 6.126904688958027
+        "x": 2.0309144117634945,
+        "y": 6.097574770925241
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "StopRollers",
+      "waypointRelativePos": 0.634172661870503,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 121.21840276434638
+    "rotation": 120.46554491945999
   },
   "reversed": false,
   "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.16234704572171
+    "rotation": -54.293308599397086
   },
   "useDefaultConstraints": true
 }

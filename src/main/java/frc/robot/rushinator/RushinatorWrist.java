@@ -40,11 +40,11 @@ public class RushinatorWrist extends SubsystemBase {
         public static final double kZeroOffset = 0.0; // rotations
 
     }
-//-1.69580078125
+// 12.3720703125 Score MId
     public enum State {
-        kScoreLeftWrist(Rotation2d.fromRotations(12.3720703125 + 23)),
-        kScoreRightWrist(Rotation2d.fromRotations(12.3720703125 - 23)),
-        kScoreMid(Rotation2d.fromRotations(12.3720703125)),
+        kScoreLeftWrist(Rotation2d.fromRotations(15.62573242 + 23)),
+        kScoreRightWrist(Rotation2d.fromRotations(15.62573242 - 23)),
+        kScoreMid(Rotation2d.fromRotations(15.62573242)),
         kScoreL1LeftWrist(Rotation2d.fromRotations(10.52197265625 + 23)),
         kScoreL1RightWrist(Rotation2d.fromRotations(10.52197265625 - 23)),
         kScoreL1Mid(Rotation2d.fromRotations(10.52197265625)),
@@ -172,17 +172,18 @@ public class RushinatorWrist extends SubsystemBase {
 
         @Override
         public void execute() {
-            if (kLastState == RushinatorWrist.State.kScoreRightWrist) {
-                new SetWristState(RushinatorWrist.State.kTravelRight);
-            } else if (kLastState == RushinatorWrist.State.kScoreLeftWrist){
-                new SetWristState(RushinatorWrist.State.kTravelLeft);
-            } else if (kLastState == RushinatorWrist.State.kTravelLeft){
-                new SetWristState(RushinatorWrist.State.kTravelLeft);
-            } else if (kLastState == RushinatorWrist.State.kTravelRight) {
-                new SetWristState(RushinatorWrist.State.kTravelRight);
-            } else {
-                new SetWristState(RushinatorWrist.State.kTravelRight);
-            }
+            // if (kLastState == RushinatorWrist.State.kScoreRightWrist) {
+            //     new SetWristState(RushinatorWrist.State.kTravelRight);
+            // } else if (kLastState == RushinatorWrist.State.kScoreLeftWrist){
+            //     new SetWristState(RushinatorWrist.State.kTravelLeft);
+            // } else if (kLastState == RushinatorWrist.State.kTravelLeft){
+            //     new SetWristState(RushinatorWrist.State.kTravelLeft);
+            // } else if (kLastState == RushinatorWrist.State.kTravelRight) {
+            //     new SetWristState(RushinatorWrist.State.kTravelRight);
+            // } else {
+            //     new SetWristState(RushinatorWrist.State.kTravelRight);
+            // }
+            new SetWristState(RushinatorWrist.State.kTravelRight);
         }
     }
 }

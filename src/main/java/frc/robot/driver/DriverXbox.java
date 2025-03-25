@@ -27,6 +27,7 @@ import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 import frc.robot.rushinator.commands.ToggleWristState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
+import frc.robot.vision.commands.AutoAlign;
 import frc.robot.vision.commands.LineupCommand;
 
 
@@ -102,8 +103,8 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
-        controller.povLeft().whileTrue(new LineupCommand(true));
-        controller.povRight().whileTrue(new LineupCommand(false));
+        // controller.povLeft().whileTrue(new LineupCommand(true));
+        // controller.povRight().whileTrue(new LineupCommand(false));
 
 
         // // Toggle Wrist Left and Right
@@ -127,7 +128,11 @@ public class DriverXbox extends XboxGamepad {
 
         /*TESTING BINDINGS */
 
-        // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
+        // controller.povLeft().whileTrue(new AutoAlign(true));
+        // controller.povRight().whileTrue(new AutoAlign(false));
+
+
+        controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
         // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
         // controller.povRight().onTrue(RobotCommands.scoreCoralAutonL1());
 

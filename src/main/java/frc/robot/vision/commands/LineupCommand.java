@@ -75,6 +75,7 @@ public class LineupCommand extends Command {
     private static Pose2d currentPose;
     private static Pose2d targetPose;
     private static boolean leftReefLineup;
+    private static boolean commandRan = false;
 
     public LineupCommand(boolean left) {
         //set tolerances of all PID controllers
@@ -98,7 +99,7 @@ public class LineupCommand extends Command {
 
     @Override
     public void initialize() {
-
+        SmartDashboard.putBoolean("command ran", commandRan);
     }
 
     @Override
@@ -115,26 +116,28 @@ public class LineupCommand extends Command {
 
         if (DriverStation.getAlliance().get() == Alliance.Blue){
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-                RobotContainer.drive.withVelocityX(-XOutput)
+                robotCentricRequest.withVelocityX(-XOutput)
                      .withVelocityY(-YOutput)
                      .withRotationalRate(thetaOutput)
                      
             ).execute();
         } else {
             CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-            RobotContainer.drive.withVelocityX(XOutput)
+            robotCentricRequest.withVelocityX(XOutput)
                      .withVelocityY(YOutput)
                      .withRotationalRate(-thetaOutput)   
             ).execute();
         }
-
+        commandRan = true;
         SmartDashboard.putString("Target Pose X", targetPose.toString());
+
 
     }
     
 
     @Override
     public boolean isFinished() {
+        commandRan = false;
         return xDistanceController.atSetpoint() && yDistanceController.atSetpoint() && thetaController.atSetpoint();
     }
 

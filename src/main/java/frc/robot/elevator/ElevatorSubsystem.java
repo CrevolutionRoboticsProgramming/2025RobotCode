@@ -59,7 +59,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     public enum State {
         kCoralL1(0.0),
         kCoralL2(0.0),
-        kCoralL3(14.3505859375),
+        kCoralL3(14.21240234375),
+        kCoralL4AutonScore(16.2),
         kCoralL4(34.92138671875),
         kAlgaeL2(15.3125),
         kAlgaeL3(24.580078125),
