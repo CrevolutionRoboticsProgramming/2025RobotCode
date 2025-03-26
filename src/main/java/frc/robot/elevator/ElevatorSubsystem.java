@@ -180,7 +180,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         double voltage = 0.0;
         voltage = mPPIDController.calculate(getPosition());
         voltage += getFeedforwardOutput(mPPIDController.getSetpoint().velocity);
-        setVoltage(voltage);
+        // setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Elevator Position", getPosition());

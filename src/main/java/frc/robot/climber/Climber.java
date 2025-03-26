@@ -122,7 +122,7 @@ public class Climber extends SubsystemBase{
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
 
-        ClimberPivot.setVoltage(speed);
+        // ClimberPivot.setVoltage(speed);
     }
 
     public static class DefaultCommand extends Command {

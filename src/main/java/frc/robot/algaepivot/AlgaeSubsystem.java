@@ -133,7 +133,7 @@ public class AlgaeSubsystem extends SubsystemBase {
             voltage = 0.0;
         }
 
-        mTalonPivot.setVoltage(voltage);
+        // mTalonPivot.setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Algae Pivot Pos (rotations)", getWristPosition().getRotations());

@@ -142,7 +142,7 @@ public class RushinatorPivot extends SubsystemBase {
             voltage = 0.0;
         }
 
-        mTalonPivot.setVoltage(voltage);
+        // mTalonPivot.setVoltage(voltage);
         // System.out.println("This Periodic is bieng called");
         // Telemetry
         SmartDashboard.putString("KLastState Arm Pivot", kLastState.name());

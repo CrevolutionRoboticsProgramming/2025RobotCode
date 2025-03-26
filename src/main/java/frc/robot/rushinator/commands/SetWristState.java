@@ -75,6 +75,95 @@ import frc.robot.rushinator.RushinatorWrist.State;
 //     }
 // }
 
+/* Current Working Class */
+// public class SetWristState extends Command {
+//     private final RushinatorWrist mRushinatorWrist;
+//     private final RushinatorPivot mRushinatorPivot;
+//     private final RushinatorWrist.State mTargetState;
+//     private final RushinatorPivot.State mArmTargetState;
+//     private double setpointAngle, targetArmRadian;
+
+//     public SetWristState(RushinatorWrist.State targetWristState) {
+//         mRushinatorWrist = RushinatorWrist.getInstance();
+
+//         mTargetState = targetWristState;
+//         mArmTargetState = null;
+
+//         mRushinatorPivot = RushinatorPivot.getInstance();
+
+//         addRequirements(mRushinatorWrist);
+//     }
+
+//     public SetWristState(RushinatorWrist.State targetWristState, double targetArmRadian) {
+//         mRushinatorWrist = RushinatorWrist.getInstance();
+
+//         mTargetState = targetWristState;
+//         this.targetArmRadian = targetArmRadian;
+//         mArmTargetState = null;
+
+//         mRushinatorPivot = RushinatorPivot.getInstance();
+
+//         addRequirements(mRushinatorWrist);
+//     }
+
+//     // public SetWristState(RushinatorWrist.State targetWristState, RushinatorPivot.State mState) {
+//     //     mRushinatorWrist = RushinatorWrist.getInstance();
+
+//     //     mTargetState = targetWristState;
+//     //     mArmTargetState = mState;
+
+//     //     mRushinatorPivot = RushinatorPivot.getInstance();
+
+//     //     addRequirements(mRushinatorWrist);
+//     //     addRequirements(mRushinatorPivot);
+//     // }
+
+//     @Override
+//     public void initialize() {
+//         /*neW Version of grabbing pos (Should work?) */
+        
+//         setpointAngle = mTargetState.pos.getRotations();
+//         mRushinatorWrist.setTargetState(mTargetState);
+        
+//         SmartDashboard.putNumber("Current Arm Pivot (Radians)", setpointAngle);
+//         SmartDashboard.putNumber("Actual Setpoint (Rotations)", Units.radiansToRotations(setpointAngle));
+        
+//     }
+
+//     @Override
+//     public void execute() {
+//         // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStowTravel.pos.getRadians() - targetArmRadian);
+//         // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.getInstance().getArmRelativePos().getRadians() - mArmTargetState.pos.getRadians());
+//         Rotation2d targetPoint = Rotation2d.fromRadians(setpointAngle);
+//         double Voltage;
+
+//         if (mTargetState.pos.getRotations() > mRushinatorWrist.getCurrentRelativePos().getRotations()) {
+//             Voltage = 3.5;
+//         } else {
+//             Voltage = -3.5;
+//         }
+
+//         var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRotations();
+//         if (-0.75 <= error && error <= 0.75) {
+//             Voltage = 0.0;
+//         }
+        
+//         mRushinatorWrist.setVoltage(Voltage);
+//         SmartDashboard.putNumber("Adjusted Target (Rotations)", targetPoint.getRotations());
+//         SmartDashboard.putNumber("Error (radians)", error);
+//         SmartDashboard.putNumber("Total Voltage", Voltage);
+//     }
+
+//     @Override
+//     public boolean isFinished() {
+//         return false;
+//     }
+
+//     @Override
+//     public void end(boolean interrupted) {
+//         mRushinatorWrist.setVoltage(0);
+//     }
+
 public class SetWristState extends Command {
     private final RushinatorWrist mRushinatorWrist;
     private final RushinatorPivot mRushinatorPivot;
@@ -119,8 +208,6 @@ public class SetWristState extends Command {
 
     @Override
     public void initialize() {
-        /*neW Version of grabbing pos (Should work?) */
-        
         setpointAngle = mTargetState.pos.getRotations();
         mRushinatorWrist.setTargetState(mTargetState);
         
@@ -131,26 +218,7 @@ public class SetWristState extends Command {
 
     @Override
     public void execute() {
-        // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.State.kStowTravel.pos.getRadians() - targetArmRadian);
-        // setpointAngle = mTargetState.pos.getRadians() - (RushinatorPivot.getInstance().getArmRelativePos().getRadians() - mArmTargetState.pos.getRadians());
-        Rotation2d targetPoint = Rotation2d.fromRadians(setpointAngle);
-        double Voltage;
-
-        if (mTargetState.pos.getRotations() > mRushinatorWrist.getCurrentRelativePos().getRotations()) {
-            Voltage = 3.5;
-        } else {
-            Voltage = -3.5;
-        }
-
-        var error = setpointAngle - mRushinatorWrist.getCurrentRelativePos().getRotations();
-        if (-0.75 <= error && error <= 0.75) {
-            Voltage = 0.0;
-        }
         
-        mRushinatorWrist.setVoltage(Voltage);
-        SmartDashboard.putNumber("Adjusted Target (Rotations)", targetPoint.getRotations());
-        SmartDashboard.putNumber("Error (radians)", error);
-        SmartDashboard.putNumber("Total Voltage", Voltage);
     }
 
     @Override
@@ -162,7 +230,6 @@ public class SetWristState extends Command {
     public void end(boolean interrupted) {
         mRushinatorWrist.setVoltage(0);
     }
-
 
 // public class SetWristState extends Command {
 //     private final RushinatorWrist mRushinatorWrist;

@@ -121,7 +121,7 @@ public class RushinatorWrist extends SubsystemBase {
         double pidOutput = mPPIDController.calculate(getWristRelativePos().getRotations());
         double ffOutput = mFFController.calculate(getWristRelativePos().getRotations(), mPPIDController.getSetpoint().velocity);
         double totalOutputVoltage = pidOutput + ffOutput;
-        mWristTalon.setVoltage(totalOutputVoltage);
+        // mWristTalon.setVoltage(totalOutputVoltage);
         
 
         // SmartDashboard.putNumber("PID Output", pidOutput);
