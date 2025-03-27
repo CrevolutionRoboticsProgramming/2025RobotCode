@@ -27,16 +27,16 @@ public class RushinatorPivot extends SubsystemBase {
 
         static final double kG = 0.1; // V
         static final double kS = 0.0; // V / rad
-        static final double kV = 1.0; // V * sec / rad
-        static final double kA = 0.01; // V * sec^2 / rad
+        static final double kV = 5.0; // V * sec / rad
+        static final double kA = 1.77; // V * sec^2 / rad
 
-        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300);
+        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(500);
         static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
-        static final double kP = 5.0;
+        static final double kP = 38.0;          
         static final double kI = 0.0;
         static final double kD = 0.0;
 
-        static final double kZeroOffset = 0.08; // rotations
+        static final double kZeroOffset = 0.05615234375000001; // rotations
 
         static final double kCurrentLimit = 40.0;
 
@@ -46,11 +46,11 @@ public class RushinatorPivot extends SubsystemBase {
     }
 
     public enum State {
-        kFloorIntake(Rotation2d.fromRotations(-0.0185546875)),
-        kHPIntake(Rotation2d.fromRotations(0.2568359375)),
-        kScore(Rotation2d.fromRotations(0.17431640625)),
+        kFloorIntake(Rotation2d.fromRotations(-0.065185546875)),
+        kHPIntake(Rotation2d.fromRotations(0.270751953125)),
+        kScore(Rotation2d.fromRotations(0.119873046875)),
         kScoreL1(Rotation2d.fromRotations(0.140380859375)),
-        kStowTravel(Rotation2d.fromRotations(0.25122)),
+        kStowTravel(Rotation2d.fromRotations(0.223876953125)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
@@ -91,7 +91,7 @@ public class RushinatorPivot extends SubsystemBase {
         if (kLastState == null) {
             kLastState = State.kStowTravel;
         }
-        mPPIDController.setGoal(kLastState.pos.getRadians());
+        mPPIDController.setGoal(kLastState.pos.getRotations());
     }
 
 
@@ -142,7 +142,7 @@ public class RushinatorPivot extends SubsystemBase {
             voltage = 0.0;
         }
 
-        // mTalonPivot.setVoltage(voltage);
+        mTalonPivot.setVoltage(voltage);
         // System.out.println("This Periodic is bieng called");
         // Telemetry
         SmartDashboard.putString("KLastState Arm Pivot", kLastState.name());

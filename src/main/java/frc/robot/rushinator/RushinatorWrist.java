@@ -13,6 +13,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,39 +29,56 @@ public class RushinatorWrist extends SubsystemBase {
         static final int kTalonWristID = 12; 
         static final int kCancoderWristID = 24; 
 
-        public static final double kG = 0.0; // V
+        public static final double kG = 0.01; // V
         public static final double kS = 0.0; // V / rad
-        public static final double kV = 1.6; // V * sec / rad
-        public static final double kA = 0.0; // V * sec^2 / rad
+        public static final double kV = 0.5; // V * sec / rad
+        public static final double kA = 0.01; // V * sec^2 / rad
 
-        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(10);
-        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(100);
-        public static final double kP = 0.05;
+        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(6000);
+        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(6000);
+        public static final double kP = 50.0;
         public static final double kI = 0.0;
-        public static final double kD = 0.05;
+        public static final double kD = 0.0;
 
         static final double kCurrentLimit = 40.0;
 
-        public static final double kZeroOffset = 0.0; // rotations
+        public static final double kZeroOffset = 0.306640625; // rotations
 
     }
 // 12.3720703125 Score MId
-    public enum State {
-        kScoreLeftWrist(Rotation2d.fromRotations(15.62573242 + 23)),
+/*
+ * kScoreLeftWrist(Rotation2d.fromRotations(15.62573242 + 23)),
         kScoreRightWrist(Rotation2d.fromRotations(15.62573242 - 23)),
         kScoreMid(Rotation2d.fromRotations(15.62573242)),
         kScoreL1LeftWrist(Rotation2d.fromRotations(10.52197265625 + 23)),
         kScoreL1RightWrist(Rotation2d.fromRotations(10.52197265625 - 23)),
         kScoreL1Mid(Rotation2d.fromRotations(10.52197265625)),
-        kHPLeft(Rotation2d.fromRotations(19.2294921875 + 23)),
-        kHPRight(Rotation2d.fromRotations(19.2294921875 - 23)),
-        kHPMid(Rotation2d.fromRotations(19.2294921875)),
-        kGroundLeft(Rotation2d.fromRotations(-4.62841796875 + 23)),
-        kGroundRight(Rotation2d.fromRotations(-4.62841796875 - 23)),
-        kGroundMid(Rotation2d.fromRotations(-4.62841796875)),
-        kTravelLeft(Rotation2d.fromRotations(18.87939453125 + 23)),
-        kTravelRight(Rotation2d.fromRotations(18.87939453125 - 23)),
-        kTravelMid(Rotation2d.fromRotations(18.87939453125));
+        kHPLeft(Rotation2d.fromRotations(25.22802734375 + 23)),
+        kHPRight(Rotation2d.fromRotations(25.22802734375 - 23)),
+        kHPMid(Rotation2d.fromRotations(25.22802734375)),
+        kGroundLeft(Rotation2d.fromRotations(-6.48388671875 + 23)),
+        kGroundRight(Rotation2d.fromRotations(-6.48388671875 - 23)),
+        kGroundMid(Rotation2d.fromRotations(-6.48388671875)),
+        kTravelLeft(Rotation2d.fromRotations(2.5478515625 + 23)),
+        kTravelRight(Rotation2d.fromRotations(2.5478515625 - 23)),
+        kTravelMid(Rotation2d.fromRotations(2.5478515625));
+ */
+    public enum State {
+        kScoreLeftWrist(Rotation2d.fromRotations(0.118408203125 - 0.25)),
+        kScoreRightWrist(Rotation2d.fromRotations(0.118408203125 + 0.25)),
+        kScoreMid(Rotation2d.fromRotations(0.118408203125)),
+        kScoreL1LeftWrist(Rotation2d.fromRotations(0 - 0.25)),
+        kScoreL1RightWrist(Rotation2d.fromRotations(0 + 0.25)),
+        kScoreL1Mid(Rotation2d.fromRotations(0)),
+        kHPLeft(Rotation2d.fromRotations(-0.297607421875 - 0.25)),
+        kHPRight(Rotation2d.fromRotations(-0.297607421875 + 0.25)),
+        kHPMid(Rotation2d.fromRotations(-0.297607421875)),
+        kGroundLeft(Rotation2d.fromRotations(0.04565429687500001 - 0.25)),
+        kGroundRight(Rotation2d.fromRotations(0.04565429687500001+ 0.25)),
+        kGroundMid(Rotation2d.fromRotations(0.04565429687500001)),
+        kTravelLeft(Rotation2d.fromRotations(-0.25 - 0.25)),
+        kTravelRight(Rotation2d.fromRotations(-0.25 + 0.25)),
+        kTravelMid(Rotation2d.fromRotations(-0.25));
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -72,6 +91,9 @@ public class RushinatorWrist extends SubsystemBase {
     public TalonFX mWristTalon;
     private final ProfiledPIDController mPPIDController;
     private final SimpleMotorFeedforward mFFController;
+    private final PIDController mPIDController;
+    
+    // private final ArmFeedforward mFFController;
     
     public static State kLastState;
     
@@ -95,6 +117,9 @@ public class RushinatorWrist extends SubsystemBase {
         ));
         mPPIDController.setTolerance(1); //degrees of tolerance
 
+        mPIDController = new PIDController(Settings.kP, Settings.kI, Settings.kD);
+        // mFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
+
         mFFController = new SimpleMotorFeedforward(Settings.kS, Settings.kV, Settings.kA);
 
         if (kLastState == null) {
@@ -115,34 +140,14 @@ public class RushinatorWrist extends SubsystemBase {
         return Rotation2d.fromRotations(mWristTalon.getPosition().getValueAsDouble());
     }
 
-
-    @Override
-    public void periodic() {
-        double pidOutput = mPPIDController.calculate(getWristRelativePos().getRotations());
-        double ffOutput = mFFController.calculate(getWristRelativePos().getRotations(), mPPIDController.getSetpoint().velocity);
-        double totalOutputVoltage = pidOutput + ffOutput;
-        // mWristTalon.setVoltage(totalOutputVoltage);
-        
-
-        // SmartDashboard.putNumber("PID Output", pidOutput);
-        // SmartDashboard.putNumber("FF Output", ffOutput);
-        // SmartDashboard.putNumber("Output Voltage", totalOutputVoltage);
-        SmartDashboard.putString("KLastState Wrist Pivot", kLastState.name());
-        SmartDashboard.putNumber("Coral Wrist Current Angle (Rotations)", getCurrentPos().getRotations());
-        SmartDashboard.putNumber("Coral Wrist Pivot (Rotations Relavtive)", mWristTalon.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Coral WRist Current Vel", mWristTalon.getVelocity().getValueAsDouble());
-
-        SmartDashboard.putNumber("Coral Wrist Target Pos", mPPIDController.getSetpoint().position);
-        SmartDashboard.putNumber("Coral Wrist Target Vel", mPPIDController.getSetpoint().velocity);
-    }
-
     public void setTargetState(State targetState) {
         kLastState = targetState;
         setTargetPosition(targetState.pos);
     }
 
     public void setTargetPosition(Rotation2d targetPosition) {
-        mPPIDController.setGoal(targetPosition.getRadians());
+        mPPIDController.setGoal(targetPosition.getRotations());
+        mPIDController.setSetpoint(targetPosition.getRotations());
     }
 
     public void setVoltage(double voltage) {
@@ -167,6 +172,28 @@ public class RushinatorWrist extends SubsystemBase {
 
     public Rotation2d getCurrentRelativePos() {
         return Rotation2d.fromRotations(mWristTalon.getPosition().getValueAsDouble());
+    }
+
+    @Override
+    public void periodic() {
+        double pidOutput = mPPIDController.calculate(getCurrentPos().getRotations());
+        // double pidOutput = mPIDController.calculate(getCurrentPos().getRotations());
+        // double ffOutput = mFFController.calculate(getWristRelativePos().getRotations(), mPPIDController.getSetpoint().velocity);
+        double ffOutput = mFFController.calculate(mPPIDController.getSetpoint().velocity);
+        double totalOutputVoltage = pidOutput + ffOutput;
+        mWristTalon.setVoltage(-totalOutputVoltage);
+        
+
+        SmartDashboard.putNumber("PID Output", pidOutput);
+        SmartDashboard.putNumber("FF Output", ffOutput);
+        SmartDashboard.putNumber("Output Voltage", totalOutputVoltage);
+        SmartDashboard.putString("KLastState Wrist Pivot", kLastState.name());
+        SmartDashboard.putNumber("Coral Wrist Current Angle (Rotations)", getCurrentPos().getRotations());
+        SmartDashboard.putNumber("Coral Wrist Pivot (Rotations Relavtive)", mWristTalon.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Coral WRist Current Vel", mWristTalon.getVelocity().getValueAsDouble());
+
+        SmartDashboard.putNumber("Coral Wrist Target Pos", mPPIDController.getSetpoint().position);
+        SmartDashboard.putNumber("Coral Wrist Target Vel", mPPIDController.getSetpoint().velocity);
     }
 
     public static class DefaultCommand extends Command {

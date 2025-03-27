@@ -63,7 +63,7 @@ public class RushinatorRollers extends SubsystemBase {
 
         @Override
         public void initialize() {
-            subsystem.setFlywheelVoltage(0.4);
+            subsystem.setFlywheelVoltage(0.5);
         }
     }
 }

@@ -110,13 +110,13 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
         //Align to Reef
-        controller.povLeft().whileTrue(new DriveToPoseCommand(
-            CommandSwerveDrivetrain.getInstance(), 
-            () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(), 
-            Cblue));
-        controller.povRight().whileTrue(new DriveToPoseCommand(CommandSwerveDrivetrain.getInstance(), 
-            () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(), 
-            Dblue));
+        // controller.povLeft().whileTrue(new DriveToPoseCommand(
+        //     CommandSwerveDrivetrain.getInstance(), 
+        //     () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(), 
+        //     Cblue));
+        // controller.povRight().whileTrue(new DriveToPoseCommand(CommandSwerveDrivetrain.getInstance(), 
+        //     () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(), 
+        //     Dblue));
 
 
         // // Toggle Wrist Left and Right
@@ -144,14 +144,15 @@ public class DriverXbox extends XboxGamepad {
         // controller.povRight().whileTrue(new AutoAlign(false));
 
 
-        controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
+        // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
         // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
         // controller.povRight().onTrue(RobotCommands.scoreCoralAutonL1());
 
         /*Elevator TEst Commands */
-        // controller.a().onTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
-        // controller.x().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL3));
-        // controller.y().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL4));
+        // controller.povDown().onTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
+        // controller.povLeft().onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
+        // controller.povRight().onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3));
+        // controller.povUp().onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3));
 
         // controller.povLeft().whileTrue(new LineupCommand(true));
         // controller.povRight().whileTrue(new LineupCommand(false));
@@ -221,9 +222,9 @@ public class DriverXbox extends XboxGamepad {
         // );
         
         /*Wrist TEsting*/
-        // controller.povLeft().onTrue(new SetWristState(RushinatorWrist.State.kScoreLeftWrist));
-        // controller.povUp().onTrue(new SetWristState(RushinatorWrist.State.kPickUp));
-        // controller.povRight().onTrue(new SetWristState(RushinatorWrist.State.kScoreRightWrist));
+        controller.povLeft().onTrue(new SetWristState(RushinatorWrist.State.kTravelLeft));
+        controller.povUp().onTrue(new SetWristState(RushinatorWrist.State.kTravelMid));
+        controller.povRight().onTrue(new SetWristState(RushinatorWrist.State.kTravelRight));
 
         // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         

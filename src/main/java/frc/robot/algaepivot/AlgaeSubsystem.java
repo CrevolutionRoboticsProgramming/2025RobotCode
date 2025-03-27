@@ -38,21 +38,23 @@ public class AlgaeSubsystem extends SubsystemBase {
         static final double kI = 0.0;
         static final double kD = 0.0;
 
-        static final double kZeroOffset = 0.3225; // rotations
+        static final double kZeroOffset = 0.425537109375; // rotations
+        // 0.129150390625
+        //0.425537109375
 
         static final double kCurrentLimit = 40.0;
 
         // TODO: Enable lower min-pos to bring down CoG when elevator is up. We should be able to tuck the shooter into the elevator.
-        static final Rotation2d kMinPos = Rotation2d.fromRotations(-0.06640625);
-        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.267);
+        static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0439453125);
+        static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.369384765625);
     }
 
     public enum State {
-        kFloorIntake(Rotation2d.fromRotations(-0.047607421875)),
-        kProcessor(Rotation2d.fromRotations(0.047119140625)),
-        kReefIntake(Rotation2d.fromRotations(0.021728515625)),
-        kScore(Rotation2d.fromRotations(0.161376953125)),
-        kStow(Rotation2d.fromRotations(0.22021484375)),
+        kFloorIntake(Rotation2d.fromRotations(0.05)),
+        kProcessor(Rotation2d.fromRotations(0.14306640625)),
+        kReefIntake(Rotation2d.fromRotations(-0.037109375)),
+        kScore(Rotation2d.fromRotations(0.22)),
+        kStow(Rotation2d.fromRotations(0.30078125)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {
@@ -133,7 +135,7 @@ public class AlgaeSubsystem extends SubsystemBase {
             voltage = 0.0;
         }
 
-        // mTalonPivot.setVoltage(voltage);
+        mTalonPivot.setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Algae Pivot Pos (rotations)", getWristPosition().getRotations());

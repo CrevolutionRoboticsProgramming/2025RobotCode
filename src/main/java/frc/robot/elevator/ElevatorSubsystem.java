@@ -44,8 +44,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         static final double kCurrentLimit = 40.0;
 
-        static final double kMaxVelocity = 25.0f;
-        static final double kMaxAcceleration = 100.0f;
+        static final double kMaxVelocity = 100.0;
+        static final double kMaxAcceleration = 100.0;
 
         static final double kCrossoverPoint = 17.2939453125;
     }
@@ -66,9 +66,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         kCoralL3(14.21240234375),
         kCoralL4AutonScore(16.2),
         kCoralL4(34.92138671875),
-        kAlgaeL2(15.3125),
-        kAlgaeL3(24.580078125),
-        kAlgaeIntake(2.4078125),
+        kAlgaeL2(23.15966796875),
+        kAlgaeL3(37.09814453125),
+        kAlgaeIntake(3.650390625),
+        kClimb(6.0),
         kZero(0.0);
 
         State(double pos) {
@@ -180,7 +181,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         double voltage = 0.0;
         voltage = mPPIDController.calculate(getPosition());
         voltage += getFeedforwardOutput(mPPIDController.getSetpoint().velocity);
-        // setVoltage(voltage);
+        setVoltage(voltage);
 
         // Telemetry
         SmartDashboard.putNumber("Elevator Position", getPosition());
