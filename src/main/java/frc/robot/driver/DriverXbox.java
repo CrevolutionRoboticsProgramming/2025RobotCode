@@ -18,6 +18,8 @@ import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.auton.AutonMaster;
+import frc.robot.climber.Climber;
+import frc.robot.climber.commands.SetClimberAngle;
 import frc.robot.commands.RobotCommands;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.commands.DriveToPoseCommand;
@@ -25,6 +27,7 @@ import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.ElevatorCommands;
 import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.indexer.commands.IndexerCommands;
+import frc.robot.operator.OperatorXbox;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
@@ -77,14 +80,102 @@ public class DriverXbox extends XboxGamepad {
         controller.x().whileTrue(new SetRollersVoltage(-2.0));
 
         //Score Coral
-        controller.y().whileTrue(new ConditionalCommand(
-            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
-            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 
+        // controller.y().whileTrue(RobotCommands.scoreCoral());
+        controller.y().and(() -> OperatorXbox.getInstance().controller.a().getAsBoolean()).whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL1, RushinatorWrist.State.kScoreL1Mid), 
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL1, RushinatorWrist.State.kScoreL1Mid), 
             () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
             RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid || 
             RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.a().getAsBoolean()).whileTrue(
+            new SetRollersVoltage(-1.2)
+        );
+
+        controller.y().and(() -> OperatorXbox.getInstance().controller.x().getAsBoolean()).whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL2, RushinatorWrist.State.kScoreL2RightWrist), 
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL2, RushinatorWrist.State.kScoreL2LeftWrist), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.x().getAsBoolean()).whileTrue(
+            new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL2)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.x().getAsBoolean()).whileTrue(
+            new SetRollersVoltage(0.0)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.x().getAsBoolean()).whileFalse(
+            new SetElevatorState(ElevatorSubsystem.State.kCoralL2)
+        );
+
+        controller.y().and(() -> OperatorXbox.getInstance().controller.b().getAsBoolean()).whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL3, RushinatorWrist.State.kScoreL3RightWrist), 
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL3, RushinatorWrist.State.kScoreL3LeftWrist), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.b().getAsBoolean()).whileTrue(
+            new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL3)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.b().getAsBoolean()).whileTrue(
+            new SetRollersVoltage(0.0)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.b().getAsBoolean()).whileFalse(
+            new SetElevatorState(ElevatorSubsystem.State.kCoralL3)
+        );
+        
+        controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL4, RushinatorWrist.State.kScoreL4RightWrist), 
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL4, RushinatorWrist.State.kScoreL4LeftWrist), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileTrue(
+            new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileTrue(
+            new SetRollersVoltage(0.0)
+        );
+        controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileFalse(
+            new SetElevatorState(ElevatorSubsystem.State.kCoralL4)
+        );
+
+        // controller.y().whileTrue(new ConditionalCommand(
+        //     RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
+        //     RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 
+        //     () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        // );
+        // controller.y().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() + 4.0));
 
         // Pulse Alage
         controller.a().whileTrue(new AlgaeRoller.IntakeCommand());
@@ -94,13 +185,19 @@ public class DriverXbox extends XboxGamepad {
 
         // Coral Ground Intake
         controller.rightTrigger().whileTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kGroundMid)
+            RushinatorPivot.State.kFloorIntake, ElevatorSubsystem.State.kZero)
+        );
+        controller.rightTrigger().whileTrue(
+            new SetWristState(RushinatorWrist.State.kGroundMid)
         );
         controller.rightTrigger().whileTrue(new SetRollersVoltage(4.5));
 
         // Coral HP Intake
         controller.rightBumper().whileTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid)
+            RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero)
+        );
+        controller.rightBumper().whileTrue(
+            new SetWristState(RushinatorWrist.State.kHPMid)
         );
         controller.rightBumper().whileTrue(new SetRollersVoltage(4.5));
 
@@ -140,11 +237,15 @@ public class DriverXbox extends XboxGamepad {
 
         /*TESTING BINDINGS */
 
+        // controller.povUp().onTrue(new SetClimberAngle(Climber.State.kDeploy.pos));
+        // controller.povDown().onTrue(new SetClimberAngle(Climber.State.kRetract.pos));
+        // controller.povLeft().onTrue(new SetClimberAngle(Climber.State.kStow.pos));
+
         // controller.povLeft().whileTrue(new AutoAlign(true));
         // controller.povRight().whileTrue(new AutoAlign(false));
 
 
-        // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
+        // controller.povLeft().onTrue(RobotCommands.scoreCoralAutonL4());
         // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
         // controller.povRight().onTrue(RobotCommands.scoreCoralAutonL1());
 

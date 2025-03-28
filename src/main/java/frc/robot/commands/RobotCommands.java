@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.SetElevatorState;
+import frc.robot.operator.OperatorXbox;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.RushinatorWrist.State;
@@ -13,12 +14,63 @@ import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.rushinator.commands.SetWristState;
 
 public class RobotCommands {
-    public static Command coralPrime(RushinatorPivot.State armState, ElevatorSubsystem.State eleState, RushinatorWrist.State wristState) {
+    public static Command scoreCoral() {
+        if (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4) {
+            return new ParallelCommandGroup(
+                new ConditionalCommand(
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 
+                    () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
+                )
+            );
+        
+        } else if (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL3 || ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralScoreL3) {
+            return new ParallelCommandGroup(
+                new ConditionalCommand(
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreLeftWrist), 
+                    () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
+                ),
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL3)
+            );
+        } else if (OperatorXbox.getInstance().controller.x().getAsBoolean() == true) {
+            return new ParallelCommandGroup(
+                new ConditionalCommand(
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL2, RushinatorWrist.State.kScoreL2RightWrist), 
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL2, RushinatorWrist.State.kScoreL2LeftWrist), 
+                    () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
+                ),
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL2)
+            );
+        } else {
+            return new ParallelCommandGroup(
+                new ConditionalCommand(
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL1, RushinatorWrist.State.kScoreL1Mid), 
+                    RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL1, RushinatorWrist.State.kScoreL1Mid), 
+                    () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+                    RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
+                ),
+                new SetRollersVoltage(-1.1)
+            );
+        }
+    }
+
+    public static Command coralPrime(RushinatorPivot.State armState, ElevatorSubsystem.State eleState) {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new SetElevatorState(eleState),
-                new SetArmState(armState),
-                new SetWristState(wristState)
+                new SetArmState(armState)
             )
         );
     }
@@ -35,42 +87,35 @@ public class RobotCommands {
     public static Command autoHPPickUp() {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
-                coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kHPMid),
+                coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero),
+                new SetWristState(RushinatorWrist.State.kHPMid),
                 new SetRollersVoltage(4.5),
-                new WaitCommand(2)
+                new WaitCommand(1.5)
             )
         );
     }
 
     
     public static Command scoreCoralAutonL4(){
+        System.out.println("Command is runing?");
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(1.65)
+                new WaitCommand(1.3)
             ),
             new ParallelRaceGroup(
-                new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
-                new SetArmState(RushinatorPivot.State.kScore),
-                new SetWristState(RushinatorWrist.State.kScoreRightWrist),
-                new WaitCommand(1.0)
-            ),
-            new ParallelRaceGroup(
-                new SetElevatorState(ElevatorSubsystem.State.kCoralL4AutonScore),
-                new WaitCommand(1.0)
-            ),
-            new ParallelRaceGroup(
-                // new SetArmState(RushinatorPivot.State.kStowTravel),
-                new SetWristState(RushinatorWrist.State.kTravelRight),
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
+                new SetArmState(RushinatorPivot.State.kScoreL4),
+                new SetWristState(RushinatorWrist.State.kScoreL4RightWrist),
                 new WaitCommand(1.0)
             ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
-                new WaitCommand(1.65)
+                new WaitCommand(1.3)
             )
         );
     }

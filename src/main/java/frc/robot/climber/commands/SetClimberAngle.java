@@ -24,11 +24,6 @@ public class SetClimberAngle extends Command{
         mClimber.setTargetPos(targetSupplier.get());
     }
 
-    @Override
-    public void execute() {
-        mClimber.setTargetPos(targetSupplier.get());
-    }
-
 
     @Override
     public boolean isFinished() {

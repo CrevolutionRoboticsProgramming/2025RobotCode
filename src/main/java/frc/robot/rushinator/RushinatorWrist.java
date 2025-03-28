@@ -34,8 +34,8 @@ public class RushinatorWrist extends SubsystemBase {
         public static final double kV = 0.5; // V * sec / rad
         public static final double kA = 0.01; // V * sec^2 / rad
 
-        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(6000);
-        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(6000);
+        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(200000);
+        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(200000);
         public static final double kP = 50.0;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
@@ -64,12 +64,21 @@ public class RushinatorWrist extends SubsystemBase {
         kTravelMid(Rotation2d.fromRotations(2.5478515625));
  */
     public enum State {
-        kScoreLeftWrist(Rotation2d.fromRotations(0.118408203125 - 0.25)),
-        kScoreRightWrist(Rotation2d.fromRotations(0.118408203125 + 0.25)),
-        kScoreMid(Rotation2d.fromRotations(0.118408203125)),
-        kScoreL1LeftWrist(Rotation2d.fromRotations(0 - 0.25)),
-        kScoreL1RightWrist(Rotation2d.fromRotations(0 + 0.25)),
-        kScoreL1Mid(Rotation2d.fromRotations(0)),
+        kScoreLeftWrist(Rotation2d.fromRotations(-0.13427734375 - 0.25)),
+        kScoreRightWrist(Rotation2d.fromRotations(-0.13427734375 + 0.25)),
+        kScoreMid(Rotation2d.fromRotations(-0.13427734375)),
+        kScoreL4LeftWrist(Rotation2d.fromRotations(-0.1533203125 - 0.25)),
+        kScoreL4RightWrist(Rotation2d.fromRotations(-0.1533203125 + 0.25)),
+        kScoreL4Mid(Rotation2d.fromRotations(-0.1533203125)),
+        kScoreL3LeftWrist(Rotation2d.fromRotations(-0.102783203125 - 0.25)),
+        kScoreL3RightWrist(Rotation2d.fromRotations(-0.102783203125 + 0.25)),
+        kScoreL3Mid(Rotation2d.fromRotations(-0.102783203125)),
+        kScoreL2LeftWrist(Rotation2d.fromRotations(-0.056396484375 - 0.25)),
+        kScoreL2RightWrist(Rotation2d.fromRotations(-0.056396484375 + 0.25)),
+        kScoreL2Mid(Rotation2d.fromRotations(-0.056396484375)),
+        kScoreL1LeftWrist(Rotation2d.fromRotations(-0.12109375 - 0.25)),
+        kScoreL1RightWrist(Rotation2d.fromRotations(-0.12109375 + 0.25)),
+        kScoreL1Mid(Rotation2d.fromRotations(-0.12109375)),
         kHPLeft(Rotation2d.fromRotations(-0.297607421875 - 0.25)),
         kHPRight(Rotation2d.fromRotations(-0.297607421875 + 0.25)),
         kHPMid(Rotation2d.fromRotations(-0.297607421875)),
@@ -78,7 +87,13 @@ public class RushinatorWrist extends SubsystemBase {
         kGroundMid(Rotation2d.fromRotations(0.04565429687500001)),
         kTravelLeft(Rotation2d.fromRotations(-0.25 - 0.25)),
         kTravelRight(Rotation2d.fromRotations(-0.25 + 0.25)),
-        kTravelMid(Rotation2d.fromRotations(-0.25));
+        kTravelMid(Rotation2d.fromRotations(-0.25)),
+        kTravelL4Left(Rotation2d.fromRotations(-0.191650390625 - 0.25)),
+        kTravelL4Right(Rotation2d.fromRotations(-0.191650390625 + 0.25)),
+        kTravelL4Mid(Rotation2d.fromRotations(-0.191650390625)),
+        kClimbLeft(Rotation2d.fromRotations(-0.28759765625 - 0.25)),
+        kClimblRight(Rotation2d.fromRotations(-0.28759765625 + 0.25)),
+        kClimblMid(Rotation2d.fromRotations(-0.28759765625));
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -115,7 +130,7 @@ public class RushinatorWrist extends SubsystemBase {
                 Settings.kMaxVelocity.getRadians(),
                 Settings.kMaxAcceleration.getRadians()
         ));
-        mPPIDController.setTolerance(1); //degrees of tolerance
+        mPPIDController.setTolerance(0.01); //degrees of tolerance
 
         mPIDController = new PIDController(Settings.kP, Settings.kI, Settings.kD);
         // mFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
@@ -216,7 +231,7 @@ public class RushinatorWrist extends SubsystemBase {
             // } else {
             //     new SetWristState(RushinatorWrist.State.kTravelRight);
             // }
-            new SetWristState(RushinatorWrist.State.kTravelRight);
+            RushinatorWrist.getInstance().mPPIDController.setGoal(RushinatorWrist.State.kTravelRight.pos.getRotations());
         }
     }
 }

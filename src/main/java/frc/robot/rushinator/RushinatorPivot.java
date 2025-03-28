@@ -30,8 +30,8 @@ public class RushinatorPivot extends SubsystemBase {
         static final double kV = 5.0; // V * sec / rad
         static final double kA = 1.77; // V * sec^2 / rad
 
-        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(500);
-        static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(600);
+        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(1000);
+        static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(1000);
         static final double kP = 38.0;          
         static final double kI = 0.0;
         static final double kD = 0.0;
@@ -49,8 +49,13 @@ public class RushinatorPivot extends SubsystemBase {
         kFloorIntake(Rotation2d.fromRotations(-0.065185546875)),
         kHPIntake(Rotation2d.fromRotations(0.270751953125)),
         kScore(Rotation2d.fromRotations(0.119873046875)),
-        kScoreL1(Rotation2d.fromRotations(0.140380859375)),
+        kScoreL1(Rotation2d.fromRotations(0.10595703125)),
+        kScoreL2(Rotation2d.fromRotations(0.04272460937499999)),
+        kScoreL3(Rotation2d.fromRotations(0.079833984375)),
+        kScoreL4(Rotation2d.fromRotations(0.12670898437)),
+        kStowL4(Rotation2d.fromRotations(0.180908203125)),
         kStowTravel(Rotation2d.fromRotations(0.223876953125)),
+        kClimb(Rotation2d.fromRotations(0.27685546875)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {

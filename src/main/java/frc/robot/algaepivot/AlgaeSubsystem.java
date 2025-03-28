@@ -54,7 +54,8 @@ public class AlgaeSubsystem extends SubsystemBase {
         kProcessor(Rotation2d.fromRotations(0.14306640625)),
         kReefIntake(Rotation2d.fromRotations(-0.037109375)),
         kScore(Rotation2d.fromRotations(0.22)),
-        kStow(Rotation2d.fromRotations(0.30078125)),
+        kStow(Rotation2d.fromRotations(0.27578125)),
+        kClimb(Rotation2d.fromRotations(0.368896484375)),
         kTuck(Settings.kMaxPos);
 
         State(Rotation2d pos) {

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
@@ -111,9 +112,9 @@ public class RobotContainer {
         //         new ElevatorSubsystem.DefaultCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
         // );
 
-        // ElevatorSubsystem.getInstance().setDefaultCommand(
-        //         new ElevatorSubsystem.VelocityCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutpu%t)
-        // );
+        ElevatorSubsystem.getInstance().setDefaultCommand(
+            new ElevatorSubsystem.zero()
+        );
         AlgaeSubsystem.getInstance().setDefaultCommand(
             new AlgaeSubsystem.DefaultCommand()
         );
@@ -124,9 +125,21 @@ public class RobotContainer {
             new RushinatorRollers.DefaultCommand()
         );
         RushinatorWrist.getInstance().setDefaultCommand(
-            new RushinatorWrist.DefaultCommand()
+            new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kClimblRight
+            )
         );
-
+        
         AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
         
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));

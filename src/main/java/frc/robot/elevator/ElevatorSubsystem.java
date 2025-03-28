@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.function.Supplier;
 
+import javax.sound.midi.MetaEventListener;
+
 public class ElevatorSubsystem extends SubsystemBase {
 
     public static class Settings {
@@ -63,13 +65,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     public enum State {
         kCoralL1(0.0),
         kCoralL2(0.0),
-        kCoralL3(14.21240234375),
+        kCoralScoreL2(6.34619140625),
+        kCoralL3(12.54296875),
+        kCoralScoreL3(15.7583007812),
         kCoralL4AutonScore(16.2),
-        kCoralL4(34.92138671875),
+        kCoralL4(35.76806640625),
+        kCoralScoreL4(29.134765625),
         kAlgaeL2(23.15966796875),
         kAlgaeL3(37.09814453125),
         kAlgaeIntake(3.650390625),
-        kClimb(6.0),
+        kClimb(13.1376953125),
         kZero(0.0);
 
         State(double pos) {
@@ -248,6 +253,19 @@ public class ElevatorSubsystem extends SubsystemBase {
         @Override
         public void initialize() {
             mElevatorSubsystem.setTargetPosition(target);
+        }
+    }
+
+    public static class zero extends Command {
+        private ElevatorSubsystem mElevatorSubsystem;
+        public zero() {
+            mElevatorSubsystem = ElevatorSubsystem.getInstance();
+            addRequirements(mElevatorSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            mElevatorSubsystem.setTargetPosition(ElevatorSubsystem.State.kZero.pos);
         }
     }
 

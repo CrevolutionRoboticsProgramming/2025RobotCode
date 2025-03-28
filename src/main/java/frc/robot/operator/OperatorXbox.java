@@ -18,6 +18,8 @@ import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
+import frc.robot.climber.Climber;
+import frc.robot.climber.commands.SetClimberAngle;
 import frc.robot.commands.RobotCommands;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.ElevatorSubsystem.State;
@@ -25,6 +27,7 @@ import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.indexer.commands.IndexerCommands;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 
 public class OperatorXbox extends XboxGamepad {
@@ -82,36 +85,99 @@ public class OperatorXbox extends XboxGamepad {
         controller.rightBumper().whileTrue(new AlgaeRoller.ShootCommand());
 
         // ADjusting Coral ORinetaiton
-        controller.povLeft().onTrue(new ConditionalCommand(
-            new SetWristState(RushinatorWrist.State.kTravelLeft), 
-            new SetWristState(RushinatorWrist.State.kGroundMid), 
-            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        controller.povLeft().onTrue(
+            new SetWristState(RushinatorWrist.State.kTravelLeft)
         );
 
-        controller.povRight().onTrue(new ConditionalCommand(
-            new SetWristState(RushinatorWrist.State.kTravelRight), 
-            new SetWristState(RushinatorWrist.State.kGroundMid), 
-            () -> RushinatorPivot.kLastState != RushinatorPivot.State.kFloorIntake)
+        controller.povRight().onTrue(
+            new SetWristState(RushinatorWrist.State.kTravelRight)
         );
+
+        // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
+        // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
+
+        // controller.povUp().and(leftTriggerOnly()).onTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kClimb));
+        // controller.povUp().and(leftTriggerOnly()).onTrue(new SetArmState(RushinatorPivot.State.kClimb));
+        // controller.povUp().and(leftTriggerOnly()).onTrue(new SetWristState(RushinatorWrist.State.kClimblRight));
+        // controller.povUp().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kClimb));
+        // // controller.povUp().and(leftTriggerOnly()).onTrue(new SetClimberAngle(Climber.State.kDeploy.pos));
+
+        // controller.povDown().and(leftTriggerOnly()).onTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kClimb));
+        // controller.povDown().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kClimb));
+        // controller.povDown().and(leftTriggerOnly()).onTrue(new SetArmState(RushinatorPivot.State.kClimb));
+        // controller.povDown().and(leftTriggerOnly()).onTrue(new SetWristState(RushinatorWrist.State.kClimblRight));
+        // // controller.povDown().and(leftTriggerOnly()).onTrue(new SetClimberAngle(Climber.State.kRetract.pos));
 
         // Score Prime L1
-        controller.a().onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kScore, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kScoreL1Mid)
+        controller.a().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kScoreL1, ElevatorSubsystem.State.kZero)
+        );
+        controller.a().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kScoreL1Mid), 
+            new SetWristState(RushinatorWrist.State.kScoreL1Mid), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid 
+            )
         );
 
         // Score Prime L2
-        controller.x().onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kZero, RushinatorWrist.State.kTravelRight)
+        controller.x().whileTrue(RobotCommands.coralPrime(
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL2)
+        );
+        controller.x().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid 
+            )
         );
 
         // Score Prime L3
         controller.b().onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL3, RushinatorWrist.State.kTravelRight)
+            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL3)
+        );
+        controller.b().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid
+            )
         );
 
         // Score Prime L4
         controller.y().onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kStowTravel, ElevatorSubsystem.State.kCoralL4, RushinatorWrist.State.kTravelRight)
+            RushinatorPivot.State.kStowL4, ElevatorSubsystem.State.kCoralL4)
+        );
+        controller.y().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelL4Right), 
+            new SetWristState(RushinatorWrist.State.kTravelL4Left), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
+            )
         );
 
         // Algae L3
