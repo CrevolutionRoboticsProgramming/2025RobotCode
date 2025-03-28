@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.64775,
-        "y": 0.75875
+        "x": 1.6672500000000001,
+        "y": 0.6807499999999993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9099754433564922,
-        "y": 0.9082982428447032
+        "x": 1.9294754433564922,
+        "y": 0.8302982428447024
       },
       "isLocked": false,
       "linkedName": "RightLoad"
     },
     {
       "anchor": {
-        "x": 3.92925,
-        "y": 2.669749999999999
+        "x": 3.9585000000000004,
+        "y": 2.767249999999999
       },
       "prevControl": {
-        "x": 2.041974652675769,
-        "y": 2.19178358993944
+        "x": 2.0712246526757694,
+        "y": 2.2892835899394397
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "StopRollers",
+      "waypointRelativePos": 0.09604316546762522,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,

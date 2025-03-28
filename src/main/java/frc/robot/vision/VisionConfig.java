@@ -87,7 +87,7 @@ public class VisionConfig {
      * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
      * meters.
      */
-    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = VecBuilder.fill(.05, .05, Units.degreesToRadians(5));
+    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = VecBuilder.fill(1.0, 1.0, 1 * Math.PI);
 
     /**
      * Standard deviations of the vision measurements. Increase these numbers to
@@ -95,7 +95,7 @@ public class VisionConfig {
      * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
      * radians.
      */
-    public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = VecBuilder.fill(0.025, 0.025, Units.degreesToRadians(2.5));
+    public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = VecBuilder.fill(0.1, 0.1, 0.1);
 
 
     public static class AlignmentConfig {

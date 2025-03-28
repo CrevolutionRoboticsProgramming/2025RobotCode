@@ -90,7 +90,7 @@ public class RobotCommands {
                 coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero),
                 new SetWristState(RushinatorWrist.State.kHPMid),
                 new SetRollersVoltage(4.5),
-                new WaitCommand(1.5)
+                new WaitCommand(1.0)
             )
         );
     }
@@ -103,19 +103,19 @@ public class RobotCommands {
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(1.3)
+                new WaitCommand(1.2)
             ),
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
                 new SetArmState(RushinatorPivot.State.kScoreL4),
                 new SetWristState(RushinatorWrist.State.kScoreL4RightWrist),
-                new WaitCommand(1.0)
+                new WaitCommand(0.35)
             ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
-                new WaitCommand(1.3)
+                new WaitCommand(1.1)
             )
         );
     }

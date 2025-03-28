@@ -28,6 +28,7 @@ import frc.robot.indexer.commands.IndexerCommands;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
+import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.rushinator.commands.SetWristState;
 
 public class OperatorXbox extends XboxGamepad {
@@ -75,6 +76,7 @@ public class OperatorXbox extends XboxGamepad {
         // Algae (Elevator) Barge Shot 
         controller.leftBumper().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL4));
         controller.leftBumper().onTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kStow));
+        controller.leftBumper().onTrue(new AlgaeRoller.PrimeCommand());
 
         // Primes the processor shooting
         controller.rightTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
@@ -92,6 +94,14 @@ public class OperatorXbox extends XboxGamepad {
         controller.povRight().onTrue(
             new SetWristState(RushinatorWrist.State.kTravelRight)
         );
+
+        // controller.povDown().whileTrue(RobotCommands.coralPrime(
+        //     RushinatorPivot.State.kLoliPop, ElevatorSubsystem.State.kZero)
+        // );
+        // controller.povDown().whileTrue(
+        //     new SetWristState(RushinatorWrist.State.kLoliRight)
+        // );
+        // controller.povDown().whileTrue(new SetRollersVoltage(4.5));
 
         // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
         // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
@@ -183,12 +193,12 @@ public class OperatorXbox extends XboxGamepad {
         // Algae L3
         controller.y().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3));
         controller.y().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.IntakeCommand());
-        controller.y().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
+        controller.y().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kReefIntake));
 
         // Algae L2 
         controller.b().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL2));
         controller.b().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.IntakeCommand());
-        controller.b().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
+        controller.b().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kReefIntake));
 
         /*TEsting Bindings */
 

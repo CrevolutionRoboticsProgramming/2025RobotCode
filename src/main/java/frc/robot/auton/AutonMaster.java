@@ -23,13 +23,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.RobotCommands;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
+import frc.robot.rushinator.commands.SetWristState;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
@@ -97,6 +100,7 @@ public class AutonMaster {
         NamedCommands.registerCommand("AutonScoreL4", RobotCommands.scoreCoralAutonL4());
         NamedCommands.registerCommand("HPPickup", RobotCommands.autoHPPickUp());
         NamedCommands.registerCommand("StopRollers", new SetRollersVoltage(0.0));
+        NamedCommands.registerCommand("PreHPPickUp", new ParallelCommandGroup(new SetWristState(RushinatorWrist.State.kHPMid), new SetArmState(RushinatorPivot.State.kHPIntake), new SetRollersVoltage(4.5)));
     }
 
     public Command getTestPathFindingCommand() {

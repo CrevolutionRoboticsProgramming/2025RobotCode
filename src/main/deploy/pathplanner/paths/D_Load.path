@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.92925,
-        "y": 2.669749999999999
+        "x": 3.9585000000000004,
+        "y": 2.767249999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1243586956521736,
-        "y": 2.2662173913043477
+        "x": 2.1536086956521734,
+        "y": 2.363717391304348
       },
       "isLocked": false,
       "linkedName": "D"
     },
     {
       "anchor": {
-        "x": 1.64775,
-        "y": 0.75875
+        "x": 1.6672500000000001,
+        "y": 0.6807499999999993
       },
       "prevControl": {
-        "x": 2.518657817193807,
-        "y": 1.400179169602283
+        "x": 2.538157817193807,
+        "y": 1.3221791696022822
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "HPPickup",
+      "waypointRelativePos": 0.2758992805755395,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,

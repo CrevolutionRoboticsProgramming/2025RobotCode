@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.64775,
-        "y": 0.75875
+        "x": 1.6672500000000001,
+        "y": 0.6807499999999993
       },
       "prevControl": {
-        "x": 2.5208478260869573,
-        "y": 1.4117391304347824
+        "x": 2.5403478260869576,
+        "y": 1.3337391304347817
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "PreHPPickUp",
+      "waypointRelativePos": 0.6413669064748201,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,

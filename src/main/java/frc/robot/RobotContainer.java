@@ -140,7 +140,7 @@ public class RobotContainer {
             )
         );
         
-        AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
+        AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
         
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
