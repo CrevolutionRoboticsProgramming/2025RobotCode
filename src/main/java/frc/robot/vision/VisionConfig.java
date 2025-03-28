@@ -7,11 +7,16 @@ import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.List;
+import java.util.Vector;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -36,149 +41,239 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.drivetrain.TunerConstants;
 
 public class VisionConfig {
+
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+
+    public static final String driverCamName = "DRIVER_CAM"; //PV name of the driver camera
+
+    public static final edu.wpi.first.math.Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(1, 1, 1);
+    public static final edu.wpi.first.math.Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
+
+    public static enum PhotonConfig {
+                
+        FRONT_LEFT_CAM(
+            "FRONT_LEFT_CAM", 
+            kDefaultSingleTagStdDevs,
+            kDefaultMultiTagStdDevs,
+            PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+            PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+            12.389, 11.683, 11.513639, // 15 - 7.163, 15 - 2.892, 19.162,
+            0, 0, -20 //11.385, 17.961, -40 
+        ),
+        FRONT_RIGHT_CAM(
+            "FRONT_RIGHT_CAM",
+            kDefaultSingleTagStdDevs,
+            kDefaultMultiTagStdDevs,
+            PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+            PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+            12.389, -11.683, 11.513639, // 15 - 7.163, -(15 - 2.892), 19.162, 
+            0, 0, 20 // -11.385, 17.961, 40
+        );
+
+        public final String name;
+        public final Transform3d offset;
+        public final Matrix<N3, N1> defaultSingleTagStdDevs;
+        public final Matrix<N3, N1> defaultMultiTagStdDevs;
+        public final PoseStrategy multiTagPoseStrategy;
+        public final PoseStrategy singleTagPoseStrategy;
+        private PhotonConfig(
+            String name, 
+            Matrix<N3, N1> defaultSingleTagStdDevs,
+            Matrix<N3, N1> defaultMultiTagStdDevs,
+            PoseStrategy multiTagPoseStrategy,
+            PoseStrategy singleTagPoseStrategy,
+            double xInch, double yInch, double zInch, 
+            double rollDeg, double pitchDeg, double yawDeg
+        ) {
+            this.name = name;
+            this.offset = new Transform3d(
+                Units.inchesToMeters(xInch),
+                Units.inchesToMeters(yInch),
+                Units.inchesToMeters(zInch),
+                new Rotation3d(
+                    Units.degreesToRadians(rollDeg),
+                    Units.degreesToRadians(pitchDeg),
+                    Units.degreesToRadians(yawDeg)
+                )
+            );
+            this.multiTagPoseStrategy = multiTagPoseStrategy;
+            this.singleTagPoseStrategy = singleTagPoseStrategy;
+            this.defaultMultiTagStdDevs = defaultMultiTagStdDevs;
+            this.defaultSingleTagStdDevs = defaultSingleTagStdDevs;
+            }
+        }
+
+    public class PathPlannerConstants {
+        public static final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
+        public static final Transform2d robotOffset = new Transform2d(0.508, 0, Rotation2d.kZero);
+        public static final double pathGenerationToleranceMeters = 0.011; // Technically it's anything larger than 0.01, but I'm adding .001 just to be safe
+        public static final double LEDpathToleranceMeters = 0.03;
+
+        public static class Control {
+            public static final PIDConstants transPID = new PIDConstants(5, 0, 0);
+            public static final PIDConstants rotPID = new PIDConstants(5, 0, 0);
+        }
+    }
+
+    public final class GeometryUtils {
+
+        /** rotates a Pose2d */
+        public static Pose2d rotatePose(Pose2d pose, Rotation2d rot) {
+            return new Pose2d(pose.getTranslation(), pose.getRotation().rotateBy(rot));
+        }
     
-    // Creates camera names; ensure these all match with the correct camera on the Photonvison Dashboard
-    public static final int TOTAL_CAMS = 2; //TODO: change to 4 where 4 cams are available
-    public static final String[] CAM_NAMES = new String[] {"Left_Cam", "Right_Cam"}; //TODO: add center cam and drive cam
+        /* finds angle from one pose to another pose */
+        public static Rotation2d angleToPose(Pose2d startPose, Pose2d endPose){
+            return endPose.getTranslation().minus(startPose.getTranslation()).getAngle();
+        }
+    }
 
-    //Camera Positions
-    public static final Transform3d[] ROBOT_TO_CAM_TRANSFORMS = new Transform3d[] {
-        //left cam
-        new Transform3d(
-            new Translation3d(Units.inchesToMeters(11.882),Units.inchesToMeters(11.020),Units.inchesToMeters(6.767)),
-            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(-20))),
-        //right cam
-        new Transform3d(
-            new Translation3d(Units.inchesToMeters(11.882),Units.inchesToMeters(-11.020),Units.inchesToMeters(6.767)), 
-            new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(20)))
-    }; 
-
-    // Creates field layout for AprilTags
-    public static AprilTagFieldLayout TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-
-    // Standard deviation of vision poses, this helps with correction or something idk thats what photon said
-    // TODO: experiment with standard deviation values and set them to whatever gives the most correct pose
-    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8); // TODO: example values, change when testing
-    public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1); //TODO: change values when testing
-
-    public static final double AMBIGUITY_THRESHOLD = 0.2;
-    public static final Distance SINGLE_TAG_DISTANCE_THRESHOLD = Meters.of(4.5);    
-
-    public static final Distance FIELD_LENGTH = Meters.of(17.548);
-    public static final Distance FIELD_WIDTH = Meters.of(8.052);
-
-    public static final double FIELD_LENGTH_METERS = 17.548;
-    public static final double FIELD_WIDTH_METERS = 8.052;
-
-    public static boolean USE_VISION = true;
-
-
-    public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
-    public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
-    public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
-    public static final double NOISY_DISTANCE_METERS = 2.5;
-    public static final double DISTANCE_WEIGHT = 7;
-    public static final int TAG_PRESENCE_WEIGHT = 10;
-
-
-     /**
-     * Standard deviations of model states. Increase these numbers to trust your
-     * model's state estimates less. This
-     * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
-     * meters.
-     */
-    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = VecBuilder.fill(.05, .05, Units.degreesToRadians(5));
-
-    /**
-     * Standard deviations of the vision measurements. Increase these numbers to
-     * trust global measurements from vision
-     * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
-     * radians.
-     */
-    public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = VecBuilder.fill(0.025, 0.025, Units.degreesToRadians(2.5));
-
-
-    public static class AlignmentConfig {
-        public static final double THETA_kP = 3.0;
-        public static final double THETA_kI = 0.0;
-        public static final double THETA_kD = 0.0;
+    public static final double kOdometryUpdateFrequency = 50.0;
     
-        public static final double X_kP = 5.0;
-        public static final double X_kI = 0.0;
-        public static final double X_kD = 0.0;
+    // // Creates camera names; ensure these all match with the correct camera on the Photonvison Dashboard
+    // public static final int TOTAL_CAMS = 2; //TODO: change to 4 where 4 cams are available
+    // public static final String[] CAM_NAMES = new String[] {"Left_Cam", "Right_Cam"}; //TODO: add center cam and drive cam
+
+    // //Camera Positions
+    // public static final Transform3d[] ROBOT_TO_CAM_TRANSFORMS = new Transform3d[] {
+    //     //left cam
+    //     new Transform3d(
+    //         new Translation3d(Units.inchesToMeters(11.882),Units.inchesToMeters(11.020),Units.inchesToMeters(6.767)),
+    //         new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(-20))),
+    //     //right cam
+    //     new Transform3d(
+    //         new Translation3d(Units.inchesToMeters(11.882),Units.inchesToMeters(-11.020),Units.inchesToMeters(6.767)), 
+    //         new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(20)))
+    // }; 
+
+    // // Creates field layout for AprilTags
+    // public static AprilTagFieldLayout TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+
+    // // Standard deviation of vision poses, this helps with correction or something idk thats what photon said
+    // // TODO: experiment with standard deviation values and set them to whatever gives the most correct pose
+    // public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8); // TODO: example values, change when testing
+    // public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1); //TODO: change values when testing
+
+    // public static final double AMBIGUITY_THRESHOLD = 0.2;
+    // public static final Distance SINGLE_TAG_DISTANCE_THRESHOLD = Meters.of(4.5);    
+
+    // public static final Distance FIELD_LENGTH = Meters.of(17.548);
+    // public static final Distance FIELD_WIDTH = Meters.of(8.052);
+
+    // public static final double FIELD_LENGTH_METERS = 17.548;
+    // public static final double FIELD_WIDTH_METERS = 8.052;
+
+    // public static boolean USE_VISION = true;
+
+
+    // public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+    // public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
+    // public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
+    // public static final double NOISY_DISTANCE_METERS = 2.5;
+    // public static final double DISTANCE_WEIGHT = 7;
+    // public static final int TAG_PRESENCE_WEIGHT = 10;
+
+
+    //  /**
+    //  * Standard deviations of model states. Increase these numbers to trust your
+    //  * model's state estimates less. This
+    //  * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
+    //  * meters.
+    //  */
+    // public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = VecBuilder.fill(.05, .05, Units.degreesToRadians(5));
+
+    // /**
+    //  * Standard deviations of the vision measurements. Increase these numbers to
+    //  * trust global measurements from vision
+    //  * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
+    //  * radians.
+    //  */
+    // public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = VecBuilder.fill(0.025, 0.025, Units.degreesToRadians(2.5));
+
+
+    // public static class AlignmentConfig {
+    //     public static final double THETA_kP = 3.0;
+    //     public static final double THETA_kI = 0.0;
+    //     public static final double THETA_kD = 0.0;
     
-        public static final double Y_kP = 5.0;
-        public static final double Y_kI = 0.0;
-        public static final double Y_kD = 0.0;
+    //     public static final double X_kP = 5.0;
+    //     public static final double X_kI = 0.0;
+    //     public static final double X_kD = 0.0;
+    
+    //     public static final double Y_kP = 5.0;
+    //     public static final double Y_kI = 0.0;
+    //     public static final double Y_kD = 0.0;
         
-        public static final Distance DISTANCE_TOLERANCE = Inches.of(0.5);
-        public static final Distance LATERAL_TOLERANCE = Inches.of(1.0);
-        public static final double THETA_TOLERANCE = 0.03;
+    //     public static final Distance DISTANCE_TOLERANCE = Inches.of(0.5);
+    //     public static final Distance LATERAL_TOLERANCE = Inches.of(1.0);
+    //     public static final double THETA_TOLERANCE = 0.03;
 
-        public static final Distance ALIGNMENT_TOLERANCE = Inches.of(0.5); //inches
-        public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(2);
-        public static final LinearAcceleration MAX_ALIGN_TRANSLATION_ACCELERATION = MetersPerSecondPerSecond.of(6.0);
-        public static final AngularVelocity MAX_ALIGN_ANGULAR_VELOCITY = RotationsPerSecond.of(1.25).times(0.75);
-        public static final AngularAcceleration MAX_ALIGN_ANGULAR_ACCELERATION = RadiansPerSecondPerSecond.of(6.0 * Math.PI);
+    //     public static final Distance ALIGNMENT_TOLERANCE = Inches.of(0.5); //inches
+    //     public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(2);
+    //     public static final LinearAcceleration MAX_ALIGN_TRANSLATION_ACCELERATION = MetersPerSecondPerSecond.of(6.0);
+    //     public static final AngularVelocity MAX_ALIGN_ANGULAR_VELOCITY = RotationsPerSecond.of(1.25).times(0.75);
+    //     public static final AngularAcceleration MAX_ALIGN_ANGULAR_ACCELERATION = RadiansPerSecondPerSecond.of(6.0 * Math.PI);
     
-        //April Tag IDs
-        public static final double id1 = 1;
-        public static final double id2 = 2;
-        public static final double id3 = 3;
-        public static final double id4 = 4;
-        public static final double id5 = 5;
-        public static final double id6 = 6;
-        public static final double id7 = 7;
-        public static final double id8 = 8;
-        public static final double id9 = 9;
-        public static final double id10 = 10;
-        public static final double id11 = 11;
-        public static final double id12 = 12;
-        public static final double id13 = 13;
-        public static final double id14 = 14;
-        public static final double id15 = 15;
-        public static final double id16 = 16;
-        public static final double id17 = 17;
-        public static final double id18 = 18;
-        public static final double id19 = 19;
-        public static final double id20 = 20;
-        public static final double id21 = 21;
-        public static final double id22 = 22;
+    //     //April Tag IDs
+    //     public static final double id1 = 1;
+    //     public static final double id2 = 2;
+    //     public static final double id3 = 3;
+    //     public static final double id4 = 4;
+    //     public static final double id5 = 5;
+    //     public static final double id6 = 6;
+    //     public static final double id7 = 7;
+    //     public static final double id8 = 8;
+    //     public static final double id9 = 9;
+    //     public static final double id10 = 10;
+    //     public static final double id11 = 11;
+    //     public static final double id12 = 12;
+    //     public static final double id13 = 13;
+    //     public static final double id14 = 14;
+    //     public static final double id15 = 15;
+    //     public static final double id16 = 16;
+    //     public static final double id17 = 17;
+    //     public static final double id18 = 18;
+    //     public static final double id19 = 19;
+    //     public static final double id20 = 20;
+    //     public static final double id21 = 21;
+    //     public static final double id22 = 22;
 
-        //Joey's Pose Constants for the Reef Locations
-        public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
+    //     //Joey's Pose Constants for the Reef Locations
+    //     public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
 
-        public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0)); 
-        public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
-        public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
-        public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
-        public static final Pose2d Eblue = new Pose2d(5.000, 2.825, Rotation2d.fromDegrees(120));
-        public static final Pose2d Fblue = new Pose2d(5.285, 2.975, Rotation2d.fromDegrees(120));
-        public static final Pose2d Gblue = new Pose2d(5.8, 3.850, Rotation2d.fromDegrees(180));
-        public static final Pose2d Hblue = new Pose2d(5.8, 4.175, Rotation2d.fromDegrees(180));
-        public static final Pose2d Iblue = new Pose2d(5.285, 5.075, Rotation2d.fromDegrees(240));
-        public static final Pose2d Jblue = new Pose2d(5.000, 5.230, Rotation2d.fromDegrees(240));
-        public static final Pose2d Kblue = new Pose2d(3.975, 5.230, Rotation2d.fromDegrees(300));
-        public static final Pose2d Lblue = new Pose2d(3.685, 5.075, Rotation2d.fromDegrees(300));
+    //     public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0)); 
+    //     public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
+    //     public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
+    //     public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
+    //     public static final Pose2d Eblue = new Pose2d(5.000, 2.825, Rotation2d.fromDegrees(120));
+    //     public static final Pose2d Fblue = new Pose2d(5.285, 2.975, Rotation2d.fromDegrees(120));
+    //     public static final Pose2d Gblue = new Pose2d(5.8, 3.850, Rotation2d.fromDegrees(180));
+    //     public static final Pose2d Hblue = new Pose2d(5.8, 4.175, Rotation2d.fromDegrees(180));
+    //     public static final Pose2d Iblue = new Pose2d(5.285, 5.075, Rotation2d.fromDegrees(240));
+    //     public static final Pose2d Jblue = new Pose2d(5.000, 5.230, Rotation2d.fromDegrees(240));
+    //     public static final Pose2d Kblue = new Pose2d(3.975, 5.230, Rotation2d.fromDegrees(300));
+    //     public static final Pose2d Lblue = new Pose2d(3.685, 5.075, Rotation2d.fromDegrees(300));
 
-        public static final double fieldFlip = 17.5;
-        public static final double fieldFlipy = 8;
+    //     public static final double fieldFlip = 17.5;
+    //     public static final double fieldFlipy = 8;
 
-        public static final Pose2d Ared = new Pose2d(fieldFlip - 3.180, fieldFlipy - 4.175, Rotation2d.fromDegrees(180));
-        public static final Pose2d Bred = new Pose2d(fieldFlip - 3.180, fieldFlipy - 3.850, Rotation2d.fromDegrees(180));
-        public static final Pose2d Cred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 2.975, Rotation2d.fromDegrees(-120));
-        public static final Pose2d Dred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 2.825, Rotation2d.fromDegrees(-120));
-        public static final Pose2d Ered = new Pose2d(fieldFlip - 5.000, fieldFlipy - 2.825, Rotation2d.fromDegrees(-60));
-        public static final Pose2d Fred = new Pose2d(fieldFlip - 5.285, fieldFlipy - 2.975, Rotation2d.fromDegrees(-60));
-        public static final Pose2d Gred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 3.850, Rotation2d.fromDegrees(0));
-        public static final Pose2d Hred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 4.175, Rotation2d.fromDegrees(0));
-        public static final Pose2d Ired = new Pose2d(fieldFlip - 5.285, fieldFlipy - 5.075, Rotation2d.fromDegrees(-300));
-        public static final Pose2d Jred = new Pose2d(fieldFlip - 5.000, fieldFlipy - 5.230, Rotation2d.fromDegrees(-300));
-        public static final Pose2d Kred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 5.230, Rotation2d.fromDegrees(-240));
-        public static final Pose2d Lred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 5.075, Rotation2d.fromDegrees(-240));
+    //     public static final Pose2d Ared = new Pose2d(fieldFlip - 3.180, fieldFlipy - 4.175, Rotation2d.fromDegrees(180));
+    //     public static final Pose2d Bred = new Pose2d(fieldFlip - 3.180, fieldFlipy - 3.850, Rotation2d.fromDegrees(180));
+    //     public static final Pose2d Cred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 2.975, Rotation2d.fromDegrees(-120));
+    //     public static final Pose2d Dred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 2.825, Rotation2d.fromDegrees(-120));
+    //     public static final Pose2d Ered = new Pose2d(fieldFlip - 5.000, fieldFlipy - 2.825, Rotation2d.fromDegrees(-60));
+    //     public static final Pose2d Fred = new Pose2d(fieldFlip - 5.285, fieldFlipy - 2.975, Rotation2d.fromDegrees(-60));
+    //     public static final Pose2d Gred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 3.850, Rotation2d.fromDegrees(0));
+    //     public static final Pose2d Hred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 4.175, Rotation2d.fromDegrees(0));
+    //     public static final Pose2d Ired = new Pose2d(fieldFlip - 5.285, fieldFlipy - 5.075, Rotation2d.fromDegrees(-300));
+    //     public static final Pose2d Jred = new Pose2d(fieldFlip - 5.000, fieldFlipy - 5.230, Rotation2d.fromDegrees(-300));
+    //     public static final Pose2d Kred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 5.230, Rotation2d.fromDegrees(-240));
+    //     public static final Pose2d Lred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 5.075, Rotation2d.fromDegrees(-240));
 
 
-                //TODO: MIGHT NEED TO PLAY AROUND WITH ALL THE POSES BELOW
+
+
+        //TODO: MIGHT NEED TO PLAY AROUND WITH ALL THE POSES BELOW
 
         // /** Pose of the robot relative to a reef branch for scoring coral on L4 */
         // public static final Transform2d RELATIVE_SCORING_POSE_CORAL_L4 = new Transform2d(
@@ -381,5 +476,4 @@ public class VisionConfig {
 
         // public static final Distance LATERAL_TARGET_L4_LEFT = Meters.of(0.05);
         // public static final Distance LATERAL_TARGET_L4_RIGHT = Meters.of(0.02);
-    }
 }

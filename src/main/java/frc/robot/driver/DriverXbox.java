@@ -1,7 +1,7 @@
 package frc.robot.driver;
 
-import static frc.robot.vision.VisionConfig.AlignmentConfig.Cblue;
-import static frc.robot.vision.VisionConfig.AlignmentConfig.Dblue;
+// import static frc.robot.vision.VisionConfig.AlignmentConfig.Cblue;
+// import static frc.robot.vision.VisionConfig.AlignmentConfig.Dblue;
 
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,7 +22,7 @@ import frc.robot.climber.Climber;
 import frc.robot.climber.commands.SetClimberAngle;
 import frc.robot.commands.RobotCommands;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
-import frc.robot.drivetrain.commands.DriveToPoseCommand;
+// import frc.robot.drivetrain.commands.DriveToPoseCommand;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.ElevatorCommands;
 import frc.robot.elevator.commands.SetElevatorState;
@@ -34,10 +34,10 @@ import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 import frc.robot.rushinator.commands.ToggleWristState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
-import frc.robot.vision.PoseEstimatorSubsystem;
-import frc.robot.vision.VisionConfig;
-import frc.robot.vision.commands.AutoAlign;
-import frc.robot.vision.commands.LineupCommand;
+// import frc.robot.vision.PoseEstimatorSubsystem;
+// import frc.robot.vision.VisionConfig;
+// import frc.robot.vision.commands.AutoAlign;
+// import frc.robot.vision.commands.LineupCommand;
 
 
 public class DriverXbox extends XboxGamepad {
