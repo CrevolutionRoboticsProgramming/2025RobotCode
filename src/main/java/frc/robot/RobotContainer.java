@@ -1,15 +1,11 @@
 package frc.robot;
 
-import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.auton.AutonMaster;
@@ -19,13 +15,22 @@ import frc.robot.drivetrain.TunerConstants;
 import frc.robot.elevator.ElevatorSubsystem;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.vision.VisionConfig.fieldLayout;
+
+import org.photonvision.PhotonCamera;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import frc.robot.operator.OperatorXbox;
-import frc.robot.vision.PoseEstimatorSubsystem;
-import frc.robot.vision.VisionConfig;
+// import frc.robot.vision.PoseEstimatorSubsystem;
+// import frc.robot.vision.VisionConfig;
 
 import frc.robot.rushinator.*;
 import frc.robot.rushinator.commands.*;
+import frc.robot.vision.PhotonVisionLocalizer;
+import frc.robot.vision.VisionConfig.PhotonConfig;
+import frc.robot.vision.VisionLocalizationSystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,6 +43,8 @@ public class RobotContainer {
     public static double kMaxAngularVelocity = RotationsPerSecond.of(1.0).in(RadiansPerSecond);
     
     public static boolean modeFast = true;
+
+    private final VisionLocalizationSystem m_vision = new VisionLocalizationSystem();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -56,10 +63,24 @@ public class RobotContainer {
         autonTab.add(mAutonChooser);
         SmartDashboard.putData(mAutonChooser);
 
-        var mPoseEstimator = PoseEstimatorSubsystem.getInstance();
+        // var mPoseEstimator = PoseEstimatorSubsystem.getInstance();
 
         // ShuffleboardTab visionTab = Shuffleboard.getTab("Vision Pose Estimator");
         // PoseEstimatorSubsystem.getInstance().addDashboardWidgets(visionTab);
+
+        for (PhotonConfig config : PhotonConfig.values()){
+                
+            var cam = new PhotonCamera(config.name);
+            m_vision.addCamera(new PhotonVisionLocalizer(
+                cam, 
+                config.offset,
+                config.multiTagPoseStrategy,
+                config.singleTagPoseStrategy,
+                () -> CommandSwerveDrivetrain.getInstance().getPose().getRotation(),
+                fieldLayout,
+                config.defaultSingleTagStdDevs, 
+                config.defaultMultiTagStdDevs));
+        }
     }
 
         /**
@@ -144,5 +165,5 @@ public class RobotContainer {
         
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
-}
+}  
   
