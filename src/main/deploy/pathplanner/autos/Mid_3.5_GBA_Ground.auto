@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start_L"
+            "pathName": "Start_G"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L_LGr"
+            "pathName": "G_RGr"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LGr_A"
+            "pathName": "RGr_B"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "A_MGr"
+            "pathName": "B_MGr"
           }
         },
         {
@@ -55,19 +55,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MGr_B"
+            "pathName": "MGr_A"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "AutonScoreL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_LGr"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Mid",
   "choreoAuto": false
 }

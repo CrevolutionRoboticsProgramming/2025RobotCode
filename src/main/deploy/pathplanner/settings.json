@@ -8,7 +8,11 @@
     "Middle",
     "Old"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Left",
+    "Mid",
+    "Right"
+  ],
   "defaultMaxVel": 3.5,
   "defaultMaxAccel": 3.5,
   "defaultMaxAngVel": 400.0,

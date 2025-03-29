@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start_I"
+            "pathName": "Start_C"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "I_Load"
+            "pathName": "C_RGr"
           }
         },
         {
@@ -31,31 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Load_K"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutonScoreL1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "K_Load"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HPPickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Load_L"
+            "pathName": "RGr_B"
           }
         },
         {
@@ -67,19 +43,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L_Load"
+            "pathName": "B_MGr"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "HPPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MGr_A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_LGr"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Left",
+  "folder": "Right",
   "choreoAuto": false
 }
