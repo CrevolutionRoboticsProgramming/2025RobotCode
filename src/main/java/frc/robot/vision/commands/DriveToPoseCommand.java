@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -11,6 +14,8 @@ import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.crevolib.math.Conversions;
@@ -26,6 +31,33 @@ public class DriveToPoseCommand extends Command{
 
     public DriveToPoseCommand(Pose2d targetPose) {
         this.mDrivetrain = CommandSwerveDrivetrain.getInstance();
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                mDrivetrain::getPose,   // Supplier of current robot pose
+                mDrivetrain::resetPose,         // Consumer for seeding pose against auto
+                mDrivetrain::getRobotRelvativeSpeeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> mDrivetrain.setControl(
+                    mDrivetrain.m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(10, 0.0, 0.0),
+                    // PID constants for rotation
+                    new PIDConstants(6.5, 0, 0.05)
+                ),
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                mDrivetrain // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
+
         this.mPoseEstimatorSubsystem = PoseEstimatorSubsystem.getInstance();
         this.targetPose = targetPose;
         addRequirements(mDrivetrain, mPoseEstimatorSubsystem);

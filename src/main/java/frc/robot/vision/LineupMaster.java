@@ -3,15 +3,22 @@ package frc.robot.vision;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.crevolib.math.Conversions;
+import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.vision.VisionConfig.ReefFace;
 import frc.robot.vision.commands.DriveToPoseCommand;
 
@@ -21,7 +28,6 @@ public class LineupMaster {
     private static final Map<ReefFace, Command> rightBranchAlignmentCommands = new HashMap<>();
     public static final Transform2d robotOffset = new Transform2d(0.508, 0, Rotation2d.kZero);
     public static final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
-   
     public LineupMaster() {
         for (ReefFace face : ReefFace.values()) {
             leftBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.leftBranch.transformBy(robotOffset), Rotation2d.k180deg)));
