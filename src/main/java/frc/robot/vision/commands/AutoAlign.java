@@ -97,20 +97,12 @@ public class AutoAlign extends Command {
         double YOutput = 0.15 * kLineupSpeed.in(MetersPerSecond) * 0.95 * xDistanceController.calculate(y, targetPose.getY());
         double thetaOutput = 0.15 * RotationsPerSecond.of(0.75).in(RadiansPerSecond) * thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-        if (DriverStation.getAlliance().get() == Alliance.Blue){
-            CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-                RobotContainer.drive.withVelocityX(-XOutput)
-                     .withVelocityY(-YOutput)
+        CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+                RobotContainer.drive.withVelocityX(XOutput)
+                     .withVelocityY(YOutput)
                      .withRotationalRate(thetaOutput)
                      
             ).execute();
-        } else {
-            CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
-            RobotContainer.drive.withVelocityX(XOutput)
-                     .withVelocityY(YOutput)
-                     .withRotationalRate(-thetaOutput)   
-            ).execute();
-        }
         
         commandRan = true;
         SmartDashboard.putBoolean("command ran", commandRan);
