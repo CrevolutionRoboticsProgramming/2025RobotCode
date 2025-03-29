@@ -59,7 +59,7 @@ public class DriveToPoseCommand extends Command{
     }
 
     public BooleanSupplier atGoal() {
-        return () -> targetPose.getTranslation().getDistance(PoseEstimatorSubsystem.getInstance().getCurrentPose().getTranslation()) < 0.03;
+        return () -> targetPose.getTranslation().getDistance(mPoseEstimatorSubsystem.getCurrentPose().getTranslation()) < 0.03;
     }
 
     @Override
