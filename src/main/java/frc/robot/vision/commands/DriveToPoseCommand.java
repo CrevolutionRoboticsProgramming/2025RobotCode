@@ -3,6 +3,8 @@ package frc.robot.vision.commands;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import javax.sound.sampled.Line;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -16,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.crevolib.math.Conversions;
@@ -26,7 +29,11 @@ public class DriveToPoseCommand extends Command{
     private Command followPathCommand;
     private final Pose2d targetPose;
     CommandSwerveDrivetrain mDrivetrain;
-    public final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
+    public final PathConstraints pathConstraints = new PathConstraints(
+        2, 
+        2, 
+        Units.degreesToRadians(360), 
+        Units.degreesToRadians(360));
     PoseEstimatorSubsystem mPoseEstimatorSubsystem;
 
     public DriveToPoseCommand(Pose2d targetPose) {
@@ -45,9 +52,9 @@ public class DriveToPoseCommand extends Command{
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0.0, 0.0),
+                    new PIDConstants(.025, 0.0, 0.0),
                     // PID constants for rotation
-                    new PIDConstants(6.5, 0, 0.05)
+                    new PIDConstants(.02, 0, 0.05)
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
@@ -88,6 +95,9 @@ public class DriveToPoseCommand extends Command{
             followPathCommand = Commands.none();
         }
         followPathCommand.schedule();
+        SmartDashboard.putString("current pose lineup", currentPose.toString());
+        SmartDashboard.putString("target pose lineup", targetPose.toString());
+        SmartDashboard.putString("starting waypoint lineup", startingWaypoint.toString());
     }
 
     public BooleanSupplier atGoal() {
@@ -101,7 +111,7 @@ public class DriveToPoseCommand extends Command{
     
     @Override
     public boolean isFinished() {
-        return followPathCommand.isFinished();
+        return atGoal().getAsBoolean();
     }
     
     @Override
