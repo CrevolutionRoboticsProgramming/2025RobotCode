@@ -22,16 +22,18 @@ public class DriveToPoseCommand extends Command{
     private final Pose2d targetPose;
     CommandSwerveDrivetrain mDrivetrain;
     public final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
+    PoseEstimatorSubsystem mPoseEstimatorSubsystem;
 
     public DriveToPoseCommand(Pose2d targetPose) {
         this.mDrivetrain = CommandSwerveDrivetrain.getInstance();
+        this.mPoseEstimatorSubsystem = PoseEstimatorSubsystem.getInstance();
         this.targetPose = targetPose;
         addRequirements(mDrivetrain);
     }
 
     @Override
     public void initialize() {
-        Pose2d currentPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
+        Pose2d currentPose = mPoseEstimatorSubsystem.getCurrentPose();
         Pose2d startingWaypoint = new Pose2d(currentPose.getTranslation(), Conversions.angleToPose(currentPose, targetPose));
         
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(

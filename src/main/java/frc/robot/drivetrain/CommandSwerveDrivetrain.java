@@ -403,17 +403,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
 
-        public Command pathfindToPose(Pose2d targetPose) {
-            return AutoBuilder.pathfindToPose(
-                targetPose,
-                pathConstraints,
-                0.0
-            );
-        }
+        // public Command pathfindToPose(Pose2d targetPose) {
+        //     return AutoBuilder.pathfindToPose(
+        //         targetPose,
+        //         pathConstraints,
+        //         0.0
+        //     );
+        // }
     
-        public Command followPath(PathPlannerPath path){
-            return AutoBuilder.followPath(path);
-        }
+        // public Command followPath(PathPlannerPath path){
+        //     return AutoBuilder.followPath(path);
+        // }
 
 
         public Command directDriveToPose(Pose2d targetPose) {
