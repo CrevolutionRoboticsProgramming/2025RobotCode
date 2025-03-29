@@ -158,7 +158,7 @@ public class AlgaeRoller extends SubsystemBase{
 
         @Override
         public void initialize() {
-            roller.setFlywheelVoltage(4);
+            roller.setFlywheelVoltage(3);
             roller.setIndexerVoltage(3);
         }
     }
@@ -172,8 +172,8 @@ public class AlgaeRoller extends SubsystemBase{
 
         @Override
         public void initialize() {
-            roller.setFlywheelVoltage(6);
-            roller.setIndexerVoltage(6);
+            roller.setFlywheelVoltage(4);
+            roller.setIndexerVoltage(4);
         }
     }
 }

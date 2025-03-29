@@ -46,8 +46,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         static final double kCurrentLimit = 40.0;
 
-        static final double kMaxVelocity = 100.0;
-        static final double kMaxAcceleration = 100.0;
+        static final double kMaxVelocity = 200.0;
+        static final double kMaxAcceleration = 200.0;
 
         static final double kCrossoverPoint = 17.2939453125;
     }
@@ -71,7 +71,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         kCoralL4AutonScore(16.2),
         kCoralL4(35.76806640625),
         kCoralScoreL4(29.134765625),
-        kAlgaeL2(17.91552734375),
+        kAlgaeL2(17.01552734375),
         kAlgaeL3(30.27490234375),
         kAlgaeIntake(3.650390625),
         kClimb(13.1376953125),

@@ -34,8 +34,8 @@ public class RushinatorWrist extends SubsystemBase {
         public static final double kV = 0.5; // V * sec / rad
         public static final double kA = 0.01; // V * sec^2 / rad
 
-        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(200000);
-        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(200000);
+        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(300000);
+        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(300000);
         public static final double kP = 50.0;
         public static final double kI = 0.0;
         public static final double kD = 0.0;

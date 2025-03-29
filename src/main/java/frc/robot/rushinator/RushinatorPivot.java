@@ -30,8 +30,8 @@ public class RushinatorPivot extends SubsystemBase {
         static final double kV = 5.0; // V * sec / rad
         static final double kA = 1.77; // V * sec^2 / rad
 
-        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(1000);
-        static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(1000);
+        static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(5000);
+        static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(5000);
         static final double kP = 38.0;          
         static final double kI = 0.0;
         static final double kD = 0.0;

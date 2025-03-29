@@ -45,9 +45,9 @@ public class DriverXbox extends XboxGamepad {
         static final int port = 0;
         static final String name = "driver";
 
-        static final double kTranslationExpVal = 2.0;
+        static final double kTranslationExpVal = 4.0;
         static final double kRotationExpVal = 1.0;
-        static final double kDeadzone = 0.1;
+        static final double kDeadzone = 0.01;
     }
 
     private static DriverXbox mInstance;
