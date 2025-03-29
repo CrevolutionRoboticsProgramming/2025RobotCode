@@ -384,14 +384,14 @@ public class VisionConfig {
     }
     
     private static final double branchOffset = Units.inchesToMeters(6.469);
-    private static final Transform2d leftBranchTransform = new Transform2d(0.0, -branchOffset, Rotation2d.kZero);
-    private static final Transform2d rightBranchTransform = new Transform2d(0.0, branchOffset, Rotation2d.kZero);
+    private static final Transform2d leftBranchTransform = new Transform2d(0.0, -Units.inchesToMeters(6), Rotation2d.kZero);
+    private static final Transform2d rightBranchTransform = new Transform2d(0.0, Units.inchesToMeters(8), Rotation2d.kZero);
 
     public enum ReefFace {
         // IMPORTANT: Fudge factors are always positive and should be in meters (use the Units.inchesToMeters() method)
 
         // Blue Reef
-        BLU_REEF_AB(18, 3.657600, 4.025900, 180.0, null, null),
+        BLU_REEF_AB(18, 3.657600 - Units.inchesToMeters(6.25), 4.025900, 180.0, null, null),
         BLU_REEF_CD(17, 4.073906, 3.306318, 240.0, null, null),
         BLU_REEF_EF(22, 4.904740, 3.306318, 300.0, null, null),
         BLU_REEF_GH(21, 5.321046, 4.025900, 0.0, null, null),

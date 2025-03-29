@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.crevolib.math.Conversions;
@@ -26,13 +27,13 @@ public class LineupMaster {
     private static final Map<ReefFace, Command> leftBranchAlignmentCommands = new HashMap<>();
     private static final Map<ReefFace, Command> reefCenterAlignmentCommands = new HashMap<>();
     private static final Map<ReefFace, Command> rightBranchAlignmentCommands = new HashMap<>();
-    public static final Transform2d robotOffset = new Transform2d(0.508, 0, Rotation2d.kZero);
+    public static final Transform2d robotOffset = new Transform2d(0.3018, 0, Rotation2d.kZero);
     public static final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
     public LineupMaster() {
         for (ReefFace face : ReefFace.values()) {
-            leftBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.leftBranch.transformBy(robotOffset), Rotation2d.k180deg)));
-            reefCenterAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.AprilTag.transformBy(robotOffset), Rotation2d.k180deg)));
-            rightBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.rightBranch.transformBy(robotOffset), Rotation2d.k180deg)));
+            leftBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.leftBranch.transformBy(robotOffset), Rotation2d.kZero)));
+            reefCenterAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.AprilTag.transformBy(robotOffset), Rotation2d.kZero)));
+            rightBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.rightBranch.transformBy(robotOffset), Rotation2d.kZero)));
         }
     }
 
@@ -47,6 +48,8 @@ public class LineupMaster {
                 closestFace = face;
             }
         }
+
+        SmartDashboard.putString("closest reef face", closestFace.name());
 
         return closestFace;
     }
