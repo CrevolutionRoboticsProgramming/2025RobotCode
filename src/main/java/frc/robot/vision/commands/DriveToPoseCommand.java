@@ -28,7 +28,7 @@ public class DriveToPoseCommand extends Command{
         this.mDrivetrain = CommandSwerveDrivetrain.getInstance();
         this.mPoseEstimatorSubsystem = PoseEstimatorSubsystem.getInstance();
         this.targetPose = targetPose;
-        addRequirements(mDrivetrain);
+        addRequirements(mDrivetrain, mPoseEstimatorSubsystem);
     }
 
     @Override
