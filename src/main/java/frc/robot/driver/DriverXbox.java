@@ -206,8 +206,8 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
 
-        controller.povLeft().onTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestLeftBranch());
-        controller.povLeft().onTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestRightBranch());
+        controller.povLeft().whileTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestLeftBranch());
+        controller.povRight().whileTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestRightBranch());
         
 
         //Align to Reef
@@ -327,9 +327,9 @@ public class DriverXbox extends XboxGamepad {
         // );
         
         /*Wrist TEsting*/
-        controller.povLeft().onTrue(new SetWristState(RushinatorWrist.State.kTravelLeft));
-        controller.povUp().onTrue(new SetWristState(RushinatorWrist.State.kTravelMid));
-        controller.povRight().onTrue(new SetWristState(RushinatorWrist.State.kTravelRight));
+        // controller.povLeft().onTrue(new SetWristState(RushinatorWrist.State.kTravelLeft));
+        // controller.povUp().onTrue(new SetWristState(RushinatorWrist.State.kTravelMid));
+        // controller.povRight().onTrue(new SetWristState(RushinatorWrist.State.kTravelRight));
 
         // controller.a().onTrue(new SetArmState(RushinatorPivot.State.kTestPos));
         
