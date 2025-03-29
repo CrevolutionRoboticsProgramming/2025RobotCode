@@ -16,9 +16,9 @@ import frc.robot.vision.VisionConfig.ReefFace;
 import frc.robot.vision.commands.DriveToPoseCommand;
 
 public class LineupMaster {
-    private final Map<ReefFace, Command> leftBranchAlignmentCommands = new HashMap<>();
-    private final Map<ReefFace, Command> reefCenterAlignmentCommands = new HashMap<>();
-    private final Map<ReefFace, Command> rightBranchAlignmentCommands = new HashMap<>();
+    private static final Map<ReefFace, Command> leftBranchAlignmentCommands = new HashMap<>();
+    private static final Map<ReefFace, Command> reefCenterAlignmentCommands = new HashMap<>();
+    private static final Map<ReefFace, Command> rightBranchAlignmentCommands = new HashMap<>();
     public static final Transform2d robotOffset = new Transform2d(0.508, 0, Rotation2d.kZero);
     public static final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
    
