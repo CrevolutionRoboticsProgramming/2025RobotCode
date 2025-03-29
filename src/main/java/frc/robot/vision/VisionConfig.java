@@ -45,12 +45,12 @@ public class VisionConfig {
     public static final Transform3d[] ROBOT_TO_CAM_TRANSFORMS = new Transform3d[] {
         //left cam
         new Transform3d(
-            new Translation3d(Units.inchesToMeters(11.882),Units.inchesToMeters(11.020),Units.inchesToMeters(6.767)),
-            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(-20))),
+            new Translation3d(Units.inchesToMeters(-11.882),Units.inchesToMeters(-11.020),Units.inchesToMeters(6.767)),
+            new Rotation3d(0,Units.degreesToRadians(15),Units.degreesToRadians(160))),
         //right cam
         new Transform3d(
-            new Translation3d(Units.inchesToMeters(11.882),Units.inchesToMeters(-11.020),Units.inchesToMeters(6.767)), 
-            new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(20)))
+            new Translation3d(Units.inchesToMeters(-11.882),Units.inchesToMeters(11.020),Units.inchesToMeters(6.767)), 
+            new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-160)))
     }; 
 
     // Creates field layout for AprilTags
