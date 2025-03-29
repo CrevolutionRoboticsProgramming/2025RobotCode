@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.crevolib.math.Conversions;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.vision.VisionConfig.ReefFace;
+import frc.robot.vision.commands.AutoAlign;
 import frc.robot.vision.commands.DriveToPoseCommand;
 
 public class LineupMaster {
@@ -55,7 +56,7 @@ public class LineupMaster {
     }
 
     public Command directDriveToPose(Pose2d targetPose) {
-        return new DriveToPoseCommand(targetPose);
+        return new AutoAlign(targetPose);
     }
 
     public Command directDriveToNearestLeftBranch() {
