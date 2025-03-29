@@ -15,18 +15,6 @@
           "data": {
             "name": "AutonScoreL4"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "G_GH-Algae"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "GH-Algae_Score"
-          }
         }
       ]
     }
