@@ -146,10 +146,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
     // Set the pose on the dashboard
     var dashboardPose = poseEstimator.getEstimatedPosition();
-    // if (originPosition == kRedAllianceWallRightSide) {
-    //   // Flip the pose when red, since the dashboard field photo cannot be rotated
-    //   dashboardPose = flipAlliance(dashboardPose);
-    // }
+    if (originPosition == kRedAllianceWallRightSide) {
+      // Flip the pose when red, since the dashboard field photo cannot be rotated
+      dashboardPose = flipAlliance(dashboardPose);
+    }
     field2d.setRobotPose(dashboardPose);
     SmartDashboard.putString("Pose Formatted", getFomattedPose());
     
