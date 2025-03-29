@@ -1,5 +1,8 @@
 package frc.crevolib.math;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public class Conversions {
     
     /**
@@ -40,6 +43,14 @@ public class Conversions {
     public static double metersToRotations(double wheelMeters, double circumference){
         double wheelRotations = wheelMeters / circumference;
         return wheelRotations;
+    }
+
+    public static Pose2d rotatePose(Pose2d pose, Rotation2d rot) {
+        return new Pose2d(pose.getTranslation(), pose.getRotation().rotateBy(rot));
+    }
+
+    public static Rotation2d angleToPose(Pose2d startPose, Pose2d endPose){
+        return endPose.getTranslation().minus(startPose.getTranslation()).getAngle();
     }
 
 }

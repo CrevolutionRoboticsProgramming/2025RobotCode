@@ -3,6 +3,9 @@ package frc.robot.drivetrain;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -12,14 +15,19 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
@@ -31,11 +39,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.crevolib.math.Conversions;
 import frc.robot.RobotContainer;
 import frc.robot.drivetrain.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.vision.PoseEstimatorSubsystem;
+import frc.robot.vision.VisionConfig.ReefFace;
+import frc.robot.vision.commands.DriveToPoseCommand;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -71,6 +83,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     private Field2d field2d = new Field2d();
+
+    private DriveCommandFactory mDriveCommandFactoryInstance = new DriveCommandFactory(); 
 
     // StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault().getStructTopic("MyPose2d", Pose2d.struct).publish();
 
@@ -368,5 +382,84 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+
+    public DriveCommandFactory getDriveCommandFactory() {
+        return mDriveCommandFactoryInstance;
+    }
+
+    public class DriveCommandFactory {
+        private final Map<ReefFace, Command> leftBranchAlignmentCommands = new HashMap<>();
+        private final Map<ReefFace, Command> reefCenterAlignmentCommands = new HashMap<>();
+        private final Map<ReefFace, Command> rightBranchAlignmentCommands = new HashMap<>();
+        public static final Transform2d robotOffset = new Transform2d(0.508, 0, Rotation2d.kZero);
+        public static final PathConstraints pathConstraints = new PathConstraints(2, 2, Units.degreesToRadians(360), Units.degreesToRadians(360));
+        private DriveCommandFactory() {
+            for (ReefFace face : ReefFace.values()) {
+                leftBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.leftBranch.transformBy(robotOffset), Rotation2d.k180deg)));
+                reefCenterAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.AprilTag.transformBy(robotOffset), Rotation2d.k180deg)));
+                rightBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.rightBranch.transformBy(robotOffset), Rotation2d.k180deg)));
+            }
+        }
+
+
+        public Command pathfindToPose(Pose2d targetPose) {
+            return AutoBuilder.pathfindToPose(
+                targetPose,
+                pathConstraints,
+                0.0
+            );
+        }
+    
+        public Command followPath(PathPlannerPath path){
+            return AutoBuilder.followPath(path);
+        }
+
+
+        public Command directDriveToPose(Pose2d targetPose) {
+            return new DriveToPoseCommand(targetPose);
+            /*
+            DirectDriveToPoseCommand directDriveToPoseCommand = new DirectDriveToPoseCommand(drive, targetPose);
+
+            return Commands.parallel(
+                    directDriveToPoseCommand,
+                    Commands.sequence(
+                        Commands.runOnce(() -> {isAutoAligned = false;}),
+                        Commands.waitUntil(() -> {return targetPose.getTranslation().getDistance(drive.getPose().getTranslation()) < PathPlannerConstants.LEDpathToleranceMeters;}),
+                        Commands.run(() -> {isAutoAligned = true;})
+                    )
+
+            );*/
+        }
+
+        
+
+        public Command directDriveToNearestLeftBranch() {
+            return new SelectCommand<>(leftBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        }
+
+        public Command directDriveToNearestReefFace() {
+            return new SelectCommand<>(reefCenterAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        }
+
+        public Command directDriveToNearestRightBranch() {
+            return new SelectCommand<>(rightBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        }
+        
+        public static ReefFace getClosestReefFace(Pose2d robotPose){
+            double closestDistance = Double.MAX_VALUE; // Distance away from april tag
+            ReefFace closestFace = null;
+    
+            for (ReefFace face: ReefFace.values()){
+                double distance = robotPose.getTranslation().getDistance(face.AprilTag.getTranslation());
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestFace = face;
+                }
+            }
+    
+            return closestFace;
+        }
+
     }
 }

@@ -22,7 +22,6 @@ import frc.robot.climber.Climber;
 import frc.robot.climber.commands.SetClimberAngle;
 import frc.robot.commands.RobotCommands;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
-import frc.robot.drivetrain.commands.DriveToPoseCommand;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.commands.ElevatorCommands;
 import frc.robot.elevator.commands.SetElevatorState;
@@ -78,7 +77,7 @@ public class DriverXbox extends XboxGamepad {
         /*COMP BINDINGS */
         // Spit Coral
         controller.x().whileTrue(new SetRollersVoltage(-2.0));
-
+        
         //Score Coral
         // controller.y().whileTrue(RobotCommands.scoreCoral());
         controller.y().and(() -> OperatorXbox.getInstance().controller.a().getAsBoolean()).whileTrue(new ConditionalCommand(
@@ -205,6 +204,11 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new AlgaeRoller.IntakeCommand());
         controller.leftTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kFloorIntake));
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
+
+
+        controller.povLeft().onTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestLeftBranch());
+        controller.povLeft().onTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestRightBranch());
+        
 
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
