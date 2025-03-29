@@ -33,6 +33,7 @@ import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetWristState;
 import frc.robot.rushinator.commands.ToggleWristState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
+import frc.robot.vision.LineupMaster;
 import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig;
 import frc.robot.vision.commands.AutoAlign;
@@ -55,10 +56,14 @@ public class DriverXbox extends XboxGamepad {
     public boolean autoAim;
     private double reqAngularVel;
     private static AlgaeSubsystem mAlgaeSubsystem;
+
+    private static LineupMaster mLineupMaster;
     
 
     private DriverXbox() {
         super(DriverXbox.Settings.name, DriverXbox.Settings.port);
+
+        mLineupMaster = new LineupMaster();
 
         translationStickCurve = new ExpCurve(DriverXbox.Settings.kTranslationExpVal, 0, 1, DriverXbox.Settings.kDeadzone);
         rotationStickCurve = new ExpCurve(DriverXbox.Settings.kRotationExpVal, 0, 1, DriverXbox.Settings.kDeadzone);
@@ -206,8 +211,8 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
 
-        controller.povLeft().whileTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestLeftBranch());
-        controller.povRight().whileTrue(CommandSwerveDrivetrain.getInstance().getDriveCommandFactory().directDriveToNearestRightBranch());
+        controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+        controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
         
 
         //Align to Reef
