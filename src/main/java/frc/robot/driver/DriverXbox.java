@@ -182,7 +182,10 @@ public class DriverXbox extends XboxGamepad {
         // controller.y().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() + 4.0));
 
         // Pulse Alage
-        controller.a().whileTrue(new AlgaeRoller.IntakeCommand());
+        // controller.a().whileTrue(new AlgaeRoller.IntakeCommand());
+        controller.a().whileTrue(new AlgaeRoller.PrimeShootCommand());
+        controller.a().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kZero));
+        
 
         // Spit Algae
         controller.b().whileTrue(new AlgaeRoller.ShootCommand());

@@ -149,6 +149,34 @@ public class AlgaeRoller extends SubsystemBase{
         }
     }
 
+    public static class PrimeShootCommand extends Command {
+        AlgaeRoller roller;
+        public PrimeShootCommand() {
+            roller = AlgaeRoller.getInstance();
+            addRequirements(roller);
+        }
+
+        @Override
+        public void initialize() {
+            roller.setIndexerVoltage(-6);
+            roller.setFlywheelVoltage(6);
+        }
+    }
+
+    public static class FarShootCommand extends Command {
+        AlgaeRoller roller;
+        public FarShootCommand() {
+            roller = AlgaeRoller.getInstance();
+            addRequirements(roller);
+        }
+
+        @Override
+        public void initialize() {
+            roller.setIndexerVoltage(6);
+            roller.setFlywheelVoltage(8);
+        }
+    }
+
     public static class ShootCommand extends Command {
         AlgaeRoller roller;
         public ShootCommand() {

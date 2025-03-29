@@ -15,12 +15,14 @@ import frc.crevolib.util.Gamepad;
 import frc.crevolib.util.XboxGamepad;
 import frc.robot.Robot;
 import frc.robot.algaeflywheel.AlgaeRoller;
+import frc.robot.algaeflywheel.commands.AlgaeRollerCommands;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.climber.Climber;
 import frc.robot.climber.commands.SetClimberAngle;
 import frc.robot.commands.RobotCommands;
+import frc.robot.driver.DriverXbox;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.elevator.ElevatorSubsystem.State;
 import frc.robot.elevator.commands.SetElevatorState;
@@ -81,6 +83,9 @@ public class OperatorXbox extends XboxGamepad {
         // Primes the processor shooting
         controller.rightTrigger().whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kProcessor));
         controller.rightTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
+
+        // ALgae Scooring For Far Barge Shot
+        controller.rightBumper().and(() -> DriverXbox.getInstance().controller.a().getAsBoolean()).whileTrue(new AlgaeRoller.FarShootCommand());
 
         // Algae SCorring for Process & Barge
         controller.rightBumper().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.ProcessShootCommand());
