@@ -3,8 +3,6 @@ package frc.robot.vision.commands;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import javax.sound.sampled.Line;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -17,6 +15,7 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -90,7 +89,7 @@ public class DriveToPoseCommand extends Command{
                 new GoalEndState(0, targetPose.getRotation())
             );
             path.preventFlipping = true;
-            followPathCommand = AutoBuilder.followPath(path);
+            followPathCommand = AutoBuilder.followPath(path).andThen(() -> mDrivetrain.stopSwerve());
         } else {
             followPathCommand = Commands.none();
         }
@@ -111,7 +110,7 @@ public class DriveToPoseCommand extends Command{
     
     @Override
     public boolean isFinished() {
-        return atGoal().getAsBoolean();
+        return followPathCommand.isFinished();
     }
     
     @Override

@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.crevolib.util.ExpCurve;
 import frc.crevolib.util.XboxGamepad;
@@ -214,10 +216,9 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
 
-        // controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
-        // controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
+        controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+        controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
         
-
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
         //     CommandSwerveDrivetrain.getInstance(), 
