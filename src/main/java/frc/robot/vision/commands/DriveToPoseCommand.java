@@ -27,7 +27,6 @@ import frc.robot.vision.PoseEstimatorSubsystem;
 public class DriveToPoseCommand extends Command{
     private Command followPathCommand;
     private final Pose2d targetPose;
-    CommandSwerveDrivetrain mDrivetrain;
     public final PathConstraints pathConstraints = new PathConstraints(
         2, 
         2, 
@@ -36,16 +35,15 @@ public class DriveToPoseCommand extends Command{
     PoseEstimatorSubsystem mPoseEstimatorSubsystem;
 
     public DriveToPoseCommand(Pose2d targetPose) {
-        this.mDrivetrain = CommandSwerveDrivetrain.getInstance();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
-                mDrivetrain::getPose,   // Supplier of current robot pose
-                mDrivetrain::resetPose,         // Consumer for seeding pose against auto
-                mDrivetrain::getRobotRelvativeSpeeds, // Supplier of current robot speeds
+                CommandSwerveDrivetrain.getInstance()::getPose,   // Supplier of current robot pose
+                CommandSwerveDrivetrain.getInstance()::resetPose,         // Consumer for seeding pose against auto
+                CommandSwerveDrivetrain.getInstance()::getRobotRelvativeSpeeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> mDrivetrain.setControl(
-                    mDrivetrain.m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                (speeds, feedforwards) -> CommandSwerveDrivetrain.getInstance().setControl(
+                    CommandSwerveDrivetrain.getInstance().m_pathApplyRobotSpeeds.withSpeeds(speeds)
                         .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                         .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 ),
@@ -58,7 +56,7 @@ public class DriveToPoseCommand extends Command{
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                mDrivetrain // Subsystem for requirements
+                CommandSwerveDrivetrain.getInstance() // Subsystem for requirements
             );
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
@@ -66,7 +64,7 @@ public class DriveToPoseCommand extends Command{
 
         this.mPoseEstimatorSubsystem = PoseEstimatorSubsystem.getInstance();
         this.targetPose = targetPose;
-        addRequirements(mDrivetrain, mPoseEstimatorSubsystem);
+        addRequirements(mPoseEstimatorSubsystem);
     }
 
     @Override
@@ -89,7 +87,7 @@ public class DriveToPoseCommand extends Command{
                 new GoalEndState(0, targetPose.getRotation())
             );
             path.preventFlipping = true;
-            followPathCommand = AutoBuilder.followPath(path).andThen(() -> mDrivetrain.stopSwerve());
+            followPathCommand = AutoBuilder.followPath(path);
         } else {
             followPathCommand = Commands.none();
         }
