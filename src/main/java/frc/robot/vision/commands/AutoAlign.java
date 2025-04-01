@@ -15,6 +15,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,16 +40,16 @@ public class AutoAlign extends Command {
   private static final Distance TRANSLATION_TOLERANCE = Inches.of(0.5);
   private static final Angle THETA_TOLERANCE = Degrees.of(1.0);
 
-  protected static final TrapezoidProfile.Constraints DEFAULT_XY_CONSTRAINTS = new TrapezoidProfile.Constraints(
-      MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond),
-      MAX_ALIGN_TRANSLATION_ACCELERATION.in(MetersPerSecondPerSecond));
-  protected static final TrapezoidProfile.Constraints DEFAULT_OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
-      MAX_ALIGN_ANGULAR_VELOCITY.in(RadiansPerSecond),
-      MAX_ALIGN_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond));
+//   protected static final TrapezoidProfile.Constraints DEFAULT_XY_CONSTRAINTS = new TrapezoidProfile.Constraints(
+//       MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond),
+//       MAX_ALIGN_TRANSLATION_ACCELERATION.in(MetersPerSecondPerSecond));
+//   protected static final TrapezoidProfile.Constraints DEFAULT_OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
+//       MAX_ALIGN_ANGULAR_VELOCITY.in(RadiansPerSecond),
+//       MAX_ALIGN_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond));
 
-  private final ProfiledPIDController xController;
-  private final ProfiledPIDController yController;
-  private final ProfiledPIDController thetaController;
+  private final PIDController xController;
+  private final PIDController yController;
+  private final PIDController thetaController;
   double xSpeed;
   double ySpeed;
   double omegaSpeed;
@@ -66,7 +68,7 @@ public class AutoAlign extends Command {
    * @param goalPose goal pose to drive to
    */
   public AutoAlign(Pose2d targetPose) {
-    this(drivetrainSubsystem, poseProvider, DEFAULT_XY_CONSTRAINTS, DEFAULT_OMEGA_CONSTRAINTS);
+    this(drivetrainSubsystem, poseProvider);
     setGoal(targetPose);
   }
 
@@ -80,20 +82,18 @@ public class AutoAlign extends Command {
    */
   public AutoAlign(
       CommandSwerveDrivetrain drivetrainSubsystem,
-      Supplier<Pose2d> poseProvider,
-      TrapezoidProfile.Constraints translationConstraints,
-      TrapezoidProfile.Constraints omegaConstraints) {
+      Supplier<Pose2d> poseProvider) {
 
     // this.drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
     // this.poseProvider = () -> PoseEstimatorSubsystem.getInstance().getCurrentPose();
 
-    xController = new ProfiledPIDController(X_kP, X_kI, X_kD, translationConstraints);
+    xController = new ProfiledPIDController(X_kP, X_kI, X_kD);
     xController.setTolerance(TRANSLATION_TOLERANCE.in(Meters));
 
-    yController = new ProfiledPIDController(Y_kP, Y_kI, Y_kD, translationConstraints);
+    yController = new ProfiledPIDController(Y_kP, Y_kI, Y_kD);
     yController.setTolerance(TRANSLATION_TOLERANCE.in(Meters));
 
-    thetaController = new ProfiledPIDController(THETA_kP, THETA_kI, THETA_kD, omegaConstraints);
+    thetaController = new ProfiledPIDController(THETA_kP, THETA_kI, THETA_kD);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(THETA_TOLERANCE.in(Radians));
 
@@ -106,17 +106,17 @@ public class AutoAlign extends Command {
    * @param goalPose goal pose
    */
   public void setGoal(Pose2d goalPose) {
-    thetaController.setGoal(goalPose.getRotation().getRadians());
-    xController.setGoal(goalPose.getX());
-    yController.setGoal(goalPose.getY());
+    thetaController.setSetpoint(goalPose.getRotation().getRadians());
+    xController.setSetpoint(goalPose.getX());
+    yController.setSetpoint(goalPose.getY());
   }
 
   @Override
   public void initialize() {
     var robotPose = poseProvider.get();
-    thetaController.reset(robotPose.getRotation().getRadians());
-    xController.reset(robotPose.getX());
-    yController.reset(robotPose.getY());
+    thetaController.reset();
+    xController.reset();
+    yController.reset();
   }
 
   @Override
@@ -124,17 +124,17 @@ public class AutoAlign extends Command {
     var robotPose = poseProvider.get();
 
     xSpeed = xController.calculate(robotPose.getX());
-    if (xController.atGoal()) {
+    if (xController.atSetpoint()) {
       xSpeed = 0;
     }
 
     ySpeed = yController.calculate(robotPose.getY());
-    if (yController.atGoal()) {
+    if (yController.atSetpoint()) {
       ySpeed = 0;
     }
 
     omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
-    if (thetaController.atGoal()) {
+    if (thetaController.atSetpoint()) {
       omegaSpeed = 0;
     }
 
@@ -149,7 +149,7 @@ public class AutoAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
+    return xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint();
   }
 
   @Override
@@ -164,6 +164,6 @@ public class AutoAlign extends Command {
     Rotation2d angle = translation.getAngle();
     magnitude = Math.min(magnitude, MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond));
     return new ChassisSpeeds(magnitude * angle.getCos(), magnitude * angle.getSin(), speeds.omegaRadiansPerSecond);
-}
+  }
 
 }
