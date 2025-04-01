@@ -65,7 +65,7 @@ public class AutoAlign extends Command {
   public AutoAlign(Pose2d targetPose) {
     this(drivetrainSubsystem, poseProvider);
     this.goalPose2d = targetPose;
-    setGoal(targetPose);
+    // setGoal(targetPose);
   }
 
   /**
@@ -123,7 +123,6 @@ public class AutoAlign extends Command {
 
   @Override
   public void execute() {
-    SmartDashboard.putString("Goal Pose", this.goalPose2d.toString());
     var robotPose = poseProvider.get();
 
     xSpeed = xController.calculate(robotPose.getX(), this.goalPose2d.getX());
@@ -151,13 +150,24 @@ public class AutoAlign extends Command {
     drivetrainSubsystem.setControl(applyFieldSpeeds.withSpeeds(speeds));
     // drivetrainSubsystem.setControl(
     //     fieldCentricSwerveRequest.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
+    SmartDashboard.putNumber("Goal Pose X", this.goalPose2d.getX());
+    SmartDashboard.putNumber("Goal Pose Y", this.goalPose2d.getY());
+    SmartDashboard.putNumber("Goal Pose Theta", this.goalPose2d.getRotation().getRadians());
+    SmartDashboard.putNumber("Current Robot Pose X", robotPose.getX());
+    SmartDashboard.putNumber("Current Robot Pose Y", robotPose.getY());
+    SmartDashboard.putNumber("Current Robot Pose Theta", robotPose.getRotation().getRadians());
     SmartDashboard.putNumber("X Setpoint", xController.getSetpoint());
     SmartDashboard.putNumber("Y Setpoint", yController.getSetpoint());
     SmartDashboard.putNumber("Theta Setpoint", thetaController.getSetpoint());
+    SmartDashboard.putNumber("X Output", xController.calculate(robotPose.getX()));
+    SmartDashboard.putNumber("Y Output", yController.calculate(robotPose.getY()));
+    SmartDashboard.putNumber("Theta Output", thetaController.calculate(robotPose.getRotation().getRadians()));
     SmartDashboard.putNumber("X Error", xController.getError());
     SmartDashboard.putNumber("Y Error", yController.getError());
     SmartDashboard.putNumber("Theta Error", thetaController.getError());
-    SmartDashboard.putString("Current Robot Position", robotPose.toString());
+    SmartDashboard.putBoolean("X at Setpoint", xController.atSetpoint());
+    SmartDashboard.putBoolean("Y at Setpoint", yController.atSetpoint());
+    SmartDashboard.putBoolean("Theta at Setpoint", thetaController.atSetpoint());
   }
 
   @Override
