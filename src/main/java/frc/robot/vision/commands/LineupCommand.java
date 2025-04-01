@@ -50,15 +50,15 @@ public class LineupCommand extends Command {
 
 
     private static final ProfiledPIDController xDistanceController = new ProfiledPIDController(
-                                        VisionConfig.AlignmentConfig.X_kP,
-                                        VisionConfig.AlignmentConfig.X_kI,
-                                        VisionConfig.AlignmentConfig.X_kD,
+                                        VisionConfig.AlignmentConfig.XY_kP,
+                                        VisionConfig.AlignmentConfig.XY_kI,
+                                        VisionConfig.AlignmentConfig.XY_kD,
                                         TRANSLATION_CONSTRAINTS);
 
     private static final ProfiledPIDController yDistanceController = new ProfiledPIDController(
-                                        VisionConfig.AlignmentConfig.Y_kP,
-                                        VisionConfig.AlignmentConfig.Y_kI,
-                                        VisionConfig.AlignmentConfig.Y_kD,
+                                        VisionConfig.AlignmentConfig.XY_kP,
+                                        VisionConfig.AlignmentConfig.XY_kI,
+                                        VisionConfig.AlignmentConfig.XY_kD,
                                         TRANSLATION_CONSTRAINTS);
 
     private static final ProfiledPIDController thetaController = new ProfiledPIDController(
