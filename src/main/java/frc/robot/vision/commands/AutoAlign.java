@@ -4,25 +4,15 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 import static frc.robot.vision.VisionConfig.AlignmentConfig.*;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
-import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -82,7 +72,7 @@ public class AutoAlign extends Command {
    */
   public AutoAlign(
       CommandSwerveDrivetrain drivetrainSubsystem,
-      Supplier<Pose2d> poseProvider) {
+      Supplier<Pose2d> goalPose) {
 
     // this.drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
     // this.poseProvider = () -> PoseEstimatorSubsystem.getInstance().getCurrentPose();
@@ -111,12 +101,20 @@ public class AutoAlign extends Command {
     yController.setSetpoint(goalPose.getY());
   }
 
+  private ChassisSpeeds applyLimits(ChassisSpeeds speeds){
+    Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    double magnitude = translation.getNorm();
+    if (magnitude < .07) return new ChassisSpeeds(0,0, speeds.omegaRadiansPerSecond);
+    Rotation2d angle = translation.getAngle();
+    magnitude = Math.min(magnitude, MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond));
+    return new ChassisSpeeds(magnitude * angle.getCos(), magnitude * angle.getSin(), speeds.omegaRadiansPerSecond);
+  }
+
   @Override
   public void initialize() {
-    var robotPose = poseProvider.get();
-    thetaController.reset();
     xController.reset();
     yController.reset();
+    thetaController.reset();
   }
 
   @Override
@@ -138,10 +136,12 @@ public class AutoAlign extends Command {
       omegaSpeed = 0;
     }
 
+    ChassisSpeeds speeds = applyLimits(new ChassisSpeeds(xSpeed, ySpeed, omegaSpeed));
+
     CommandSwerveDrivetrain.getInstance().applyRequest( () -> 
-        RobotContainer.drive.withVelocityX(xSpeed)
-            .withVelocityY(ySpeed)
-            .withRotationalRate(omegaSpeed)
+        RobotContainer.drive.withVelocityX(speeds.vxMetersPerSecond)
+            .withVelocityY(speeds.vyMetersPerSecond)
+            .withRotationalRate(speeds.omegaRadiansPerSecond)
     ).execute();
     // drivetrainSubsystem.setControl(
     //     fieldCentricSwerveRequest.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
@@ -156,14 +156,4 @@ public class AutoAlign extends Command {
   public void end(boolean interrupted) {
     drivetrainSubsystem.setControl(new SwerveRequest.Idle());
   }
-
-  private ChassisSpeeds applyLimits(ChassisSpeeds speeds){
-    Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-    double magnitude = translation.getNorm();
-    if (magnitude < .07) return new ChassisSpeeds(0,0, speeds.omegaRadiansPerSecond);
-    Rotation2d angle = translation.getAngle();
-    magnitude = Math.min(magnitude, MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond));
-    return new ChassisSpeeds(magnitude * angle.getCos(), magnitude * angle.getSin(), speeds.omegaRadiansPerSecond);
-  }
-
 }
