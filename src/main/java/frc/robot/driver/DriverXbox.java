@@ -169,9 +169,9 @@ public class DriverXbox extends XboxGamepad {
         controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileTrue(
             new SetRollersVoltage(0.0)
         );
-        controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileFalse(
-            new SetElevatorState(ElevatorSubsystem.State.kCoralL4)
-        );
+        // controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileFalse(
+        //     new SetElevatorState(ElevatorSubsystem.State.kCoralL4)
+        // );
 
         // controller.y().whileTrue(new ConditionalCommand(
         //     RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScore, RushinatorWrist.State.kScoreRightWrist), 
@@ -216,8 +216,8 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
 
-        controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
-        controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
+        // controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+        // controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
         
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(

@@ -31,7 +31,20 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ZeroAlgae",
+      "waypointRelativePos": 0.22985611510791487,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "AlgaeBargePrime",
+      "waypointRelativePos": 0.9205035971223003,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,

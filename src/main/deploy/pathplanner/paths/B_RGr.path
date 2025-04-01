@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.110869565217391,
-        "y": 3.900271739130435
+        "x": 3.0810000000000004,
+        "y": 3.771499999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5019021739130434,
-        "y": 3.8709239130434785
+        "x": 2.4720326086956526,
+        "y": 3.7421521739130426
       },
       "isLocked": false,
       "linkedName": "B"
     },
     {
       "anchor": {
-        "x": 1.7461956521739128,
-        "y": 2.5649456521739125
+        "x": 1.8232499999999998,
+        "y": 2.7379999999999995
       },
       "prevControl": {
-        "x": 2.3845108695652173,
-        "y": 2.9024456521739137
+        "x": 2.4615652173913043,
+        "y": 3.075500000000001
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Lolipop",
+      "name": "LolipopLeft",
       "waypointRelativePos": 0.39052350019105836,
       "endWaypointRelativePos": null,
       "command": null

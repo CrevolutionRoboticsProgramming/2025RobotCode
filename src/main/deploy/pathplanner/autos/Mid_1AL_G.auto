@@ -23,15 +23,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AlgaeIntakeL2"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "GH-Algae_Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreAlgaeBarge"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Mid",
+  "folder": null,
   "choreoAuto": false
 }

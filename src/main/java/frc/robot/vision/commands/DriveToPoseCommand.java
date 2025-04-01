@@ -33,34 +33,36 @@ public class DriveToPoseCommand extends Command{
         Units.degreesToRadians(360), 
         Units.degreesToRadians(360));
     PoseEstimatorSubsystem mPoseEstimatorSubsystem;
-
+    private Timer mTimer;
     public DriveToPoseCommand(Pose2d targetPose) {
-        try {
-            var config = RobotConfig.fromGUISettings();
-            AutoBuilder.configure(
-                CommandSwerveDrivetrain.getInstance()::getPose,   // Supplier of current robot pose
-                CommandSwerveDrivetrain.getInstance()::resetPose,         // Consumer for seeding pose against auto
-                CommandSwerveDrivetrain.getInstance()::getRobotRelvativeSpeeds, // Supplier of current robot speeds
-                // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> CommandSwerveDrivetrain.getInstance().setControl(
-                    CommandSwerveDrivetrain.getInstance().m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-                ),
-                new PPHolonomicDriveController(
-                    // PID constants for translation
-                    new PIDConstants(.025, 0.0, 0.0),
-                    // PID constants for rotation
-                    new PIDConstants(.02, 0, 0.05)
-                ),
-                config,
-                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                CommandSwerveDrivetrain.getInstance() // Subsystem for requirements
-            );
-        } catch (Exception ex) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
-        }
+        // try {
+        //     var config = RobotConfig.fromGUISettings();
+        //     AutoBuilder.configure(
+        //         CommandSwerveDrivetrain.getInstance()::getPose,   // Supplier of current robot pose
+        //         CommandSwerveDrivetrain.getInstance()::resetPose,         // Consumer for seeding pose against auto
+        //         CommandSwerveDrivetrain.getInstance()::getRobotRelvativeSpeeds, // Supplier of current robot speeds
+        //         // Consumer of ChassisSpeeds and feedforwards to drive the robot
+        //         (speeds, feedforwards) -> CommandSwerveDrivetrain.getInstance().setControl(
+        //             CommandSwerveDrivetrain.getInstance().m_pathApplyRobotSpeeds.withSpeeds(speeds)
+        //                 .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+        //                 .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+        //         ),
+        //         new PPHolonomicDriveController(
+        //             // PID constants for translation
+        //             new PIDConstants(.025, 0.0, 0.0),
+        //             // PID constants for rotation
+        //             new PIDConstants(.02, 0, 0.05)
+        //         ),
+        //         config,
+        //         // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+        //         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        //         CommandSwerveDrivetrain.getInstance() // Subsystem for requirements
+        //     );
+        // } catch (Exception ex) {
+        //     DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        // }
+
+        mTimer = new Timer();
 
         this.mPoseEstimatorSubsystem = PoseEstimatorSubsystem.getInstance();
         this.targetPose = targetPose;
@@ -104,11 +106,12 @@ public class DriveToPoseCommand extends Command{
     @Override
     public void execute(){
         followPathCommand.execute();
+        mTimer.start();
     }
     
     @Override
     public boolean isFinished() {
-        return followPathCommand.isFinished();
+        return followPathCommand.isFinished() || mTimer.get() > 2;
     }
     
     @Override

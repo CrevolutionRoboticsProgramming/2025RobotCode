@@ -72,8 +72,8 @@ public class OperatorXbox extends XboxGamepad {
         controller.leftBumper().and(leftTriggerOnly()).whileTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kReefIntake));
 
         // Jogging the ELevator Up and Down
-        controller.povUp().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() + 5.0));
-        controller.povDown().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0));
+        // controller.povUp().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() + 5.0));
+        // controller.povDown().whileTrue(new ElevatorSubsystem.applyJog(ElevatorSubsystem.getInstance().getPosition() - 3.0));
 
         // Algae (Elevator) Barge Shot 
         controller.leftBumper().onTrue(new SetElevatorState(ElevatorSubsystem.State.kCoralL4));
@@ -92,12 +92,18 @@ public class OperatorXbox extends XboxGamepad {
         controller.rightBumper().whileTrue(new AlgaeRoller.ShootCommand());
 
         // ADjusting Coral ORinetaiton
-        controller.povLeft().onTrue(
-            new SetWristState(RushinatorWrist.State.kTravelLeft)
+        controller.povLeft().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            new SetWristState(RushinatorWrist.State.kTravelL4Left), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight
+            )
         );
 
-        controller.povRight().onTrue(
-            new SetWristState(RushinatorWrist.State.kTravelRight)
+        controller.povRight().onTrue(new ConditionalCommand(
+            new SetWristState(RushinatorWrist.State.kTravelRight), 
+            new SetWristState(RushinatorWrist.State.kTravelL4Right), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight
+            )
         );
 
         // controller.povDown().whileTrue(RobotCommands.coralPrime(
@@ -108,8 +114,8 @@ public class OperatorXbox extends XboxGamepad {
         // );
         // controller.povDown().whileTrue(new SetRollersVoltage(4.5));
 
-        // controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
-        // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
+        controller.povUp().onTrue(RobotCommands.scoreCoralAutonL4());
+        controller.povDown().onTrue(RobotCommands.autoHPPickUp());
 
         // controller.povUp().and(leftTriggerOnly()).onTrue(new SetAngleAlgaePivot(AlgaeSubsystem.State.kClimb));
         // controller.povUp().and(leftTriggerOnly()).onTrue(new SetArmState(RushinatorPivot.State.kClimb));

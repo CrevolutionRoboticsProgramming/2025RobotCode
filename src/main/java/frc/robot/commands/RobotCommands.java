@@ -103,11 +103,11 @@ public class RobotCommands {
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(1.2)
+                new WaitCommand(0.7)
             ),
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
-                new SetArmState(RushinatorPivot.State.kScoreL4),
+                new SetArmState(RushinatorPivot.State.kScoreL4Auton),
                 new SetWristState(RushinatorWrist.State.kScoreL4RightWrist),
                 new WaitCommand(0.35)
             ),
@@ -115,7 +115,7 @@ public class RobotCommands {
                 new SetArmState(RushinatorPivot.State.kStowTravel),
                 new SetWristState(RushinatorWrist.State.kTravelRight),
                 new SetElevatorState(ElevatorSubsystem.State.kZero),
-                new WaitCommand(1.1)
+                new WaitCommand(0.7)
             )
         );
     }

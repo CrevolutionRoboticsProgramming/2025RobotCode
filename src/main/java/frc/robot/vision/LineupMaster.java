@@ -56,7 +56,7 @@ public class LineupMaster {
     }
 
     public Command directDriveToPose(Pose2d targetPose) {
-        return new AutoAlign(targetPose);
+        return new DriveToPoseCommand(targetPose);
     }
 
     public Command directDriveToNearestLeftBranch() {

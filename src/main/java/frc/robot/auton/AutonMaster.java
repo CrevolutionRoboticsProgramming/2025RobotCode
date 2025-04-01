@@ -24,6 +24,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.algaeflywheel.AlgaeRoller;
+import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.commands.RobotCommands;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
@@ -82,7 +86,10 @@ public class AutonMaster {
         autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("Left_3.5_IKL"));
         autonChooser.addOption("MidStart1PieceCoral", AutoBuilder.buildAuto("Mid_1AL_G"));
         autonChooser.addOption("RightMoveSomeone", AutoBuilder.buildAuto("Right_Move_Someone"));
-
+        autonChooser.addOption("RightStartRightLoli3.5Piece", AutoBuilder.buildAuto("Right_3.5_CBA_Ground"));
+        autonChooser.addOption("LeftStartLeftLoli3.5Piece", AutoBuilder.buildAuto("Left_3.5_LAB_Ground"));
+        autonChooser.addOption("MidLeftStartLeftLoli3.5Piece", AutoBuilder.buildAuto("Mid_3.5_GAB_Ground"));
+        autonChooser.addOption("MidRightStartLeftLoli3.5Piece", AutoBuilder.buildAuto("Mid_3.5_GBA_Ground"));
     }
     
 
@@ -101,6 +108,21 @@ public class AutonMaster {
         NamedCommands.registerCommand("HPPickup", RobotCommands.autoHPPickUp());
         NamedCommands.registerCommand("StopRollers", new SetRollersVoltage(0.0));
         NamedCommands.registerCommand("PreHPPickUp", new ParallelCommandGroup(new SetWristState(RushinatorWrist.State.kHPMid), new SetArmState(RushinatorPivot.State.kHPIntake), new SetRollersVoltage(4.5)));
+        NamedCommands.registerCommand("LolipopRight", new ParallelRaceGroup(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kLoliPop, RushinatorWrist.State.kLoliLeft),
+            new WaitCommand(1.0)));
+        NamedCommands.registerCommand("LolipopLeft", new ParallelRaceGroup(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kLoliPop, RushinatorWrist.State.kLoliRight),
+            new WaitCommand(1.0)));
+        NamedCommands.registerCommand("AlgaeIntakeL2", new ParallelCommandGroup(
+            RobotCommands.algaePrime(AlgaeSubsystem.State.kReefIntake, ElevatorSubsystem.State.kAlgaeL2),
+            new AlgaeRoller.IntakeCommand()
+        ));
+        NamedCommands.registerCommand("ZeroAlgae", RobotCommands.algaePrime(AlgaeSubsystem.State.kStow, ElevatorSubsystem.State.kAlgaeL2));
+        NamedCommands.registerCommand("AlgaeBargePrime", new ParallelCommandGroup(
+            RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kCoralL4),
+            new AlgaeRoller.PrimeCommand()));
+        NamedCommands.registerCommand("ScoreAlgaeBarge", new AlgaeRoller.ShootCommand());
     }
 
     public Command getTestPathFindingCommand() {

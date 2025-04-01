@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.9222826086956522,
-        "y": 4.032336956521739
+        "x": 2.03775,
+        "y": 3.771499999999999
       },
       "prevControl": {
-        "x": 2.5312499999999996,
-        "y": 4.091032608695652
+        "x": 2.6467173913043474,
+        "y": 3.8301956521739124
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,8 +38,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Lolipop",
-      "waypointRelativePos": 0.39052350019105836,
+      "name": "LolipopLeft",
+      "waypointRelativePos": 0.18812949640287852,
       "endWaypointRelativePos": null,
       "command": null
     }
