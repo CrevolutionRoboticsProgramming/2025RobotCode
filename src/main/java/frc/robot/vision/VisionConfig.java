@@ -99,17 +99,15 @@ public class VisionConfig {
 
 
     public static class AlignmentConfig {
-        public static final double THETA_kP = 3.0;
+
+        //Starting with same PID values as Auton
+        public static final double XY_kP = 10.0;
+        public static final double XY_kI = 0.0;
+        public static final double XY_kD = 0.0;
+    
+        public static final double THETA_kP = 6.5;
         public static final double THETA_kI = 0.0;
-        public static final double THETA_kD = 0.0;
-    
-        public static final double X_kP = 5.0;
-        public static final double X_kI = 0.0;
-        public static final double X_kD = 0.0;
-    
-        public static final double Y_kP = 5.0;
-        public static final double Y_kI = 0.0;
-        public static final double Y_kD = 0.0;
+        public static final double THETA_kD = 0.05;    
         
         public static final Distance DISTANCE_TOLERANCE = Inches.of(0.5);
         public static final Distance LATERAL_TOLERANCE = Inches.of(1.0);

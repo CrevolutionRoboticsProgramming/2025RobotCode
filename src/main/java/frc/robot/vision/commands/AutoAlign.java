@@ -16,8 +16,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.vision.PoseEstimatorSubsystem;
 
@@ -64,7 +64,8 @@ public class AutoAlign extends Command {
    */
   public AutoAlign(Pose2d targetPose) {
     this(drivetrainSubsystem, poseProvider);
-    setGoal(targetPose);
+    this.goalPose2d = targetPose;
+    // setGoal(targetPose);
   }
 
   /**
@@ -72,27 +73,23 @@ public class AutoAlign extends Command {
    * 
    * @param drivetrainSubsystem drivetrain subsystem
    * @param poseProvider provider to call to get the robot pose
-   * @param translationConstraints translation motion profile constraints
-   * @param omegaConstraints rotation motion profile constraints
    */
   public AutoAlign(
       CommandSwerveDrivetrain drivetrainSubsystem,
-      Supplier<Pose2d> goalPose) {
+      Supplier<Pose2d> poseProvider) {
 
     // this.drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
     // this.poseProvider = () -> PoseEstimatorSubsystem.getInstance().getCurrentPose();
 
-    xController = new PIDController(X_kP, X_kI, X_kD);
+    xController = new PIDController(XY_kP, XY_kI, XY_kD);
     xController.setTolerance(TRANSLATION_TOLERANCE.in(Meters));
 
-    yController = new PIDController(Y_kP, Y_kI, Y_kD);
+    yController = new PIDController(XY_kP, XY_kI, XY_kD);
     yController.setTolerance(TRANSLATION_TOLERANCE.in(Meters));
 
     thetaController = new PIDController(THETA_kP, THETA_kI, THETA_kD);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(THETA_TOLERANCE.in(Radians));
-
-    this.goalPose2d = goalPose.get();
 
     addRequirements(drivetrainSubsystem);
   }
@@ -153,6 +150,24 @@ public class AutoAlign extends Command {
     drivetrainSubsystem.setControl(applyFieldSpeeds.withSpeeds(speeds));
     // drivetrainSubsystem.setControl(
     //     fieldCentricSwerveRequest.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
+    SmartDashboard.putNumber("Goal Pose X", this.goalPose2d.getX());
+    SmartDashboard.putNumber("Goal Pose Y", this.goalPose2d.getY());
+    SmartDashboard.putNumber("Goal Pose Theta", this.goalPose2d.getRotation().getRadians());
+    SmartDashboard.putNumber("Current Robot Pose X", robotPose.getX());
+    SmartDashboard.putNumber("Current Robot Pose Y", robotPose.getY());
+    SmartDashboard.putNumber("Current Robot Pose Theta", robotPose.getRotation().getRadians());
+    SmartDashboard.putNumber("X Setpoint", xController.getSetpoint());
+    SmartDashboard.putNumber("Y Setpoint", yController.getSetpoint());
+    SmartDashboard.putNumber("Theta Setpoint", thetaController.getSetpoint());
+    SmartDashboard.putNumber("X Output", xController.calculate(robotPose.getX()));
+    SmartDashboard.putNumber("Y Output", yController.calculate(robotPose.getY()));
+    SmartDashboard.putNumber("Theta Output", thetaController.calculate(robotPose.getRotation().getRadians()));
+    SmartDashboard.putNumber("X Error", xController.getError());
+    SmartDashboard.putNumber("Y Error", yController.getError());
+    SmartDashboard.putNumber("Theta Error", thetaController.getError());
+    SmartDashboard.putBoolean("X at Setpoint", xController.atSetpoint());
+    SmartDashboard.putBoolean("Y at Setpoint", yController.atSetpoint());
+    SmartDashboard.putBoolean("Theta at Setpoint", thetaController.atSetpoint());
   }
 
   @Override
