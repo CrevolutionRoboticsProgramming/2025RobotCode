@@ -48,6 +48,9 @@ public class AutoAlign extends Command {
   private final ProfiledPIDController xController;
   private final ProfiledPIDController yController;
   private final ProfiledPIDController thetaController;
+  double xSpeed;
+  double ySpeed;
+  double omegaSpeed;
 
   private final static CommandSwerveDrivetrain drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
 //   private final FieldCentric fieldCentricSwerveRequest = new FieldCentric()
@@ -120,17 +123,17 @@ public class AutoAlign extends Command {
   public void execute() {
     var robotPose = poseProvider.get();
 
-    var xSpeed = xController.calculate(robotPose.getX());
+    xSpeed = xController.calculate(robotPose.getX());
     if (xController.atGoal()) {
       xSpeed = 0;
     }
 
-    var ySpeed = yController.calculate(robotPose.getY());
+    ySpeed = yController.calculate(robotPose.getY());
     if (yController.atGoal()) {
       ySpeed = 0;
     }
 
-    var omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
+    omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
     if (thetaController.atGoal()) {
       omegaSpeed = 0;
     }
