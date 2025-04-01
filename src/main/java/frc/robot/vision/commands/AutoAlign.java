@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.vision.VisionConfig.AlignmentConfig.*;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -53,6 +54,8 @@ public class AutoAlign extends Command {
 
   private Pose2d goalPose2d;
 
+  private final SwerveRequest.ApplyFieldSpeeds applyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds()
+            .withDriveRequestType(SwerveModule.DriveRequestType.Velocity);
   /**
    * Constructs a DriveToPoseCommand
    * 
@@ -142,11 +145,12 @@ public class AutoAlign extends Command {
 
     ChassisSpeeds speeds = applyLimits(new ChassisSpeeds(xSpeed, ySpeed, omegaSpeed));
 
-    CommandSwerveDrivetrain.getInstance().applyRequest( () -> 
-        RobotContainer.drive.withVelocityX(speeds.vxMetersPerSecond)
-            .withVelocityY(speeds.vyMetersPerSecond)
-            .withRotationalRate(speeds.omegaRadiansPerSecond)
-    ).execute();
+    // CommandSwerveDrivetrain.getInstance().applyRequest( () -> 
+    //     RobotContainer.drive.withVelocityX(speeds.vxMetersPerSecond)
+    //         .withVelocityY(speeds.vyMetersPerSecond)
+    //         .withRotationalRate(speeds.omegaRadiansPerSecond)
+    // ).execute();
+    drivetrainSubsystem.setControl(applyFieldSpeeds.withSpeeds(speeds));
     // drivetrainSubsystem.setControl(
     //     fieldCentricSwerveRequest.withVelocityX(xSpeed).withVelocityY(ySpeed).withRotationalRate(omegaSpeed));
   }
