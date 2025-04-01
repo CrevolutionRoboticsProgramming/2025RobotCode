@@ -216,8 +216,8 @@ public class DriverXbox extends XboxGamepad {
         controller.leftTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeIntake));
 
 
-        // controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
-        // controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
+        controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+        controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
         
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
