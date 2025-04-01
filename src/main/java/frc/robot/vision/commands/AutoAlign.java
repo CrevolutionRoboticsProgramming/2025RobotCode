@@ -87,13 +87,13 @@ public class AutoAlign extends Command {
     // this.drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
     // this.poseProvider = () -> PoseEstimatorSubsystem.getInstance().getCurrentPose();
 
-    xController = new ProfiledPIDController(X_kP, X_kI, X_kD);
+    xController = new PIDController(X_kP, X_kI, X_kD);
     xController.setTolerance(TRANSLATION_TOLERANCE.in(Meters));
 
-    yController = new ProfiledPIDController(Y_kP, Y_kI, Y_kD);
+    yController = new PIDController(Y_kP, Y_kI, Y_kD);
     yController.setTolerance(TRANSLATION_TOLERANCE.in(Meters));
 
-    thetaController = new ProfiledPIDController(THETA_kP, THETA_kI, THETA_kD);
+    thetaController = new PIDController(THETA_kP, THETA_kI, THETA_kD);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(THETA_TOLERANCE.in(Radians));
 
