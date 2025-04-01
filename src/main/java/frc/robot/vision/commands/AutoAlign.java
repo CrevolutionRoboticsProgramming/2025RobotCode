@@ -51,6 +51,8 @@ public class AutoAlign extends Command {
 //       .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance); // Always Blue coordinate system for auto drive
   protected final static Supplier<Pose2d> poseProvider = () -> PoseEstimatorSubsystem.getInstance().getCurrentPose();
 
+  private Pose2d goalPose2d;
+
   /**
    * Constructs a DriveToPoseCommand
    * 
@@ -87,6 +89,8 @@ public class AutoAlign extends Command {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(THETA_TOLERANCE.in(Radians));
 
+    this.goalPose2d = goalPose.get();
+
     addRequirements(drivetrainSubsystem);
   }
 
@@ -121,17 +125,17 @@ public class AutoAlign extends Command {
   public void execute() {
     var robotPose = poseProvider.get();
 
-    xSpeed = xController.calculate(robotPose.getX());
+    xSpeed = xController.calculate(robotPose.getX(), this.goalPose2d.getX());
     if (xController.atSetpoint()) {
       xSpeed = 0;
     }
 
-    ySpeed = yController.calculate(robotPose.getY());
+    ySpeed = yController.calculate(robotPose.getY(), this.goalPose2d.getY());
     if (yController.atSetpoint()) {
       ySpeed = 0;
     }
 
-    omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
+    omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians(), this.goalPose2d.getRotation().getRadians());
     if (thetaController.atSetpoint()) {
       omegaSpeed = 0;
     }
