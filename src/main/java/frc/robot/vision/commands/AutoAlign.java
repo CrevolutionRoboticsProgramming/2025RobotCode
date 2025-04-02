@@ -63,8 +63,9 @@ public class AutoAlign extends Command {
   double xSpeed;
   double ySpeed;
   double omegaSpeed;
-  Supplier<ReefFace> nearestReefFace;
-  boolean isLeftAlign;
+
+  boolean isLeftAlign = false;
+  ReefFace nearestReefFace = null;
 
   private final static CommandSwerveDrivetrain drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
 //   private final FieldCentric fieldCentricSwerveRequest = new FieldCentric()
@@ -83,22 +84,15 @@ public class AutoAlign extends Command {
    * @param drivetrainSubsystem drivetrain subsystem
    * @param goalPose goal pose to drive to
    */
-  public AutoAlign(Supplier<Pose2d> targetPose, Supplier<ReefFace> nearestReefFace, boolean isLeftAlign) {
+  public AutoAlign(Supplier<Pose2d> targetPose, Supplier<ReefFace> nearestReefFace, Supplier<Boolean> isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
     this.goalPose2d = targetPose.get();
-    this.nearestReefFace = nearestReefFace;
-    this.isLeftAlign = isLeftAlign;
-    
+    this.isLeftAlign = isLeftAlign.get();
+    this.nearestReefFace = nearestReefFace.get();
     //we are getting ATag Pose
     //firstly if elevator is L4, update the AprilTag X, Y
       //need to do - transform for left or right wrist
     //else
-      //need to do - transform for left or right wrist
-
-
-
-    goalPose2d = Conversions.rotatePose(goalPose2d.transformBy(robotOffset), Rotation2d.kZero);
-    
   }
 
   public static ReefFace updateReefFace(ReefFace oldReefFace) {
@@ -211,6 +205,67 @@ public class AutoAlign extends Command {
 
   @Override
   public void execute() {
+       //need to do - transform for left or right wrist
+      boolean isRightWrist = (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight) ||
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right) ||
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist) || 
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist) || 
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist) || 
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid) ||
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid) ||
+       (RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid);
+      boolean isElevatorL4 = (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4) || 
+                      (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4AutonScore) || 
+                      (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralScoreL4);
+
+      SmartDashboard.putBoolean("isRightWrist - AutoAlign", isRightWrist);
+      SmartDashboard.putBoolean("isElevatorL4 - AutoAlign", isElevatorL4);
+      SmartDashboard.putString("elevator kLastState - AutoAlign", ElevatorSubsystem.kLastState.name());
+      SmartDashboard.putString("alliance - AutoAlign", DriverStation.getAlliance().toString());
+      SmartDashboard.putBoolean("requesting lineup left branch - AutoAlign", isLeftAlign);
+      SmartDashboard.putString("nearest ReefFace accessed - AutoAlign", nearestReefFace.name());
+      if(isElevatorL4 == true) {
+      System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
+      ReefFace newReefFace = updateReefFace(nearestReefFace);
+      SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
+      goalPose2d = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
+      if(isRightWrist) {
+        if(isLeftAlign) {
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
+        }
+        else {
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
+        }
+      }
+      else {
+        if(isLeftAlign) {
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
+        }
+        else {
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
+        }
+      }
+      }
+      else {
+      if(isRightWrist) {
+       if(isLeftAlign) {
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
+        }
+        else {
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
+        }
+      }
+      else {
+        if(isLeftAlign) {
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
+          }
+          else {
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
+          }
+        }
+      }
+
+    goalPose2d = Conversions.rotatePose(goalPose2d.transformBy(robotOffset), Rotation2d.kZero);
     var robotPose = poseProvider.get();
 
     boolean isRightWrist = (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight) ||
