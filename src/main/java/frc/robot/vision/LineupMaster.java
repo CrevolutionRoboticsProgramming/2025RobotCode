@@ -26,7 +26,7 @@ import frc.crevolib.math.Conversions;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.vision.VisionConfig.ReefFace;
 import frc.robot.vision.commands.AutoAlign;
-import frc.robot.vision.commands.DriveToPoseCommand;
+// import frc.robot.vision.commands.DriveToPoseCommand;
 
 public class LineupMaster {
     private static final Map<ReefFace, Command> leftBranchAlignmentCommands = new HashMap<>();
