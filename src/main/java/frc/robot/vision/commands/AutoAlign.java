@@ -267,6 +267,21 @@ public class AutoAlign extends Command {
 
     goalPose2d = Conversions.rotatePose(goalPose2d.transformBy(robotOffset), Rotation2d.kZero);
     var robotPose = poseProvider.get();
+    
+    xSpeed = xController.calculate(robotPose.getX(), this.goalPose2d.getX());
+    if (xController.atSetpoint()) {
+      xSpeed = 0;
+    }
+
+    ySpeed = yController.calculate(robotPose.getY(), this.goalPose2d.getY());
+    if (yController.atSetpoint()) {
+      ySpeed = 0;
+    }
+
+    omegaSpeed = thetaController.calculate(robotPose.getRotation().getRadians(), this.goalPose2d.getRotation().getRadians());
+    if (thetaController.atSetpoint()) {
+      omegaSpeed = 0;
+    }
 
     ChassisSpeeds speeds = applyLimits(new ChassisSpeeds(xSpeed, ySpeed, omegaSpeed));
 
