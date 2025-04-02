@@ -74,7 +74,8 @@ public class LineupMaster {
     }
 
     public Command directDriveToPose(Pose2d targetPose, boolean isLeftAlign) {
-        return new AutoAlign(targetPose, getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()), isLeftAlign);
+        AutoAlign newAutoAlign = new AutoAlign(targetPose, getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()), isLeftAlign);
+        return newAutoAlign;
         // return new DriveToPoseCommand(targetPose);
     }
 

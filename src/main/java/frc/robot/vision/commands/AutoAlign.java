@@ -36,18 +36,18 @@ import java.util.function.Supplier;
  */
 public class AutoAlign extends Command {
 
-  private static final Distance TRANSLATION_TOLERANCE = Inches.of(0.25);
-  private static final Angle THETA_TOLERANCE = Degrees.of(1.0);
+  private final Distance TRANSLATION_TOLERANCE = Inches.of(0.25);
+  private final Angle THETA_TOLERANCE = Degrees.of(1.0);
 
-  private static final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
-  private static final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist, Rotation2d.kZero);
-  private static final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist, Rotation2d.kZero);
+  private final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
+  private final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist, Rotation2d.kZero);
+  private final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist, Rotation2d.kZero);
 
-  private static final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
-  private static final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist , Rotation2d.kZero);
-  private static final Transform2d rightBranchTransformLeftWrist = new Transform2d(0.0, branchOffsetLeftWrist, Rotation2d.kZero);
+  private final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
+  private final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist , Rotation2d.kZero);
+  private final Transform2d rightBranchTransformLeftWrist = new Transform2d(0.0, branchOffsetLeftWrist, Rotation2d.kZero);
 
-  public static final Transform2d robotOffset = new Transform2d(0.3018, 0, Rotation2d.kZero);
+  public final Transform2d robotOffset = new Transform2d(0.3018, 0, Rotation2d.kZero);
 
   
 //   protected static final TrapezoidProfile.Constraints DEFAULT_XY_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -258,6 +258,7 @@ public class AutoAlign extends Command {
     xController.reset();
     yController.reset();
     thetaController.reset();
+
   }
 
   @Override
