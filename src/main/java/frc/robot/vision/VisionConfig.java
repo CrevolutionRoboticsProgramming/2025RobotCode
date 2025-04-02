@@ -121,61 +121,61 @@ public class VisionConfig {
         public static final AngularVelocity MAX_ALIGN_ANGULAR_VELOCITY = RotationsPerSecond.of(1.25).times(0.75);
         public static final AngularAcceleration MAX_ALIGN_ANGULAR_ACCELERATION = RadiansPerSecondPerSecond.of(6.0 * Math.PI);
     
-        //April Tag IDs
-        public static final double id1 = 1;
-        public static final double id2 = 2;
-        public static final double id3 = 3;
-        public static final double id4 = 4;
-        public static final double id5 = 5;
-        public static final double id6 = 6;
-        public static final double id7 = 7;
-        public static final double id8 = 8;
-        public static final double id9 = 9;
-        public static final double id10 = 10;
-        public static final double id11 = 11;
-        public static final double id12 = 12;
-        public static final double id13 = 13;
-        public static final double id14 = 14;
-        public static final double id15 = 15;
-        public static final double id16 = 16;
-        public static final double id17 = 17;
-        public static final double id18 = 18;
-        public static final double id19 = 19;
-        public static final double id20 = 20;
-        public static final double id21 = 21;
-        public static final double id22 = 22;
+        // //April Tag IDs
+        // public static final double id1 = 1;
+        // public static final double id2 = 2;
+        // public static final double id3 = 3;
+        // public static final double id4 = 4;
+        // public static final double id5 = 5;
+        // public static final double id6 = 6;
+        // public static final double id7 = 7;
+        // public static final double id8 = 8;
+        // public static final double id9 = 9;
+        // public static final double id10 = 10;
+        // public static final double id11 = 11;
+        // public static final double id12 = 12;
+        // public static final double id13 = 13;
+        // public static final double id14 = 14;
+        // public static final double id15 = 15;
+        // public static final double id16 = 16;
+        // public static final double id17 = 17;
+        // public static final double id18 = 18;
+        // public static final double id19 = 19;
+        // public static final double id20 = 20;
+        // public static final double id21 = 21;
+        // public static final double id22 = 22;
 
-        //Joey's Pose Constants for the Reef Locations
-        public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
+        // //Joey's Pose Constants for the Reef Locations
+        // public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
 
-        public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0)); 
-        public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
-        public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
-        public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
-        public static final Pose2d Eblue = new Pose2d(5.000, 2.825, Rotation2d.fromDegrees(120));
-        public static final Pose2d Fblue = new Pose2d(5.285, 2.975, Rotation2d.fromDegrees(120));
-        public static final Pose2d Gblue = new Pose2d(5.8, 3.850, Rotation2d.fromDegrees(180));
-        public static final Pose2d Hblue = new Pose2d(5.8, 4.175, Rotation2d.fromDegrees(180));
-        public static final Pose2d Iblue = new Pose2d(5.285, 5.075, Rotation2d.fromDegrees(240));
-        public static final Pose2d Jblue = new Pose2d(5.000, 5.230, Rotation2d.fromDegrees(240));
-        public static final Pose2d Kblue = new Pose2d(3.975, 5.230, Rotation2d.fromDegrees(300));
-        public static final Pose2d Lblue = new Pose2d(3.685, 5.075, Rotation2d.fromDegrees(300));
+        // public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0)); 
+        // public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
+        // public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
+        // public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
+        // public static final Pose2d Eblue = new Pose2d(5.000, 2.825, Rotation2d.fromDegrees(120));
+        // public static final Pose2d Fblue = new Pose2d(5.285, 2.975, Rotation2d.fromDegrees(120));
+        // public static final Pose2d Gblue = new Pose2d(5.8, 3.850, Rotation2d.fromDegrees(180));
+        // public static final Pose2d Hblue = new Pose2d(5.8, 4.175, Rotation2d.fromDegrees(180));
+        // public static final Pose2d Iblue = new Pose2d(5.285, 5.075, Rotation2d.fromDegrees(240));
+        // public static final Pose2d Jblue = new Pose2d(5.000, 5.230, Rotation2d.fromDegrees(240));
+        // public static final Pose2d Kblue = new Pose2d(3.975, 5.230, Rotation2d.fromDegrees(300));
+        // public static final Pose2d Lblue = new Pose2d(3.685, 5.075, Rotation2d.fromDegrees(300));
 
-        public static final double fieldFlip = 17.5;
-        public static final double fieldFlipy = 8;
+        // public static final double fieldFlip = 17.5;
+        // public static final double fieldFlipy = 8;
 
-        public static final Pose2d Ared = new Pose2d(fieldFlip - 3.180, fieldFlipy - 4.175, Rotation2d.fromDegrees(180));
-        public static final Pose2d Bred = new Pose2d(fieldFlip - 3.180, fieldFlipy - 3.850, Rotation2d.fromDegrees(180));
-        public static final Pose2d Cred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 2.975, Rotation2d.fromDegrees(-120));
-        public static final Pose2d Dred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 2.825, Rotation2d.fromDegrees(-120));
-        public static final Pose2d Ered = new Pose2d(fieldFlip - 5.000, fieldFlipy - 2.825, Rotation2d.fromDegrees(-60));
-        public static final Pose2d Fred = new Pose2d(fieldFlip - 5.285, fieldFlipy - 2.975, Rotation2d.fromDegrees(-60));
-        public static final Pose2d Gred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 3.850, Rotation2d.fromDegrees(0));
-        public static final Pose2d Hred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 4.175, Rotation2d.fromDegrees(0));
-        public static final Pose2d Ired = new Pose2d(fieldFlip - 5.285, fieldFlipy - 5.075, Rotation2d.fromDegrees(-300));
-        public static final Pose2d Jred = new Pose2d(fieldFlip - 5.000, fieldFlipy - 5.230, Rotation2d.fromDegrees(-300));
-        public static final Pose2d Kred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 5.230, Rotation2d.fromDegrees(-240));
-        public static final Pose2d Lred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 5.075, Rotation2d.fromDegrees(-240));
+        // public static final Pose2d Ared = new Pose2d(fieldFlip - 3.180, fieldFlipy - 4.175, Rotation2d.fromDegrees(180));
+        // public static final Pose2d Bred = new Pose2d(fieldFlip - 3.180, fieldFlipy - 3.850, Rotation2d.fromDegrees(180));
+        // public static final Pose2d Cred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 2.975, Rotation2d.fromDegrees(-120));
+        // public static final Pose2d Dred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 2.825, Rotation2d.fromDegrees(-120));
+        // public static final Pose2d Ered = new Pose2d(fieldFlip - 5.000, fieldFlipy - 2.825, Rotation2d.fromDegrees(-60));
+        // public static final Pose2d Fred = new Pose2d(fieldFlip - 5.285, fieldFlipy - 2.975, Rotation2d.fromDegrees(-60));
+        // public static final Pose2d Gred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 3.850, Rotation2d.fromDegrees(0));
+        // public static final Pose2d Hred = new Pose2d(fieldFlip - 5.8, fieldFlipy - 4.175, Rotation2d.fromDegrees(0));
+        // public static final Pose2d Ired = new Pose2d(fieldFlip - 5.285, fieldFlipy - 5.075, Rotation2d.fromDegrees(-300));
+        // public static final Pose2d Jred = new Pose2d(fieldFlip - 5.000, fieldFlipy - 5.230, Rotation2d.fromDegrees(-300));
+        // public static final Pose2d Kred = new Pose2d(fieldFlip - 3.975, fieldFlipy - 5.230, Rotation2d.fromDegrees(-240));
+        // public static final Pose2d Lred = new Pose2d(fieldFlip - 3.685, fieldFlipy - 5.075, Rotation2d.fromDegrees(-240));
 
 
                 //TODO: MIGHT NEED TO PLAY AROUND WITH ALL THE POSES BELOW
@@ -383,36 +383,42 @@ public class VisionConfig {
         // public static final Distance LATERAL_TARGET_L4_RIGHT = Meters.of(0.02);
         
     }
-    private static final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
-    private static final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist, Rotation2d.kZero);
-    private static final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist, Rotation2d.kZero);
-
-    private static final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
-    private static final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist , Rotation2d.kZero);
-    private static final Transform2d rightBranchTransformLeftWrist = new Transform2d(0.0, branchOffsetLeftWrist, Rotation2d.kZero);
 
     private static final double acutalX = 6.25;
     private static final double x = 0.5 * acutalX;
     private static final double y = (Math.sqrt(3)/2) * acutalX;
+
     
     public enum ReefFace {
         // IMPORTANT: Fudge factors are always positive and should be in meters (use the Units.inchesToMeters() method)
 
         // Blue Reef
-        BLU_REEF_AB(18, 3.657600 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
-        BLU_REEF_CD(17, 4.073906 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
-        BLU_REEF_EF(22, 4.904740 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null),
-        BLU_REEF_GH(21, 5.321046 + Units.inchesToMeters(acutalX), 4.025900, 0.0, null, null),
-        BLU_REEF_IJ(20, 4.904740 + Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 60.0, null, null),
-        BLU_REEF_KL(19, 4.073906 - Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 120.0, null, null),
+        BLU_REEF_AB_L4(18, 3.657600 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
+        BLU_REEF_CD_L4(17, 4.073906 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
+        BLU_REEF_EF_L4(22, 4.904740 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null),
+        BLU_REEF_GH_L4(21, 5.321046 + Units.inchesToMeters(acutalX), 4.025900, 0.0, null, null),
+        BLU_REEF_IJ_L4(20, 4.904740 + Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 60.0, null, null),
+        BLU_REEF_KL_L4(19, 4.073906 - Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 120.0, null, null),
+        RED_REEF_AB_L4(7, 13.890498 + Units.inchesToMeters(acutalX), 4.025900, 0.0, null, null),
+        RED_REEF_CD_L4(8, 13.474446 + Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 60., null, null),
+        RED_REEF_EF_L4(9, 12.643358 - Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 120.0, null, null),
+        RED_REEF_GH_L4(10, 12.227306 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
+        RED_REEF_IJ_L4(11, 12.643358 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
+        RED_REEF_KL_L4(6, 13.474446 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null),
+        BLU_REEF_AB(18, 3.657600, 4.025900, 180.0, null, null),
+        BLU_REEF_CD(17, 4.073906, 3.306318, 240.0, null, null),
+        BLU_REEF_EF(22, 4.904740, 3.306318, 300.0, null, null),
+        BLU_REEF_GH(21, 5.321046, 4.025900, 0.0, null, null),
+        BLU_REEF_IJ(20, 4.904740, 4.745482, 60.0, null, null),
+        BLU_REEF_KL(19, 4.073906, 4.745482, 120.0, null, null),
+        RED_REEF_AB(7, 13.890498, 4.025900, 0.0, null, null),
+        RED_REEF_CD(8, 13.474446, 4.745482, 60., null, null),
+        RED_REEF_EF(9, 12.643358, 4.745482, 120.0, null, null),
+        RED_REEF_GH(10, 12.227306, 4.025900, 180.0, null, null),
+        RED_REEF_IJ(11, 12.643358, 3.306318, 240.0, null, null),
+        RED_REEF_KL(6, 13.474446, 3.306318, 300.0, null, null);
 
-        // Red Reef
-        RED_REEF_AB(7, 13.890498 + Units.inchesToMeters(acutalX), 4.025900, 0.0, null, null),
-        RED_REEF_CD(8, 13.474446 + Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 60., null, null),
-        RED_REEF_EF(9, 12.643358 - Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 120.0, null, null),
-        RED_REEF_GH(10, 12.227306 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
-        RED_REEF_IJ(11, 12.643358 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
-        RED_REEF_KL(6, 13.474446 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null);
+        
 
 
         public final Double leftBranchFudgeTransform;
@@ -421,53 +427,82 @@ public class VisionConfig {
         public final Pose2d rightBranch;
         public final Pose2d AprilTag;
         public final int aprilTagID;
+        public final double aprilTagX;
+        public final double aprilTagY;
+        public final double aprilTagTheta;
 
         //AT stands for AprilTag
         @SuppressWarnings("unused")
         private ReefFace(int aprilTagID, double aprilTagX, double aprilTagY, double aprilTagTheta, Double leftBranchFudgeTransform, Double rightBranchFudgeTransform) {
-            if (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid) {
-                this.aprilTagID = aprilTagID;
-                this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
-                this.leftBranchFudgeTransform = leftBranchFudgeTransform;
-                this.rightBranchFudgeTransform = rightBranchFudgeTransform;
-
-                    if (this.leftBranchFudgeTransform == null) {
-                        this.leftBranch = AprilTag.transformBy(leftBranchTransformRightWrist);
-                    } else {
-                        this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
-                    }
-                    
-                    if (this.rightBranchFudgeTransform == null) {
-                        this.rightBranch = AprilTag.transformBy(rightBranchTransformRightWrist);
-                    } else {
-                            this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
-                    }
-                } else {
-                    this.aprilTagID = aprilTagID;
-                this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
-                this.leftBranchFudgeTransform = leftBranchFudgeTransform;
-                this.rightBranchFudgeTransform = rightBranchFudgeTransform;
-
-                if (this.leftBranchFudgeTransform == null) {
-                    this.leftBranch = AprilTag.transformBy(leftBranchTransformLeftWrist);
-                } else {
-                    this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
-                }
+            // if (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+            //     RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid) {
                 
-                if (this.rightBranchFudgeTransform == null) {
-                    this.rightBranch = AprilTag.transformBy(rightBranchTransformLeftWrist);
-                } else {
-                    this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
-                }
-            }
+            //     this.aprilTagID = aprilTagID;
+            //     this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
+            //     this.leftBranchFudgeTransform = leftBranchFudgeTransform;
+            //     this.rightBranchFudgeTransform = rightBranchFudgeTransform;
+
+            //     if (this.leftBranchFudgeTransform == null) {
+            //         this.leftBranch = AprilTag.transformBy(leftBranchTransformRightWrist);
+            //     } else {
+            //         this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
+            //     }
+                
+            //     if (this.rightBranchFudgeTransform == null) {
+            //         this.rightBranch = AprilTag.transformBy(rightBranchTransformRightWrist);
+            //     } else {
+            //         this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
+            //     }
+            // } 
+            // else {
+            //     this.aprilTagID = aprilTagID;
+            //     this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
+            //     this.leftBranchFudgeTransform = leftBranchFudgeTransform;
+            //     this.rightBranchFudgeTransform = rightBranchFudgeTransform;
+
+            //     if (this.leftBranchFudgeTransform == null) {
+            //         this.leftBranch = AprilTag.transformBy(leftBranchTransformLeftWrist);
+            //     } else {
+            //         this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
+            //     }
+                
+            //     if (this.rightBranchFudgeTransform == null) {
+            //         this.rightBranch = AprilTag.transformBy(rightBranchTransformLeftWrist);
+            //     } else {
+            //         this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
+            //     }
+            // }
+            this.aprilTagID = aprilTagID;
+            this.aprilTagX = aprilTagX;
+            this.aprilTagY = aprilTagY;
+            this.aprilTagTheta = aprilTagTheta;
+            this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
+            this.leftBranchFudgeTransform = leftBranchFudgeTransform;
+            this.rightBranchFudgeTransform = rightBranchFudgeTransform;
+
+            this.leftBranch = AprilTag;
+            this.rightBranch = AprilTag;
+
+            // if (this.leftBranchFudgeTransform == null) {
+            //     this.leftBranch = AprilTag.transformBy(leftBranchTransformLeftWrist);
+            // } else {
+            //     this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
+            // }
+            
+            // if (this.rightBranchFudgeTransform == null) {
+            //     this.rightBranch = AprilTag.transformBy(rightBranchTransformLeftWrist);
+            // } else {
+            //     this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
+            // }
+
         }
+
     }
 
     

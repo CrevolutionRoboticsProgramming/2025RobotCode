@@ -12,14 +12,22 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.crevolib.math.Conversions;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.elevator.ElevatorSubsystem;
+import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.vision.PoseEstimatorSubsystem;
+import frc.robot.vision.VisionConfig.ReefFace;
 
 import java.util.function.Supplier;
 
@@ -31,6 +39,17 @@ public class AutoAlign extends Command {
   private static final Distance TRANSLATION_TOLERANCE = Inches.of(0.25);
   private static final Angle THETA_TOLERANCE = Degrees.of(1.0);
 
+  private static final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
+  private static final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist, Rotation2d.kZero);
+  private static final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist, Rotation2d.kZero);
+
+  private static final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
+  private static final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist , Rotation2d.kZero);
+  private static final Transform2d rightBranchTransformLeftWrist = new Transform2d(0.0, branchOffsetLeftWrist, Rotation2d.kZero);
+
+  public static final Transform2d robotOffset = new Transform2d(0.3018, 0, Rotation2d.kZero);
+
+  
 //   protected static final TrapezoidProfile.Constraints DEFAULT_XY_CONSTRAINTS = new TrapezoidProfile.Constraints(
 //       MAX_ALIGN_TRANSLATION_VELOCITY.in(MetersPerSecond),
 //       MAX_ALIGN_TRANSLATION_ACCELERATION.in(MetersPerSecondPerSecond));
@@ -62,10 +81,122 @@ public class AutoAlign extends Command {
    * @param drivetrainSubsystem drivetrain subsystem
    * @param goalPose goal pose to drive to
    */
-  public AutoAlign(Pose2d targetPose) {
+  public AutoAlign(Pose2d targetPose, ReefFace nearestReefFace, boolean isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
+    
+    
+    //we are getting ATag Pose
+    //firstly if elevator is L4, update the AprilTag X, Y
+      //need to do - transform for left or right wrist
+    //else
+      //need to do - transform for left or right wrist
+    boolean isRightWrist = RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid;
+    boolean isElevatorL4 = ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4 || 
+                          ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4AutonScore || 
+                          ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralScoreL4;
+    
+    if(isElevatorL4) {
+      ReefFace newReefFace = updateReefFace(nearestReefFace);
+      targetPose = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
+      if(isRightWrist) {
+        if(isLeftAlign) {
+          targetPose = targetPose.transformBy(leftBranchTransformRightWrist);
+        }
+        else {
+          targetPose = targetPose.transformBy(rightBranchTransformRightWrist);
+        }
+      }
+      else {
+        if(isLeftAlign) {
+          targetPose = targetPose.transformBy(leftBranchTransformLeftWrist);
+        }
+        else {
+          targetPose = targetPose.transformBy(rightBranchTransformLeftWrist);
+        }
+      }
+    }
+    else {
+      if(isRightWrist) {
+        if(isLeftAlign) {
+          targetPose = targetPose.transformBy(leftBranchTransformRightWrist);
+        }
+        else {
+          targetPose = targetPose.transformBy(rightBranchTransformRightWrist);
+        }
+      }
+      else {
+        if(isLeftAlign) {
+          targetPose = targetPose.transformBy(leftBranchTransformLeftWrist);
+        }
+        else {
+          targetPose = targetPose.transformBy(rightBranchTransformLeftWrist);
+        }
+      }
+    }
+
+    targetPose = Conversions.rotatePose(targetPose.transformBy(robotOffset), Rotation2d.kZero);
     this.goalPose2d = targetPose;
-    // setGoal(targetPose);
+  }
+
+  public ReefFace updateReefFace(ReefFace oldReefFace) {
+    var curr_alliance = DriverStation.getAlliance().get();
+    if(curr_alliance == Alliance.Blue) {
+      if(oldReefFace == ReefFace.BLU_REEF_AB) {
+        return ReefFace.BLU_REEF_AB_L4;
+      }
+      else if(oldReefFace == ReefFace.BLU_REEF_CD) {
+        return ReefFace.BLU_REEF_CD_L4;
+      }
+      else if(oldReefFace == ReefFace.BLU_REEF_EF) {
+        return ReefFace.BLU_REEF_EF_L4;
+      }
+      else if(oldReefFace == ReefFace.BLU_REEF_GH) {
+        return ReefFace.BLU_REEF_GH_L4;
+      }
+      else if(oldReefFace == ReefFace.BLU_REEF_IJ) {
+        return ReefFace.BLU_REEF_IJ_L4;
+      }
+      else if(oldReefFace == ReefFace.BLU_REEF_KL) {
+        return ReefFace.BLU_REEF_KL_L4;
+      }
+      else {
+        System.out.println("invalid blue reef face");
+      }
+    }
+    else if(curr_alliance == Alliance.Red) {
+      if(oldReefFace == ReefFace.RED_REEF_AB) {
+        return ReefFace.RED_REEF_AB_L4;
+      }
+      else if(oldReefFace == ReefFace.RED_REEF_CD) {
+        return ReefFace.RED_REEF_CD_L4;
+      }
+      else if(oldReefFace == ReefFace.RED_REEF_EF) {
+        return ReefFace.RED_REEF_EF_L4;
+      }
+      else if(oldReefFace == ReefFace.RED_REEF_GH) {
+        return ReefFace.RED_REEF_GH_L4;
+      }
+      else if(oldReefFace == ReefFace.RED_REEF_IJ) {
+        return ReefFace.RED_REEF_IJ_L4;
+      }
+      else if(oldReefFace == ReefFace.RED_REEF_KL) {
+        return ReefFace.RED_REEF_KL_L4;
+      }
+      else {
+        System.out.println("invalid ref reef face");
+      }
+    }
+    else {
+      System.out.println("AutoAlign: invalid alliance");
+    }
+    return null;
   }
 
   /**

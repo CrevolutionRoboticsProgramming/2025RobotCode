@@ -1,7 +1,5 @@
 package frc.robot.driver;
 
-import static frc.robot.vision.VisionConfig.AlignmentConfig.Cblue;
-import static frc.robot.vision.VisionConfig.AlignmentConfig.Dblue;
 
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -39,8 +37,6 @@ import frc.robot.vision.LineupMaster;
 import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig;
 import frc.robot.vision.commands.AutoAlign;
-import frc.robot.vision.commands.LineupCommand;
-
 
 public class DriverXbox extends XboxGamepad {
     private static class Settings {
