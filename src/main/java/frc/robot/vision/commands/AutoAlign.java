@@ -81,7 +81,7 @@ public class AutoAlign extends Command {
    * @param drivetrainSubsystem drivetrain subsystem
    * @param goalPose goal pose to drive to
    */
-  public AutoAlign(Supplier<Pose2d> targetPose, ReefFace nearestReefFace, boolean isLeftAlign) {
+  public AutoAlign(Supplier<Pose2d> targetPose, Supplier<ReefFace> nearestReefFace, boolean isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
     this.goalPose2d = targetPose.get();
     //we are getting ATag Pose
@@ -106,10 +106,10 @@ public class AutoAlign extends Command {
     SmartDashboard.putString("elevator kLastState - AutoAlign", ElevatorSubsystem.kLastState.name());
     SmartDashboard.putString("alliance - AutoAlign", DriverStation.getAlliance().toString());
     SmartDashboard.putBoolean("requesting lineup left branch - AutoAlign", isLeftAlign);
-    SmartDashboard.putString("nearest ReefFace accessed - AutoAlign", nearestReefFace.name());
+    SmartDashboard.putString("nearest ReefFace accessed - AutoAlign", nearestReefFace.get().name());
     if(isElevatorL4 == true) {
       System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
-      ReefFace newReefFace = updateReefFace(nearestReefFace);
+      ReefFace newReefFace = updateReefFace(nearestReefFace.get());
       SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
       goalPose2d = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
       if(isRightWrist) {
