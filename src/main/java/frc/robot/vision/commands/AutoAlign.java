@@ -26,6 +26,7 @@ import frc.crevolib.math.Conversions;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.elevator.ElevatorSubsystem;
 import frc.robot.rushinator.RushinatorWrist;
+import frc.robot.vision.LineupMaster;
 import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig.ReefFace;
 
@@ -84,11 +85,11 @@ public class AutoAlign extends Command {
    * @param drivetrainSubsystem drivetrain subsystem
    * @param goalPose goal pose to drive to
    */
-  public AutoAlign(Supplier<Pose2d> targetPose, Supplier<ReefFace> nearestReefFace, Supplier<Boolean> isLeftAlign) {
+  public AutoAlign(Supplier<Pose2d> targetPose, Supplier<Boolean> isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
     this.goalPose2d = targetPose.get();
     this.isLeftAlign = isLeftAlign.get();
-    this.nearestReefFace = nearestReefFace.get();
+    // this.nearestReefFace = nearestReefFace.get();
     //we are getting ATag Pose
     //firstly if elevator is L4, update the AprilTag X, Y
       //need to do - transform for left or right wrist
@@ -205,6 +206,7 @@ public class AutoAlign extends Command {
 
   @Override
   public void execute() {
+      this.nearestReefFace = LineupMaster.getClosestReefFace(poseProvider);
        //need to do - transform for left or right wrist
       boolean isRightWrist = (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight) ||
        (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right) ||
