@@ -365,5 +365,13 @@ public class DriverXbox extends XboxGamepad {
         return rotationStickCurve.calculate(-controller.getRightX());
     }
 
+    public boolean isLeftPovPressed() {
+        return controller.povLeft().getAsBoolean();
+    }
+
+    public boolean isRightPovPressed() {
+        return controller.povRight().getAsBoolean();
+    }
+
     public double getRightX() { return controller.getRightX(); }
 }

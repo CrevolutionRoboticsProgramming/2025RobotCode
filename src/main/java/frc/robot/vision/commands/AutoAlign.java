@@ -29,6 +29,7 @@ import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.vision.LineupMaster;
 import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig.ReefFace;
+import frc.robot.driver.DriverXbox;
 
 import java.util.function.Supplier;
 
@@ -88,7 +89,7 @@ public class AutoAlign extends Command {
   public AutoAlign(Supplier<Pose2d> targetPose, Supplier<Boolean> isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
     // this.goalPose2d = targetPose.get();
-    this.isLeftAlign = isLeftAlign.get();
+    // this.isLeftAlign = isLeftAlign.get();
     // this.nearestReefFace = nearestReefFace.get();
     //we are getting ATag Pose
     //firstly if elevator is L4, update the AprilTag X, Y
@@ -206,8 +207,14 @@ public class AutoAlign extends Command {
 
   @Override
   public void execute() {
+      this.isLeftAlign = DriverXbox.getInstance().isLeftPovPressed();
       this.nearestReefFace = LineupMaster.getClosestReefFace(poseProvider);
-      this.goalPose2d = nearestReefFace.leftBranch;
+      if(isLeftAlign) {
+        this.goalPose2d = nearestReefFace.leftBranch;
+      }
+      else {
+        this.goalPose2d = nearestReefFace.rightBranch;
+      }
        //need to do - transform for left or right wrist
       boolean isRightWrist = (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight) ||
        (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right) ||
