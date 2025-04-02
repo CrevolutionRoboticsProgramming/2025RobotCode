@@ -87,7 +87,7 @@ public class AutoAlign extends Command {
    */
   public AutoAlign(Supplier<Pose2d> targetPose, Supplier<Boolean> isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
-    this.goalPose2d = targetPose.get();
+    // this.goalPose2d = targetPose.get();
     this.isLeftAlign = isLeftAlign.get();
     // this.nearestReefFace = nearestReefFace.get();
     //we are getting ATag Pose
@@ -207,6 +207,7 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
       this.nearestReefFace = LineupMaster.getClosestReefFace(poseProvider);
+      this.goalPose2d = nearestReefFace.leftBranch;
        //need to do - transform for left or right wrist
       boolean isRightWrist = (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight) ||
        (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right) ||
