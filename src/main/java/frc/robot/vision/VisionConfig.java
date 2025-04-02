@@ -34,6 +34,8 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.drivetrain.TunerConstants;
+import frc.robot.rushinator.RushinatorPivot;
+import frc.robot.rushinator.RushinatorWrist;
 
 public class VisionConfig {
     
@@ -101,7 +103,7 @@ public class VisionConfig {
     public static class AlignmentConfig {
 
         //Starting with same PID values as Auton
-        public static final double XY_kP = 10.0;
+        public static final double XY_kP = 5.0;
         public static final double XY_kI = 0.0;
         public static final double XY_kD = 0.0;
     
@@ -379,30 +381,38 @@ public class VisionConfig {
 
         // public static final Distance LATERAL_TARGET_L4_LEFT = Meters.of(0.05);
         // public static final Distance LATERAL_TARGET_L4_RIGHT = Meters.of(0.02);
+        
     }
-    
-    private static final double branchOffset = Units.inchesToMeters(6.469);
-    private static final Transform2d leftBranchTransform = new Transform2d(0.0, -branchOffset, Rotation2d.kZero);
-    private static final Transform2d rightBranchTransform = new Transform2d(0.0, branchOffset, Rotation2d.kZero);
+    private static final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
+    private static final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist, Rotation2d.kZero);
+    private static final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist, Rotation2d.kZero);
 
+    private static final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
+    private static final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist , Rotation2d.kZero);
+    private static final Transform2d rightBranchTransformLeftWrist = new Transform2d(0.0, branchOffsetLeftWrist, Rotation2d.kZero);
+
+    private static final double acutalX = 6.25;
+    private static final double x = 0.5 * acutalX;
+    private static final double y = (Math.sqrt(3)/2) * acutalX;
+    
     public enum ReefFace {
         // IMPORTANT: Fudge factors are always positive and should be in meters (use the Units.inchesToMeters() method)
 
         // Blue Reef
-        BLU_REEF_AB(18, 3.657600 - Units.inchesToMeters(6.25), 4.025900, 180.0, null, null),
-        BLU_REEF_CD(17, 4.073906, 3.306318, 240.0, null, null),
-        BLU_REEF_EF(22, 4.904740, 3.306318, 300.0, null, null),
-        BLU_REEF_GH(21, 5.321046, 4.025900, 0.0, null, null),
-        BLU_REEF_IJ(20, 4.904740, 4.745482, 60.0, null, null),
-        BLU_REEF_KL(19, 4.073906, 4.745482, 120.0, null, null),
+        BLU_REEF_AB(18, 3.657600 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
+        BLU_REEF_CD(17, 4.073906 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
+        BLU_REEF_EF(22, 4.904740 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null),
+        BLU_REEF_GH(21, 5.321046 + Units.inchesToMeters(acutalX), 4.025900, 0.0, null, null),
+        BLU_REEF_IJ(20, 4.904740 + Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 60.0, null, null),
+        BLU_REEF_KL(19, 4.073906 - Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 120.0, null, null),
 
         // Red Reef
-        RED_REEF_AB(7, 13.890498, 4.025900, 0.0, null, null),
-        RED_REEF_CD(8, 13.474446, 4.745482, 60., null, null),
-        RED_REEF_EF(9, 12.643358, 4.745482, 120.0, null, null),
-        RED_REEF_GH(10, 12.227306, 4.025900, 180.0, null, null),
-        RED_REEF_IJ(11, 12.643358, 3.306318, 240.0, null, null),
-        RED_REEF_KL(6, 13.474446, 3.306318, 300.0, null, null);
+        RED_REEF_AB(7, 13.890498 + Units.inchesToMeters(acutalX), 4.025900, 0.0, null, null),
+        RED_REEF_CD(8, 13.474446 + Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 60., null, null),
+        RED_REEF_EF(9, 12.643358 - Units.inchesToMeters(x), 4.745482 + Units.inchesToMeters(y), 120.0, null, null),
+        RED_REEF_GH(10, 12.227306 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
+        RED_REEF_IJ(11, 12.643358 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
+        RED_REEF_KL(6, 13.474446 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null);
 
 
         public final Double leftBranchFudgeTransform;
@@ -413,22 +423,49 @@ public class VisionConfig {
         public final int aprilTagID;
 
         //AT stands for AprilTag
+        @SuppressWarnings("unused")
         private ReefFace(int aprilTagID, double aprilTagX, double aprilTagY, double aprilTagTheta, Double leftBranchFudgeTransform, Double rightBranchFudgeTransform) {
-            this.aprilTagID = aprilTagID;
-            this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
-            this.leftBranchFudgeTransform = leftBranchFudgeTransform;
-            this.rightBranchFudgeTransform = rightBranchFudgeTransform;
+            if (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+                RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid) {
+                this.aprilTagID = aprilTagID;
+                this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
+                this.leftBranchFudgeTransform = leftBranchFudgeTransform;
+                this.rightBranchFudgeTransform = rightBranchFudgeTransform;
 
-            if (this.leftBranchFudgeTransform == null) {
-                this.leftBranch = AprilTag.transformBy(leftBranchTransform);
-            } else {
-                this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
-            }
-            
-            if (this.rightBranchFudgeTransform == null) {
-                this.rightBranch = AprilTag.transformBy(rightBranchTransform);
-            } else {
-                this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
+                    if (this.leftBranchFudgeTransform == null) {
+                        this.leftBranch = AprilTag.transformBy(leftBranchTransformRightWrist);
+                    } else {
+                        this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
+                    }
+                    
+                    if (this.rightBranchFudgeTransform == null) {
+                        this.rightBranch = AprilTag.transformBy(rightBranchTransformRightWrist);
+                    } else {
+                            this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
+                    }
+                } else {
+                    this.aprilTagID = aprilTagID;
+                this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
+                this.leftBranchFudgeTransform = leftBranchFudgeTransform;
+                this.rightBranchFudgeTransform = rightBranchFudgeTransform;
+
+                if (this.leftBranchFudgeTransform == null) {
+                    this.leftBranch = AprilTag.transformBy(leftBranchTransformLeftWrist);
+                } else {
+                    this.leftBranch = AprilTag.transformBy(new Transform2d(0.0, -this.leftBranchFudgeTransform, Rotation2d.kZero));
+                }
+                
+                if (this.rightBranchFudgeTransform == null) {
+                    this.rightBranch = AprilTag.transformBy(rightBranchTransformLeftWrist);
+                } else {
+                    this.rightBranch = AprilTag.transformBy(new Transform2d(0.0, this.rightBranchFudgeTransform, Rotation2d.kZero));
+                }
             }
         }
     }

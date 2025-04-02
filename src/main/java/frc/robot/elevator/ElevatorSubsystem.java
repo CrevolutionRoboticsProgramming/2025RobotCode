@@ -69,7 +69,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         kCoralL3(12.54296875),
         kCoralScoreL3(15.7583007812),
         kCoralL4AutonScore(16.2),
-        kCoralL4(37.21337890625),
+        kCoralL4(38.05337890625),
         kCoralScoreL4(29.134765625),
         kAlgaeL2(17.01552734375),
         kAlgaeL3(30.27490234375),

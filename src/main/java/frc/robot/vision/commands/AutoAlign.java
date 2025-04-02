@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  */
 public class AutoAlign extends Command {
 
-  private static final Distance TRANSLATION_TOLERANCE = Inches.of(0.5);
+  private static final Distance TRANSLATION_TOLERANCE = Inches.of(0.25);
   private static final Angle THETA_TOLERANCE = Degrees.of(1.0);
 
 //   protected static final TrapezoidProfile.Constraints DEFAULT_XY_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -140,7 +140,7 @@ public class AutoAlign extends Command {
       omegaSpeed = 0;
     }
 
-    ChassisSpeeds speeds = applyLimits(new ChassisSpeeds(xSpeed, ySpeed, omegaSpeed));
+    ChassisSpeeds speeds = applyLimits(new ChassisSpeeds(-xSpeed, -ySpeed, omegaSpeed));
 
     // CommandSwerveDrivetrain.getInstance().applyRequest( () -> 
     //     RobotContainer.drive.withVelocityX(speeds.vxMetersPerSecond)
