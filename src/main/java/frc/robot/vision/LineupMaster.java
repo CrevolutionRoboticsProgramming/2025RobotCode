@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -73,7 +74,7 @@ public class LineupMaster {
         return closestFace;
     }
 
-    public Command directDriveToPose(Pose2d targetPose, boolean isLeftAlign) {
+    public Command directDriveToPose(Supplier<Pose2d> targetPose, boolean isLeftAlign) {
         AutoAlign newAutoAlign = new AutoAlign(targetPose, getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()), isLeftAlign);
         return newAutoAlign;
         // return new DriveToPoseCommand(targetPose);
@@ -81,7 +82,7 @@ public class LineupMaster {
 
     public Command directDriveToNearestLeftBranch() {
         ReefFace nearestReefFace = getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose());
-        return directDriveToPose(nearestReefFace.leftBranch, true);
+        return directDriveToPose(() -> nearestReefFace.leftBranch, true);
         // try {
         //     return new SelectCommand<>(leftBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
         // }
@@ -97,7 +98,7 @@ public class LineupMaster {
 
     public Command directDriveToNearestRightBranch() {
         ReefFace nearestReefFace = getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose());
-        return directDriveToPose(nearestReefFace.rightBranch, false);
+        return directDriveToPose(() -> nearestReefFace.rightBranch, false);
         // try {
         //     return new SelectCommand<>(rightBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
         // } catch(Exception ex) {

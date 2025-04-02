@@ -81,10 +81,9 @@ public class AutoAlign extends Command {
    * @param drivetrainSubsystem drivetrain subsystem
    * @param goalPose goal pose to drive to
    */
-  public AutoAlign(Pose2d targetPose, ReefFace nearestReefFace, boolean isLeftAlign) {
+  public AutoAlign(Supplier<Pose2d> targetPose, ReefFace nearestReefFace, boolean isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
-    
-    
+    this.goalPose2d = targetPose.get();
     //we are getting ATag Pose
     //firstly if elevator is L4, update the AprilTag X, Y
       //need to do - transform for left or right wrist
@@ -112,45 +111,45 @@ public class AutoAlign extends Command {
       System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
       ReefFace newReefFace = updateReefFace(nearestReefFace);
       SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
-      targetPose = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
+      goalPose2d = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
       if(isRightWrist) {
         if(isLeftAlign) {
-          targetPose = targetPose.transformBy(leftBranchTransformRightWrist);
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
         }
         else {
-          targetPose = targetPose.transformBy(rightBranchTransformRightWrist);
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
         }
       }
       else {
         if(isLeftAlign) {
-          targetPose = targetPose.transformBy(leftBranchTransformLeftWrist);
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
         }
         else {
-          targetPose = targetPose.transformBy(rightBranchTransformLeftWrist);
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
         }
       }
     }
     else {
       if(isRightWrist) {
         if(isLeftAlign) {
-          targetPose = targetPose.transformBy(leftBranchTransformRightWrist);
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
         }
         else {
-          targetPose = targetPose.transformBy(rightBranchTransformRightWrist);
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
         }
       }
       else {
         if(isLeftAlign) {
-          targetPose = targetPose.transformBy(leftBranchTransformLeftWrist);
+          goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
         }
         else {
-          targetPose = targetPose.transformBy(rightBranchTransformLeftWrist);
+          goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
         }
       }
     }
 
-    targetPose = Conversions.rotatePose(targetPose.transformBy(robotOffset), Rotation2d.kZero);
-    this.goalPose2d = targetPose;
+    goalPose2d = Conversions.rotatePose(goalPose2d.transformBy(robotOffset), Rotation2d.kZero);
+    
   }
 
   public static ReefFace updateReefFace(ReefFace oldReefFace) {
