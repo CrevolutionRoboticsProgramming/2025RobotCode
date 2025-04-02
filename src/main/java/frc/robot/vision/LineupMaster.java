@@ -47,6 +47,7 @@ public class LineupMaster {
     
     public LineupMaster() {
         for (ReefFace face : filteredReefFaces) {
+            System.out.println("POPULATING WITH ReefFace " + face.name());
             // leftBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.leftBranch.transformBy(robotOffset), Rotation2d.kZero)));
             // reefCenterAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.AprilTag.transformBy(robotOffset), Rotation2d.kZero)));
             // rightBranchAlignmentCommands.put(face, directDriveToPose(Conversions.rotatePose(face.rightBranch.transformBy(robotOffset), Rotation2d.kZero)));
@@ -78,7 +79,13 @@ public class LineupMaster {
     }
 
     public Command directDriveToNearestLeftBranch() {
-        return new SelectCommand<>(leftBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        try {
+            return new SelectCommand<>(leftBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        }
+        catch(Exception ex) {
+            DriverStation.reportError("Direct Drive to nearest left branch failed", ex.getStackTrace());
+            return null;
+        }
     }
 
     // public Command directDriveToNearestReefFace() {
@@ -86,7 +93,12 @@ public class LineupMaster {
     // }
 
     public Command directDriveToNearestRightBranch() {
-        return new SelectCommand<>(rightBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        try {
+            return new SelectCommand<>(rightBranchAlignmentCommands, () -> getClosestReefFace(PoseEstimatorSubsystem.getInstance().getCurrentPose()));
+        } catch(Exception ex) {
+            DriverStation.reportError("Direct Drive to nearest right branch failed", ex.getStackTrace());
+            return null;
+        }
     }
     
 }

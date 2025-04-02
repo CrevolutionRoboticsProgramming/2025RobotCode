@@ -90,20 +90,28 @@ public class AutoAlign extends Command {
       //need to do - transform for left or right wrist
     //else
       //need to do - transform for left or right wrist
-    boolean isRightWrist = RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
-                RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
-                RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid;
-    boolean isElevatorL4 = ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4 || 
-                          ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4AutonScore || 
-                          ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralScoreL4;
+    boolean isRightWrist = (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight) ||
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right) ||
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist) || 
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist) || 
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist) || 
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid) ||
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid) ||
+                (RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid);
+    boolean isElevatorL4 = (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4) || 
+                          (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralL4AutonScore) || 
+                          (ElevatorSubsystem.kLastState == ElevatorSubsystem.State.kCoralScoreL4);
     
-    if(isElevatorL4) {
+    SmartDashboard.putBoolean("isRightWrist - AutoAlign", isRightWrist);
+    SmartDashboard.putBoolean("isElevatorL4 - AutoAlign", isElevatorL4);
+    SmartDashboard.putString("elevator kLastState - AutoAlign", ElevatorSubsystem.kLastState.name());
+    SmartDashboard.putString("alliance - AutoAlign", DriverStation.getAlliance().toString());
+    SmartDashboard.putBoolean("requesting lineup left branch - AutoAlign", isLeftAlign);
+    SmartDashboard.putString("nearest ReefFace accessed - AutoAlign", nearestReefFace.name());
+    if(isElevatorL4 == true) {
+      System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
       ReefFace newReefFace = updateReefFace(nearestReefFace);
+      SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
       targetPose = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
       if(isRightWrist) {
         if(isLeftAlign) {
@@ -145,7 +153,7 @@ public class AutoAlign extends Command {
     this.goalPose2d = targetPose;
   }
 
-  public ReefFace updateReefFace(ReefFace oldReefFace) {
+  public static ReefFace updateReefFace(ReefFace oldReefFace) {
     var curr_alliance = DriverStation.getAlliance().get();
     if(curr_alliance == Alliance.Blue) {
       if(oldReefFace == ReefFace.BLU_REEF_AB) {
