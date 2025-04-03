@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -80,17 +82,30 @@ public class RobotContainer {
     public void setDefaultCommands() {
         final var driver = DriverXbox.getInstance();
         final var operator = OperatorXbox.getInstance();
+        final var currAlliance = DriverStation.getAlliance().get();
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
                 CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
+                if (currAlliance == Alliance.Blue){
                     if (modeFast) {
                     return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
                     .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
                     .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-                } else {
+                    } else {
                     return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
                         .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
                         .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+                    }
+                } else {
+                    if (modeFast) {
+                        return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+                        .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+                    } else {
+                        return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
+                            .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
+                            .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+                    }
                 }
             })
         );
