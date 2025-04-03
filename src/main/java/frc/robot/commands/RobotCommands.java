@@ -89,8 +89,7 @@ public class RobotCommands {
             new ParallelRaceGroup(
                 coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero),
                 new SetWristState(RushinatorWrist.State.kHPMid),
-                new SetRollersVoltage(4.5),
-                new WaitCommand(1.0)
+                new SetRollersVoltage(4.5)
             )
         );
     }
