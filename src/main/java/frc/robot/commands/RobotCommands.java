@@ -95,16 +95,19 @@ public class RobotCommands {
         );
     }
 
-    
-    public static Command scoreCoralAutonL4(){
+    public static Command primeScoreCoralAutonL4(){
         System.out.println("Command is runing?");
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralL4),
                 new SetArmState(RushinatorPivot.State.kStowTravel),
-                new SetWristState(RushinatorWrist.State.kTravelRight),
-                new WaitCommand(0.7)
-            ),
+                new SetWristState(RushinatorWrist.State.kTravelRight)
+            )
+        );
+    }
+    
+    public static Command scoreCoralAutonL4(){
+        return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
                 new SetArmState(RushinatorPivot.State.kScoreL4Auton),

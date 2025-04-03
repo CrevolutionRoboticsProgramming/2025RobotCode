@@ -7,7 +7,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start_G"
+            "pathName": "Start_Mid_1"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpRight"
+                }
+              }
+            ]
           }
         },
         {
@@ -20,6 +39,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Mid",
+  "folder": null,
   "choreoAuto": false
 }

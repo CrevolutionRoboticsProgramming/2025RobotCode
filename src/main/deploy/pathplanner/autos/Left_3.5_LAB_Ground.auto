@@ -11,6 +11,25 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpRight"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "AutonScoreL4"
@@ -23,15 +42,28 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "HPPickup"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "LGr_A"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpLeft"
+                }
+              }
+            ]
           }
         },
         {
@@ -47,15 +79,28 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "HPPickup"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "MGr_B"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpRight"
+                }
+              }
+            ]
           }
         },
         {
@@ -74,6 +119,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left",
+  "folder": null,
   "choreoAuto": false
 }

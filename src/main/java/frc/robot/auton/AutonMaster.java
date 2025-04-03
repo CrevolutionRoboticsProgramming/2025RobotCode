@@ -37,6 +37,7 @@ import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.rushinator.commands.SetWristState;
+import frc.robot.vision.LineupMaster;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
@@ -84,7 +85,7 @@ public class AutonMaster {
         // autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("L-3C-F"));
         autonChooser.addOption("RightStart3PieceCoralFeed", AutoBuilder.buildAuto("Right_3.5_FDC"));
         autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("Left_3.5_IKL"));
-        autonChooser.addOption("MidStart1PieceCoral", AutoBuilder.buildAuto("Mid_1AL_G"));
+        autonChooser.addOption("MidStart1PieceCoral", AutoBuilder.buildAuto("Mid_1_G"));
         autonChooser.addOption("RightMoveSomeone", AutoBuilder.buildAuto("Right_Move_Someone"));
         autonChooser.addOption("RightStartRightLoli3.5Piece", AutoBuilder.buildAuto("Right_3.5_CBA_Ground"));
         autonChooser.addOption("LeftStartLeftLoli3.5Piece", AutoBuilder.buildAuto("Left_3.5_LAB_Ground"));
@@ -101,6 +102,9 @@ public class AutonMaster {
     }
 
     public void configureNamedCommands() {
+        NamedCommands.registerCommand("PrimeScoreL4", RobotCommands.primeScoreCoralAutonL4());
+        NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
+        NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
         NamedCommands.registerCommand("AutonScoreL1", RobotCommands.scoreCoralAutonL1());
         NamedCommands.registerCommand("AutonScoreL2", RobotCommands.scoreCoralAutonL2());
         NamedCommands.registerCommand("AutonScoreL3", RobotCommands.scoreCoralAutonL3());
@@ -110,9 +114,15 @@ public class AutonMaster {
         NamedCommands.registerCommand("PreHPPickUp", new ParallelCommandGroup(new SetWristState(RushinatorWrist.State.kHPMid), new SetArmState(RushinatorPivot.State.kHPIntake), new SetRollersVoltage(4.5)));
         NamedCommands.registerCommand("LolipopRight", new ParallelRaceGroup(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kLoliPop, RushinatorWrist.State.kLoliLeft),
+            new SetRollersVoltage(4.0),
             new WaitCommand(1.0)));
         NamedCommands.registerCommand("LolipopLeft", new ParallelRaceGroup(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kLoliPop, RushinatorWrist.State.kLoliRight),
+            new SetRollersVoltage(4.0),
+            new WaitCommand(1.0)));
+        NamedCommands.registerCommand("ResetArmWrist", new ParallelRaceGroup(
+            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight),
+            new SetRollersVoltage(4.0),
             new WaitCommand(1.0)));
         NamedCommands.registerCommand("AlgaeIntakeL2", new ParallelCommandGroup(
             RobotCommands.algaePrime(AlgaeSubsystem.State.kReefIntake, ElevatorSubsystem.State.kAlgaeL2),

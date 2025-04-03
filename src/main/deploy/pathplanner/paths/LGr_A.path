@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.1402173913043474,
-        "y": 4.215760869565218
+        "x": 2.6032500000000005,
+        "y": 4.229749999999999
       },
       "prevControl": {
-        "x": 2.494565217391304,
-        "y": 4.7
+        "x": 1.9575978260869573,
+        "y": 4.713989130434782
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ResetArmWrist",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,
