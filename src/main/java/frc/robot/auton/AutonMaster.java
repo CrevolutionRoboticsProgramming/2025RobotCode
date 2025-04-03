@@ -11,6 +11,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,6 +39,8 @@ import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.rushinator.commands.SetWristState;
 import frc.robot.vision.LineupMaster;
+import frc.robot.vision.PoseEstimatorSubsystem;
+import frc.robot.vision.commands.AutoAlign;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
@@ -103,8 +106,10 @@ public class AutonMaster {
 
     public void configureNamedCommands() {
         NamedCommands.registerCommand("PrimeScoreL4", RobotCommands.primeScoreCoralAutonL4());
-        NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
-        NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
+        // NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
+        NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
+        NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
+        // NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
         NamedCommands.registerCommand("AutonScoreL1", RobotCommands.scoreCoralAutonL1());
         NamedCommands.registerCommand("AutonScoreL2", RobotCommands.scoreCoralAutonL2());
         NamedCommands.registerCommand("AutonScoreL3", RobotCommands.scoreCoralAutonL3());

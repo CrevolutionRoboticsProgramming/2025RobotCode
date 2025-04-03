@@ -101,7 +101,7 @@ public class LineupMaster {
         // Supplier<ReefFace> nearestReefFace = getClosestReefFace(()->PoseEstimatorSubsystem.getInstance().getCurrentPose());
         // return directDriveToPose(() -> nearestReefFace.get().rightBranch, false);
         ReefFace nearestReefFace = getClosestReefFace(() -> PoseEstimatorSubsystem.getInstance().getCurrentPose());
-        return directDriveToPose(() -> nearestReefFace.leftBranch, () -> true);
+        return directDriveToPose(() -> nearestReefFace.rightBranch, () -> true);
         // try {
         // return new SelectCommand<>(rightBranchAlignmentCommands, () -> getClosestReefFace(() -> PoseEstimatorSubsystem.getInstance().getCurrentPose()));
         // } catch(Exception ex) {
