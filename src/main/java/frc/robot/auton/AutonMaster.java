@@ -119,16 +119,13 @@ public class AutonMaster {
         NamedCommands.registerCommand("PreHPPickUp", new ParallelCommandGroup(new SetWristState(RushinatorWrist.State.kHPMid), new SetArmState(RushinatorPivot.State.kHPIntake), new SetRollersVoltage(4.5)));
         NamedCommands.registerCommand("LolipopRight", new ParallelRaceGroup(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kLoliPop, RushinatorWrist.State.kLoliLeft),
-            new SetRollersVoltage(4.0),
-            new WaitCommand(1.0)));
+            new SetRollersVoltage(4.0)));
         NamedCommands.registerCommand("LolipopLeft", new ParallelRaceGroup(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kLoliPop, RushinatorWrist.State.kLoliRight),
-            new SetRollersVoltage(4.0),
-            new WaitCommand(1.0)));
+            new SetRollersVoltage(4.0)));
         NamedCommands.registerCommand("ResetArmWrist", new ParallelRaceGroup(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight),
-            new SetRollersVoltage(4.0),
-            new WaitCommand(1.0)));
+            new SetRollersVoltage(4.0)));
         NamedCommands.registerCommand("AlgaeIntakeL2", new ParallelCommandGroup(
             RobotCommands.algaePrime(AlgaeSubsystem.State.kReefIntake, ElevatorSubsystem.State.kAlgaeL2),
             new AlgaeRoller.IntakeCommand()

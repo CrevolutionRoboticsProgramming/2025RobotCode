@@ -25,6 +25,12 @@
                 "data": {
                   "name": "LineUpRight"
                 }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
               }
             ]
           }
@@ -36,15 +42,67 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "L_LGr"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L_LGr"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LolipopLeft"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "LGr_A"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LGr_A"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ResetArmWrist"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -62,6 +120,12 @@
                 "data": {
                   "name": "LineUpLeft"
                 }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
               }
             ]
           }
@@ -73,15 +137,67 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "A_MGr"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A_MGr"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LolipopLeft"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "MGr_B"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MGr_B"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ResetArmWrist"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -99,6 +215,12 @@
                 "data": {
                   "name": "LineUpRight"
                 }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
               }
             ]
           }
@@ -110,9 +232,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "B_RGr"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B_RGr"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LolipopLeft"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

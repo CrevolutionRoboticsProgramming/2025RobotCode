@@ -11,51 +11,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AutonScoreL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C_RGr"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HPPickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RGr_B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutonScoreL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "B_MGr"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HPPickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MGr_A"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpLeft"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              }
+            ]
           }
         },
         {
@@ -65,9 +42,225 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "A_LGr"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C_RGr"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LolipopLeft"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RGr_B"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ResetArmWrist"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpRight"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL4"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B_MGr"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LolipopLeft"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MGr_A"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ResetArmWrist"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpLeft"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL4"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A_LGr"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "LolipopRight"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
