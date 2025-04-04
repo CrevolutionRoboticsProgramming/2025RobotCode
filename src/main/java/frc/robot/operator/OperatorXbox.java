@@ -202,22 +202,22 @@ public class OperatorXbox extends XboxGamepad {
         );
 
         // Score Prime Auto ALign L4
-        controller.x().and(leftTriggerOnly()).onTrue(RobotCommands.coralPrime(
-            RushinatorPivot.State.kStowAutoAlignL4, ElevatorSubsystem.State.kCoralL4)
-        );
-        controller.x().and(leftTriggerOnly()).onTrue(new ConditionalCommand(
-            new SetWristState(RushinatorWrist.State.kTravelL4Right), 
-            new SetWristState(RushinatorWrist.State.kTravelL4Left), 
-            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
-            )
-        );
+        // controller.x().and(leftTriggerOnly()).onTrue(RobotCommands.coralPrime(
+        //     RushinatorPivot.State.kStowAutoAlignL4, ElevatorSubsystem.State.kCoralL4)
+        // );
+        // controller.x().and(leftTriggerOnly()).onTrue(new ConditionalCommand(
+        //     new SetWristState(RushinatorWrist.State.kTravelL4Right), 
+        //     new SetWristState(RushinatorWrist.State.kTravelL4Left), 
+        //     () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid
+        //     )
+        // );
 
         // Algae L3
         controller.y().and(leftTriggerOnly()).onTrue(new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3));

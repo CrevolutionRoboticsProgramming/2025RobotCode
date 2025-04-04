@@ -168,25 +168,25 @@ public class DriverXbox extends XboxGamepad {
         
 
         // Score L4 Auto Align
-        controller.y().and(() -> OperatorXbox.getInstance().controller.x().and(leftTriggerOnly()).getAsBoolean()).whileTrue(new ConditionalCommand(
-            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL4, RushinatorWrist.State.kScoreL4RightWrist), 
-            RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL4, RushinatorWrist.State.kScoreL4LeftWrist), 
-            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist ||  
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
-        );
-        controller.y().and(() -> OperatorXbox.getInstance().controller.x().and(leftTriggerOnly()).getAsBoolean()).whileTrue(
-            new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4)
-        );
-        controller.y().and(() -> OperatorXbox.getInstance().controller.x().and(leftTriggerOnly()).getAsBoolean()).whileTrue(
-            new SetRollersVoltage(0.0)
-        );
+        // controller.y().and(() -> OperatorXbox.getInstance().controller.x().and(leftTriggerOnly()).getAsBoolean()).whileTrue(new ConditionalCommand(
+        //     RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL4, RushinatorWrist.State.kScoreL4RightWrist), 
+        //     RobotCommands.coralPrimeShoot(RushinatorPivot.State.kScoreL4, RushinatorWrist.State.kScoreL4LeftWrist), 
+        //     () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist ||  
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+        //     RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        // );
+        // controller.y().and(() -> OperatorXbox.getInstance().controller.x().and(leftTriggerOnly()).getAsBoolean()).whileTrue(
+        //     new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4)
+        // );
+        // controller.y().and(() -> OperatorXbox.getInstance().controller.x().and(leftTriggerOnly()).getAsBoolean()).whileTrue(
+        //     new SetRollersVoltage(0.0)
+        // );
 
         // controller.y().and(() -> OperatorXbox.getInstance().controller.y().getAsBoolean()).whileFalse(
         //     new SetElevatorState(ElevatorSubsystem.State.kCoralL4)

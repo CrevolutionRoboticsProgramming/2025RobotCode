@@ -116,14 +116,19 @@ public class VisionConfig {
         public static final double THETA_TOLERANCE = 0.03;
 
         public static final Distance ALIGNMENT_TOLERANCE = Inches.of(0.5); //inches
-        public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(2);
+        public static final LinearVelocity MAX_ALIGN_TRANSLATION_VELOCITY = TunerConstants.kSpeedAt12Volts.div(8);
         public static final LinearAcceleration MAX_ALIGN_TRANSLATION_ACCELERATION = MetersPerSecondPerSecond.of(6.0);
         public static final AngularVelocity MAX_ALIGN_ANGULAR_VELOCITY = RotationsPerSecond.of(1.25).times(0.75);
         public static final AngularAcceleration MAX_ALIGN_ANGULAR_ACCELERATION = RadiansPerSecondPerSecond.of(6.0 * Math.PI);
         
     }
 
-    private static final double acutalX = 5.675;
+    /*Red Alliance */
+    private static final double acutalX = 5.775;
+
+    /*Blue Alliance */
+    // private static final double acutalX = 5.1;
+
     private static final double x = 0.5 * acutalX;
     private static final double y = (Math.sqrt(3)/2) * acutalX;
 

@@ -158,14 +158,14 @@ public class RobotContainer {
         //         new ElevatorSubsystem.DefaultCommand(ElevatorSubsystem.getInstance(), operator::getElevatorOutput)
         // );
 
-        // ElevatorSubsystem.getInstance().setDefaultCommand(
-        //     new ElevatorSubsystem.zero()
-        // );
-        AlgaeSubsystem.getInstance().setDefaultCommand(
-            new AlgaeSubsystem.DefaultCommand()
-        );
         RushinatorPivot.getInstance().setDefaultCommand(
             new RushinatorPivot.DefaultCommand()
+        );
+        ElevatorSubsystem.getInstance().setDefaultCommand(
+            new ElevatorSubsystem.zero()
+        );
+        AlgaeSubsystem.getInstance().setDefaultCommand(
+            new AlgaeSubsystem.DefaultCommand()
         );
         RushinatorRollers.getInstance().setDefaultCommand(
             new RushinatorRollers.DefaultCommand()

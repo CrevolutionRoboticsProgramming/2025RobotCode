@@ -109,9 +109,9 @@ public class RobotCommands {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
-                new SetArmState(RushinatorPivot.State.kScoreL4Auton),
+                new SetArmState(RushinatorPivot.State.kScoreL4),
                 new SetWristState(RushinatorWrist.State.kScoreL4RightWrist),
-                new WaitCommand(0.35)
+                new WaitCommand(0.4)
             ),
             new ParallelRaceGroup(
                 new SetArmState(RushinatorPivot.State.kStowTravel),

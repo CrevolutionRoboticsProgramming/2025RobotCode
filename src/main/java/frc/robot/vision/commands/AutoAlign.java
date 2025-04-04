@@ -41,9 +41,15 @@ public class AutoAlign extends Command {
   private final Distance TRANSLATION_TOLERANCE = Inches.of(0.25);
   private final Angle THETA_TOLERANCE = Degrees.of(1.0);
 
+  /* Blue Alliance */
+  // private final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
+  // private final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist - Units.inchesToMeters(3.75), Rotation2d.kZero);
+  // private final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist - Units.inchesToMeters(1.00), Rotation2d.kZero);
+
+  /* Red Alliance */
   private final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
   private final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist - Units.inchesToMeters(0.75), Rotation2d.kZero);
-  private final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist - Units.inchesToMeters(0.75), Rotation2d.kZero);
+  private final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist - Units.inchesToMeters(1.25), Rotation2d.kZero);
 
   private final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
   private final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist + Units.inchesToMeters(1.25) , Rotation2d.kZero);
@@ -116,7 +122,7 @@ public class AutoAlign extends Command {
         return ReefFace.BLU_REEF_GH_L4;
       }
       else if(oldReefFace == ReefFace.BLU_REEF_IJ) {
-        return ReefFace.BLU_REEF_IJ_L4;
+        return ReefFace.BLU_REEF_IJ_L4; 
       }
       else if(oldReefFace == ReefFace.BLU_REEF_KL) {
         return ReefFace.BLU_REEF_KL_L4;
