@@ -86,30 +86,61 @@ public class RobotContainer {
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
                 CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
-                if (currAlliance == Alliance.Blue){
-                    if (modeFast) {
-                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
-                    .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
-                    .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-                    } else {
-                    return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
-                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
-                        .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
-                    }
-                } else {
-                    if (modeFast) {
-                        return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
-                        .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                    if (currAlliance == Alliance.Blue){
+                        if (modeFast) {
+                        return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+                        .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
                         .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
-                    } else {
-                        return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
-                            .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
+                        } else {
+                        return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
+                            .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
                             .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+                        }
+                    } else {
+                        if (modeFast) {
+                            return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+                            .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+                            .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+                        } else {
+                            return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
+                                .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
+                                .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+                        }
                     }
-                }
             })
         );
 
+        // if (modeFast) {
+        //     return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+        //     .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+        //     .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+        //     } else {
+        //     return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
+        //         .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
+        //         .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+        // }
+
+        // if (currAlliance == Alliance.Blue){
+        //     if (modeFast) {
+        //     return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+        //     .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+        //     .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+        //     } else {
+        //     return drive.withVelocityX(driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
+        //         .withVelocityY(driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
+        //         .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+        //     }
+        // } else {
+        //     if (modeFast) {
+        //         return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity) // Drive forward with negative Y (forward)
+        //         .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity) // Drive left with negative X (left)
+        //         .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity); // Drive counterclockwise with negative X (left)
+        //     } else {
+        //         return drive.withVelocityX(-driver.getDriveTranslation().getX() * kMaxVelocity * 0.3) // Drive forward with negative Y (forward)
+        //             .withVelocityY(-driver.getDriveTranslation().getY() * kMaxVelocity * 0.3) // Drive left with negative X (left)
+        //             .withRotationalRate(driver.getDriveRotation() * kMaxAngularVelocity * 0.3); // Drive counterclockwise with negative X (left)
+        //     }
+        // }
         // RushinatorWrist.getInstance().setDefaultCommand(new HoldWristPosition());
         // RushinatorWrist.getInstance().setDefaultCommand(new ManualWristControl(() -> operator.getLeftY()));
         
