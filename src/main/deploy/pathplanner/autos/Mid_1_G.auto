@@ -25,6 +25,12 @@
                 "data": {
                   "name": "LineUpRight"
                 }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
               }
             ]
           }
