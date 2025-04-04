@@ -54,6 +54,7 @@ public class RushinatorPivot extends SubsystemBase {
         kScoreL3(Rotation2d.fromRotations(0.079833984375)),
         kScoreL4(Rotation2d.fromRotations(0.07958984375)),
         kStowL4(Rotation2d.fromRotations(0.146728515625)),
+        kStowAutoAlignL4(Rotation2d.fromRotations(0.185)),
         kScoreL4Auton(Rotation2d.fromRotations(0.10670898437)),
         kStowTravel(Rotation2d.fromRotations(0.223876953125)),
         kLoliPop(Rotation2d.fromRotations(-0.075419921875)),

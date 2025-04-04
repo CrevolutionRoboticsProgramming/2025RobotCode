@@ -36,9 +36,21 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "AutonScoreL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutonScoreL1"
           }
         }
       ]

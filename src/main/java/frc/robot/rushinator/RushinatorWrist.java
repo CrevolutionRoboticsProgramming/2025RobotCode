@@ -94,6 +94,9 @@ public class RushinatorWrist extends SubsystemBase {
         kTravelL4Left(Rotation2d.fromRotations(-0.191650390625 - 0.25)),
         kTravelL4Right(Rotation2d.fromRotations(-0.191650390625 + 0.25)),
         kTravelL4Mid(Rotation2d.fromRotations(-0.191650390625)),
+        kTravelAutoAlignL4Left(Rotation2d.fromRotations(-0.191650390625 - 0.25)),
+        kTravelAutonAlignL4Right(Rotation2d.fromRotations(-0.191650390625 + 0.25)),
+        kTravelAutonAlignL4Mid(Rotation2d.fromRotations(-0.191650390625)),
         kClimbLeft(Rotation2d.fromRotations(-0.28759765625 - 0.25)),
         kClimblRight(Rotation2d.fromRotations(-0.28759765625 + 0.25)),
         kClimblMid(Rotation2d.fromRotations(-0.28759765625));
