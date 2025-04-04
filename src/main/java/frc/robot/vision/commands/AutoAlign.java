@@ -43,10 +43,10 @@ public class AutoAlign extends Command {
 
   private final double branchOffsetRightWrist = Units.inchesToMeters(6.469);
   private final Transform2d leftBranchTransformRightWrist = new Transform2d(0.0, -branchOffsetRightWrist - Units.inchesToMeters(0.75), Rotation2d.kZero);
-  private final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist - Units.inchesToMeters(1.25), Rotation2d.kZero);
+  private final Transform2d rightBranchTransformRightWrist = new Transform2d(0.0, branchOffsetRightWrist - Units.inchesToMeters(0.75), Rotation2d.kZero);
 
   private final double branchOffsetLeftWrist = Units.inchesToMeters(6.469);
-  private final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist + Units.inchesToMeters(0.75) , Rotation2d.kZero);
+  private final Transform2d leftBranchTransformLeftWrist = new Transform2d(0.0, -branchOffsetLeftWrist + Units.inchesToMeters(1.25) , Rotation2d.kZero);
   private final Transform2d rightBranchTransformLeftWrist = new Transform2d(0.0, branchOffsetLeftWrist + Units.inchesToMeters(0.5), Rotation2d.kZero);
 
   public final Transform2d robotOffset = new Transform2d(0.3018, 0, Rotation2d.kZero);

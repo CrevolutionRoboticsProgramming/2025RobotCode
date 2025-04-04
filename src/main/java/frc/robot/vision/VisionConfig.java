@@ -123,7 +123,7 @@ public class VisionConfig {
         
     }
 
-    private static final double acutalX = 6.175;
+    private static final double acutalX = 5.675;
     private static final double x = 0.5 * acutalX;
     private static final double y = (Math.sqrt(3)/2) * acutalX;
 
