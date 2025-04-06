@@ -1,11 +1,11 @@
 # 2025RobotCode
 
-   SSSSSS    TTTTTTTTTTT    AAAAAAAAA    TTTTTTTTTTT    EEEEEEEEE      SSSSSS
-  S             TTT         A       A       TTT         E            S
- S              TTT         A       A       TTT         E            S
- S              TTT         A       A       TTT         E            S
-  SSSSSS        TTT         AAAAAAAAA       TTT         EEEEEEEEE     SSSSSS
-       S        TTT         A       A       TTT         E                  S
-        S       TTT         A       A       TTT         E                   S
-       S        TTT         A       A       TTT         E                  S
-  SSSSSS        TTT         A       A       TTT         EEEEEEEEE    SSSSSS
+ W       W   OOOOOOO   RRRRRRRR   L         DDDDDD    SSSSSS
+ W       W  O       O  R      R   L         D     D  S
+ W   W   W  O       O  RRRRRRRR   L         D     D  S
+ W  W W  W  O       O  R   R      L         D     D  S
+ W W   W W  O       O  R    R     L         D     D   SSSSSS
+ WW     WW  O       O  R     R    L         D     D        S
+ W       W  O       O  R      R   L         D     D         S
+ W       W  O       O  R       R  L         D     D        S
+ W       W   OOOOOOO   R        R LLLLLLLL  DDDDDD    SSSSSS
