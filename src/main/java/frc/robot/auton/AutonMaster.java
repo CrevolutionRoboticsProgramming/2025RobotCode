@@ -56,7 +56,10 @@ public class AutonMaster {
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
-                () -> PoseEstimatorSubsystem.getInstance().getCurrentPose(),   // Supplier of current robot pose
+                () -> {
+                    Pose2d poseEstPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
+                    return poseEstPose != Pose2d.kZero ? poseEstPose : CommandSwerveDrivetrain.getInstance().getPose();
+                },   // Supplier of current robot pose
                 drivetrain::resetPose,         // Consumer for seeding pose against auto
                 drivetrain::getRobotRelvativeSpeeds, // Supplier of current robot speeds
                 // Consumer of ChassisSpeeds and feedforwards to drive the robot
