@@ -84,12 +84,56 @@ public class RobotCommands {
         );
     }
 
+    public static Command coralPrimeAutoScore(RushinatorPivot.State armState, RushinatorWrist.State wristState, ElevatorSubsystem.State eleState) {
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new SetArmState(armState),
+                new SetWristState(wristState),
+                new SetElevatorState(eleState)
+            )
+        );
+    }
+
     public static Command autoHPPickUp() {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                 coralPrime(RushinatorPivot.State.kHPIntake, ElevatorSubsystem.State.kZero),
                 new SetWristState(RushinatorWrist.State.kHPMid),
                 new SetRollersVoltage(4.5)
+            )
+        );
+    }
+
+    public static Command scoreCoralAutoL4RightWrist(){
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
+                new SetArmState(RushinatorPivot.State.kScoreL4),
+                new SetWristState(RushinatorWrist.State.kScoreL4RightWrist),
+                new WaitCommand(0.4)
+            ),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetWristState(RushinatorWrist.State.kTravelRight),
+                new WaitCommand(0.7)
+            )
+        );
+    }
+
+    public static Command scoreCoralAutoL4LeftWrist(){
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL4),
+                new SetArmState(RushinatorPivot.State.kScoreL4),
+                new SetWristState(RushinatorWrist.State.kScoreL4LeftWrist),
+                new WaitCommand(0.4)
+            ),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new SetArmState(RushinatorPivot.State.kStowTravel),
+                new SetWristState(RushinatorWrist.State.kTravelLeft),
+                new WaitCommand(0.7)
             )
         );
     }

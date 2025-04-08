@@ -204,8 +204,10 @@ public class DriverXbox extends XboxGamepad {
 
         // Pulse Alage
         // controller.a().whileTrue(new AlgaeRoller.IntakeCommand());
-        controller.a().whileTrue(new AlgaeRoller.PrimeShootCommand());
-        controller.a().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kZero));
+
+         /*Algae Shoot */
+        // controller.a().whileTrue(new AlgaeRoller.PrimeShootCommand());
+        // controller.a().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kZero));
         
 
         // Spit Algae
@@ -236,7 +238,48 @@ public class DriverXbox extends XboxGamepad {
 
 
         controller.povLeft().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+        controller.povLeft().whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight, ElevatorSubsystem.State.kCoralL4), 
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelLeft, ElevatorSubsystem.State.kCoralL4), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+
+        controller.a().onTrue(new ConditionalCommand(
+            RobotCommands.scoreCoralAutoL4RightWrist(), 
+            RobotCommands.scoreCoralAutoL4LeftWrist(), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+
         controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
+        controller.povRight().whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight, ElevatorSubsystem.State.kCoralL4), 
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelLeft, ElevatorSubsystem.State.kCoralL4), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
         
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
