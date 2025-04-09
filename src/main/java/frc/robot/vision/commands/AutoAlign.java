@@ -246,7 +246,7 @@ public class AutoAlign extends Command {
       SmartDashboard.putBoolean("requesting lineup left branch - AutoAlign", isLeftAlign);
       SmartDashboard.putString("nearest ReefFace accessed - AutoAlign", nearestReefFace.name());
       if(isElevatorL4 == true) {
-      System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
+      // System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
       ReefFace newReefFace = updateReefFace(nearestReefFace);
       SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
       goalPose2d = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
