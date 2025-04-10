@@ -70,9 +70,9 @@ public class AutonMaster {
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0.0, 0.0),
+                    new PIDConstants(4.5, 0.0, 0.0),
                     // PID constants for rotation
-                    new PIDConstants(6.5, 0, 0.05)
+                    new PIDConstants(5.5, 0, 0.0)
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
