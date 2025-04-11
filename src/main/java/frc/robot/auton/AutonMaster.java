@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -141,11 +142,18 @@ public class AutonMaster {
             new AlgaeRoller.PrimeCommand()));
         NamedCommands.registerCommand("ScoreAlgaeBarge", new AlgaeRoller.ShootCommand());
 
-        NamedCommands.registerCommand("LineUpBlueHPStationRight", new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
-        NamedCommands.registerCommand("LineUpBlueHPStationLeft", new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
-        NamedCommands.registerCommand("LineUpRedHPStationRight", new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag));
-        NamedCommands.registerCommand("LineUpRedHPStationLeft", new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag));
+        // NamedCommands.registerCommand("LineUpBlueHPStationRight", new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
+        // NamedCommands.registerCommand("LineUpBlueHPStationLeft", new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
+        // NamedCommands.registerCommand("LineUpRedHPStationRight", new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag));
+        // NamedCommands.registerCommand("LineUpRedHPStationLeft", new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag));
 
+        NamedCommands.registerCommand("LineUpHPStationRight", new ConditionalCommand(
+            new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag), 
+            () -> DriverStation.getAlliance().get() == Alliance.Red));
+        
+        NamedCommands.registerCommand("LineUpHPStationLeft", new ConditionalCommand(
+            new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag), 
+            () -> DriverStation.getAlliance().get() == Alliance.Red));
 
     }
 
