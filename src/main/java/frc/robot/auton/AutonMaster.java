@@ -40,7 +40,9 @@ import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.rushinator.commands.SetWristState;
 import frc.robot.vision.LineupMaster;
 import frc.robot.vision.PoseEstimatorSubsystem;
+import frc.robot.vision.VisionConfig.HPStation;
 import frc.robot.vision.commands.AutoAlign;
+import frc.robot.vision.commands.AutoAlignHP;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
@@ -138,6 +140,13 @@ public class AutonMaster {
             RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kCoralL4),
             new AlgaeRoller.PrimeCommand()));
         NamedCommands.registerCommand("ScoreAlgaeBarge", new AlgaeRoller.ShootCommand());
+
+        NamedCommands.registerCommand("LineUpBlueHPStationRight", new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
+        NamedCommands.registerCommand("LineUpBlueHPStationLeft", new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
+        NamedCommands.registerCommand("LineUpRedHPStationRight", new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag));
+        NamedCommands.registerCommand("LineUpRedHPStationLeft", new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag));
+
+
     }
 
     public Command getTestPathFindingCommand() {

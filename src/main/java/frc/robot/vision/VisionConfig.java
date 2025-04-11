@@ -132,6 +132,28 @@ public class VisionConfig {
     private static final double x = 0.5 * acutalX;
     private static final double y = (Math.sqrt(3)/2) * acutalX;
 
+    public enum HPStation {
+        //TODO: may need to adjust x, y coordinates for all poses below - see markings reference picture
+        BLU_LEFT_STATION(13, Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), 305),
+        BLU_RIGHT_STATION(12, Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), 55),
+        RED_LEFT_STATION(1,Units.inchesToMeters(657.37), Units.inchesToMeters(25.80), 125),
+        RED_RIGHT_STATION(2, Units.inchesToMeters(657.37), Units.inchesToMeters(291.20), -125);
+
+        public final Pose2d AprilTag;
+        public final int aprilTagID;
+        public final double aprilTagX;
+        public final double aprilTagY;
+        public final double aprilTagTheta;
+
+        private HPStation(int aprilTagID, double aprilTagX, double aprilTagY, double aprilTagTheta) {
+            this.AprilTag = new Pose2d(aprilTagX, aprilTagY, Rotation2d.fromDegrees(aprilTagTheta));
+            this.aprilTagID = aprilTagID;
+            this.aprilTagX = aprilTagX;
+            this.aprilTagY = aprilTagY;
+            this.aprilTagTheta = aprilTagTheta;
+        }
+    }
+
     
     public enum ReefFace {
         // IMPORTANT: Fudge factors are always positive and should be in meters (use the Units.inchesToMeters() method)
