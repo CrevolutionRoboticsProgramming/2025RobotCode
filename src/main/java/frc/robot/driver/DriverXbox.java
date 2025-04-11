@@ -36,7 +36,9 @@ import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.vision.LineupMaster;
 import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig;
+import frc.robot.vision.VisionConfig.HPStation;
 import frc.robot.vision.commands.AutoAlign;
+import frc.robot.vision.commands.AutoAlignHP;
 
 public class DriverXbox extends XboxGamepad {
     private static class Settings {
@@ -281,6 +283,9 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
         
+        controller.povUp().whileTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
+        controller.povDown().whileTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
+
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
         //     CommandSwerveDrivetrain.getInstance(), 

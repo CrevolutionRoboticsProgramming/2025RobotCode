@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Start_G"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutonScoreL4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Start_G"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeIntakeL2"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,15 +30,53 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "AlgaeIntakeL2"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrimeScoreL4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LineUpRight"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "GH-Algae_Score"
+            "name": "AutonScoreL4"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeBargePrime"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GH-Algae_Score"
+                }
+              }
+            ]
           }
         },
         {

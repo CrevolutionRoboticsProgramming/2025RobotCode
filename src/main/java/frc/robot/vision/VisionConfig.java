@@ -135,7 +135,7 @@ public class VisionConfig {
     public enum HPStation {
         //TODO: may need to adjust x, y coordinates for all poses below - see markings reference picture
         BLU_LEFT_STATION(13, Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), 305),
-        BLU_RIGHT_STATION(12, Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), 55),
+        BLU_RIGHT_STATION(12, 1.014, 0.807, 55),
         RED_LEFT_STATION(1,Units.inchesToMeters(657.37), Units.inchesToMeters(25.80), 125),
         RED_RIGHT_STATION(2, Units.inchesToMeters(657.37), Units.inchesToMeters(291.20), -125);
 

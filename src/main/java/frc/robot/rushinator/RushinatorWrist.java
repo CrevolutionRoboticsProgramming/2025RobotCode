@@ -42,7 +42,7 @@ public class RushinatorWrist extends SubsystemBase {
 
         static final double kCurrentLimit = 40.0;
 
-        public static final double kZeroOffset = 0.306640625; // rotations
+        public static final double kZeroOffset = 0.505126953125; // rotations
 
     }
 // 12.3720703125 Score MId

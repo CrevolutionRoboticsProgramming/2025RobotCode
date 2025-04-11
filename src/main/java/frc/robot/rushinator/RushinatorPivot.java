@@ -36,7 +36,7 @@ public class RushinatorPivot extends SubsystemBase {
         static final double kI = 0.0;
         static final double kD = 0.0;
 
-        static final double kZeroOffset = 0.05615234375000001; // rotations
+        static final double kZeroOffset = 0.037841796875; // rotations
 
         static final double kCurrentLimit = 40.0;
 
@@ -46,13 +46,13 @@ public class RushinatorPivot extends SubsystemBase {
     }
 
     public enum State {
-        kFloorIntake(Rotation2d.fromRotations(-0.080185546875)),
+        kFloorIntake(Rotation2d.fromRotations(-0.090185546875)),
         kHPIntake(Rotation2d.fromRotations(0.254638671875)),
         kScore(Rotation2d.fromRotations(0.119873046875)),
         kScoreL1(Rotation2d.fromRotations(0.10595703125)),
         kScoreL2(Rotation2d.fromRotations(0.04272460937499999)),
         kScoreL3(Rotation2d.fromRotations(0.079833984375)),
-        kScoreL4(Rotation2d.fromRotations(0.07958984375)),
+        kScoreL4(Rotation2d.fromRotations(0.06058984375)),
         kStowL4(Rotation2d.fromRotations(0.146728515625)),
         kStowAutoAlignL4(Rotation2d.fromRotations(0.185)),
         kScoreL4Auton(Rotation2d.fromRotations(0.10670898437)),
@@ -151,6 +151,7 @@ public class RushinatorPivot extends SubsystemBase {
         }
 
         mTalonPivot.setVoltage(voltage);
+
         // System.out.println("This Periodic is bieng called");
         // Telemetry
         SmartDashboard.putString("KLastState Arm Pivot", kLastState.name());
