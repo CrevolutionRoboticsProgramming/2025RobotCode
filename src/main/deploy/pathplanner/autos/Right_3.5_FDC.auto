@@ -71,15 +71,9 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpHPStationRight"
-                }
-              },
-              {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.8
                 }
               }
             ]
@@ -165,15 +159,9 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpHPStationRight"
-                }
-              },
-              {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.8
                 }
               }
             ]
@@ -259,15 +247,9 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "LineUpHPStationRight"
-                }
-              },
-              {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 0.8
                 }
               }
             ]

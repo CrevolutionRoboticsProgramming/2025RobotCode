@@ -283,8 +283,8 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
         
-        // controller.povUp().whileTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
-        // controller.povDown().whileTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
+        controller.povUp().onTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
+        controller.povDown().onTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
 
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
