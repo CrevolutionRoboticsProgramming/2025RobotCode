@@ -81,6 +81,7 @@ public class LineupMaster {
     }
 
     public Command directDriveToNearestLeftBranch() {
+        System.out.println("LEFT BRANCH CALLED");
         ReefFace nearestReefFace = getClosestReefFace(() -> PoseEstimatorSubsystem.getInstance().getCurrentPose());
         return directDriveToPose(() -> nearestReefFace.leftBranch, () -> true);
         // return new SelectCommand<>(leftBranchAlignmentCommands, () -> getClosestReefFace(() -> PoseEstimatorSubsystem.getInstance().getCurrentPose()));
@@ -101,7 +102,7 @@ public class LineupMaster {
         // Supplier<ReefFace> nearestReefFace = getClosestReefFace(()->PoseEstimatorSubsystem.getInstance().getCurrentPose());
         // return directDriveToPose(() -> nearestReefFace.get().rightBranch, false);
         ReefFace nearestReefFace = getClosestReefFace(() -> PoseEstimatorSubsystem.getInstance().getCurrentPose());
-        return directDriveToPose(() -> nearestReefFace.rightBranch, () -> true);
+        return directDriveToPose(() -> nearestReefFace.rightBranch, () -> false);
         // try {
         // return new SelectCommand<>(rightBranchAlignmentCommands, () -> getClosestReefFace(() -> PoseEstimatorSubsystem.getInstance().getCurrentPose()));
         // } catch(Exception ex) {
