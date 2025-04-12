@@ -86,11 +86,12 @@ public class OperatorXbox extends XboxGamepad {
         controller.rightTrigger().whileTrue(new SetElevatorState(ElevatorSubsystem.State.kZero));
 
         // ALgae Scooring For Far Barge Shot
-        controller.rightBumper().and(() -> DriverXbox.getInstance().controller.a().getAsBoolean()).whileTrue(new AlgaeRoller.FarShootCommand());
+        controller.x().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.FarShootCommand());
 
         // Algae SCorring for Process & Barge
         controller.rightBumper().and(leftTriggerOnly()).whileTrue(new AlgaeRoller.ProcessShootCommand());
         controller.rightBumper().whileTrue(new AlgaeRoller.ShootCommand());
+        
 
         // ADjusting Coral ORinetaiton
         controller.povLeft().onTrue(new ConditionalCommand(

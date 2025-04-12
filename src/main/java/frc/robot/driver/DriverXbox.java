@@ -208,12 +208,12 @@ public class DriverXbox extends XboxGamepad {
         // controller.a().whileTrue(new AlgaeRoller.IntakeCommand());
 
          /*Algae Shoot */
-        // controller.a().whileTrue(new AlgaeRoller.PrimeShootCommand());
-        // controller.a().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kZero));
+        controller.b().whileTrue(new AlgaeRoller.PrimeShootCommand());
+        controller.b().whileTrue(RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kZero));
         
 
         // Spit Algae
-        controller.b().whileTrue(new AlgaeRoller.ShootCommand());
+        // controller.b().whileTrue(new AlgaeRoller.ShootCommand());
 
         // Coral Ground Intake
         controller.rightTrigger().whileTrue(RobotCommands.coralPrime(
@@ -283,8 +283,8 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
         
-        controller.povUp().whileTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
-        controller.povDown().whileTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
+        // controller.povUp().whileTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
+        // controller.povDown().whileTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
 
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(

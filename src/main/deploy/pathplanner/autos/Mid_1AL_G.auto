@@ -24,9 +24,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "G_GH-Algae"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "G_GH-Algae"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeConstantIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ZeroAlgae"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -65,24 +97,139 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeBargePrime"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "GH-Algae_Score"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.6
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AlgaeBargePrime"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "ScoreAlgaeBarge"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreAlgaeBarge"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.65
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ZeroAlgae"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.7
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "I_IJ-Algae"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AlgaeIntakeL3"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "IJ-Algae_End"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeConstantIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ZeroAlgae"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

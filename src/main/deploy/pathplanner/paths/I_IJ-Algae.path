@@ -3,38 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.198,
-        "y": 2.31875
+        "x": 6.961500000000001,
+        "y": 5.039
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6539942501426845,
-        "y": 2.131788691526274
+        "x": 6.09375,
+        "y": 6.832999999999999
       },
       "isLocked": false,
-      "linkedName": "C"
+      "linkedName": "ScoreAl"
     },
     {
       "anchor": {
-        "x": 1.41375,
-        "y": 1.0707499999999994
+        "x": 5.07,
+        "y": 5.1754999999999995
       },
       "prevControl": {
-        "x": 2.0678511728920146,
-        "y": 1.9413712747438887
+        "x": 5.31375,
+        "y": 5.779999999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightLoad"
+      "linkedName": "IAlgaeIntake"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4544881889763806,
+      "rotationDegrees": -110.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 4.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.655288325621555
+    "rotation": -119.05460409907708
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Middle",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -121.37300514010843
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.357,
+        "x": 6.8542499999999995,
         "y": 4.02
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.907271739130434,
+        "x": 7.404521739130433,
         "y": 4.115380434782608
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 7.098,
-        "y": 4.87325
+        "x": 6.961500000000001,
+        "y": 5.039
       },
       "prevControl": {
-        "x": 6.489032608695652,
-        "y": 4.682489130434782
+        "x": 6.352532608695653,
+        "y": 4.8482391304347825
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,23 +31,10 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "ZeroAlgae",
-      "waypointRelativePos": 0.22985611510791487,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "AlgaeBargePrime",
-      "waypointRelativePos": 0.9205035971223003,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
@@ -63,5 +50,5 @@
     "velocity": 0,
     "rotation": 0.6995474049508932
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

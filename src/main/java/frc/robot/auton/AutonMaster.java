@@ -30,10 +30,12 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
+import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.commands.RobotCommands;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.elevator.ElevatorSubsystem;
+import frc.robot.elevator.commands.SetElevatorState;
 import frc.robot.rushinator.RushinatorPivot;
 import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
@@ -96,6 +98,7 @@ public class AutonMaster {
         autonChooser.addOption("LeftStart3PieceCoralFeed", AutoBuilder.buildAuto("Left_3.5_IKL"));
         autonChooser.addOption("MidStart1PieceCoral", AutoBuilder.buildAuto("Mid_1_G"));
         autonChooser.addOption("RightMoveSomeone", AutoBuilder.buildAuto("Right_Move_Someone"));
+        autonChooser.addOption("MidStartAlgaeAuto", AutoBuilder.buildAuto("Mid_1AL_G"));
         autonChooser.addOption("RightStartRightLoli3.5Piece", AutoBuilder.buildAuto("Right_3.5_CBA_Ground"));
         autonChooser.addOption("LeftStartLeftLoli3.5Piece", AutoBuilder.buildAuto("Left_3.5_LAB_Ground"));
         autonChooser.addOption("MidLeftStartLeftLoli3.5Piece", AutoBuilder.buildAuto("Mid_3.5_GAB_Ground"));
@@ -112,10 +115,14 @@ public class AutonMaster {
 
     public void configureNamedCommands() {
         NamedCommands.registerCommand("PrimeScoreL4", RobotCommands.primeScoreCoralAutonL4());
-        // NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
-        NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
-        NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
-        // NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
+
+        // NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
+        // NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
+
+        NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
+        NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
+
+
         NamedCommands.registerCommand("AutonScoreL1", RobotCommands.scoreCoralAutonL1());
         NamedCommands.registerCommand("AutonScoreL2", RobotCommands.scoreCoralAutonL2());
         NamedCommands.registerCommand("AutonScoreL3", RobotCommands.scoreCoralAutonL3());
@@ -131,14 +138,22 @@ public class AutonMaster {
             new SetRollersVoltage(4.0)));
         NamedCommands.registerCommand("ResetArmWrist", new ParallelRaceGroup(
             RobotCommands.coralPrimeShoot(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight),
-            new SetRollersVoltage(4.0)));
+            new SetRollersVoltage(0)));
         NamedCommands.registerCommand("AlgaeIntakeL2", new ParallelCommandGroup(
-            RobotCommands.algaePrime(AlgaeSubsystem.State.kReefIntake, ElevatorSubsystem.State.kAlgaeL2),
+            new SetAngleAlgaePivot(AlgaeSubsystem.State.kReefIntake),
+            new SetElevatorState(ElevatorSubsystem.State.kAlgaeL2),
             new AlgaeRoller.IntakeCommand()
         ));
-        NamedCommands.registerCommand("ZeroAlgae", RobotCommands.algaePrime(AlgaeSubsystem.State.kStow, ElevatorSubsystem.State.kAlgaeL2));
+        NamedCommands.registerCommand("AlgaeIntakeL3", new ParallelCommandGroup(
+            new SetAngleAlgaePivot(AlgaeSubsystem.State.kReefIntake),
+            new SetElevatorState(ElevatorSubsystem.State.kAlgaeL3),
+            new AlgaeRoller.IntakeCommand()
+        ));
+        NamedCommands.registerCommand("AlgaeConstantIntake", new AlgaeRoller.SetIndexerVoltagCommand(AlgaeRoller.getInstance(), -5));
+
+        NamedCommands.registerCommand("ZeroAlgae", RobotCommands.algaePrime(AlgaeSubsystem.State.kStow, ElevatorSubsystem.State.kZero));
         NamedCommands.registerCommand("AlgaeBargePrime", new ParallelCommandGroup(
-            RobotCommands.algaePrime(AlgaeSubsystem.State.kScore, ElevatorSubsystem.State.kCoralL4),
+            RobotCommands.algaePrime(AlgaeSubsystem.State.kStow, ElevatorSubsystem.State.kCoralL4),
             new AlgaeRoller.PrimeCommand()));
         NamedCommands.registerCommand("ScoreAlgaeBarge", new AlgaeRoller.ShootCommand());
 
@@ -148,11 +163,11 @@ public class AutonMaster {
         // NamedCommands.registerCommand("LineUpRedHPStationLeft", new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag));
 
         NamedCommands.registerCommand("LineUpHPStationRight", new ConditionalCommand(
-            new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag), 
+            new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag), 
             () -> DriverStation.getAlliance().get() == Alliance.Red));
         
         NamedCommands.registerCommand("LineUpHPStationLeft", new ConditionalCommand(
-            new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag), 
+            new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag), 
             () -> DriverStation.getAlliance().get() == Alliance.Red));
 
     }
