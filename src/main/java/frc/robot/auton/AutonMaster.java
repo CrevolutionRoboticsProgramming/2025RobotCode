@@ -116,11 +116,11 @@ public class AutonMaster {
     public void configureNamedCommands() {
         NamedCommands.registerCommand("PrimeScoreL4", RobotCommands.primeScoreCoralAutonL4());
 
-        // NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
-        // NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
+        NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
+        NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
 
-        NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
-        NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
+        // NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
+        // NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
 
 
         NamedCommands.registerCommand("AutonScoreL1", RobotCommands.scoreCoralAutonL1());

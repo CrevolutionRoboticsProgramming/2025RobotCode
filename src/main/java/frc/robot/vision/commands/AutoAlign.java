@@ -75,6 +75,8 @@ public class AutoAlign extends Command {
   boolean isLeftAlign = false;
   ReefFace nearestReefFace = null;
 
+  Supplier<Boolean> isAutoLeftAlign;
+
   private final static CommandSwerveDrivetrain drivetrainSubsystem = CommandSwerveDrivetrain.getInstance();
 //   private final FieldCentric fieldCentricSwerveRequest = new FieldCentric()
 //       .withSteerRequestType(SteerRequestType.MotionMagicExpo)
@@ -94,9 +96,7 @@ public class AutoAlign extends Command {
    */
   public AutoAlign(Supplier<Pose2d> targetPose, Supplier<Boolean> isLeftAlign) {
     this(drivetrainSubsystem, poseProvider);
-    if(DriverStation.isAutonomous()) {
-      this.isLeftAlign = isLeftAlign.get();
-    }
+    this.isAutoLeftAlign = isLeftAlign;
     // this.goalPose2d = targetPose.get();
     // this.isLeftAlign = isLeftAlign.get();
     // this.nearestReefFace = nearestReefFace.get();
@@ -216,7 +216,10 @@ public class AutoAlign extends Command {
 
   @Override
   public void execute() {
-      if(!DriverStation.isAutonomous()) {
+      if(DriverStation.isAutonomous()) {
+        this.isLeftAlign = this.isAutoLeftAlign.get();
+      }
+      else {
         this.isLeftAlign = DriverXbox.getInstance().isLeftPovPressed();
       }
       this.nearestReefFace = LineupMaster.getClosestReefFace(poseProvider);
