@@ -250,42 +250,42 @@ public class AutoAlign extends Command {
       SmartDashboard.putString("nearest ReefFace accessed - AutoAlign", nearestReefFace.name());
       if(isElevatorL4 == true) {
       // System.out.println("REACHED ELEVATOR L4 IF STATEMENT IN AUTOALIGN");
-      ReefFace newReefFace = updateReefFace(nearestReefFace);
-      SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
-      goalPose2d = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
-      if(isRightWrist) {
-        if(isLeftAlign) {
-          goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
-        }
-        else {
-          goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
-        }
-      }
-      else {
-        if(isLeftAlign) {
-          goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
-        }
-        else {
-          goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
-        }
-      }
-      }
-      else {
-      if(isRightWrist) {
-       if(isLeftAlign) {
-          goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
-        }
-        else {
-          goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
-        }
-      }
-      else {
-        if(isLeftAlign) {
-          goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
+        ReefFace newReefFace = updateReefFace(nearestReefFace);
+        SmartDashboard.putString("updated ReefFace - AutoAlign", newReefFace.name());
+        goalPose2d = new Pose2d(newReefFace.aprilTagX, newReefFace.aprilTagY, Rotation2d.fromDegrees(newReefFace.aprilTagTheta));
+        if(isRightWrist) {
+          if(isLeftAlign) {
+            goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
           }
           else {
-          goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
+            goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
           }
+        }
+        else {
+          if(isLeftAlign) {
+            goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
+          }
+          else {
+            goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
+          }
+        }
+      }
+      else {
+        if(isRightWrist) {
+          if(isLeftAlign) {
+              goalPose2d = goalPose2d.transformBy(leftBranchTransformRightWrist);
+            }
+            else {
+              goalPose2d = goalPose2d.transformBy(rightBranchTransformRightWrist);
+            }
+          }
+        else {
+          if(isLeftAlign) {
+            goalPose2d = goalPose2d.transformBy(leftBranchTransformLeftWrist);
+            }
+            else {
+            goalPose2d = goalPose2d.transformBy(rightBranchTransformLeftWrist);
+            }
         }
       }
 
