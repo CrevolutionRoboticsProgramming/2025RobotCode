@@ -254,20 +254,6 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
 
-        controller.a().onTrue(new ConditionalCommand(
-            RobotCommands.scoreCoralAutoL4RightWrist(), 
-            RobotCommands.scoreCoralAutoL4LeftWrist(), 
-            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
-        );
-
         controller.povRight().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
         controller.povRight().whileTrue(new ConditionalCommand(
             RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight, ElevatorSubsystem.State.kCoralL4), 
@@ -282,7 +268,68 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
-        
+
+        /* L4 Scoring */
+        controller.a().onTrue(new ConditionalCommand(
+            RobotCommands.scoreCoralAutoL4RightWrist(), 
+            RobotCommands.scoreCoralAutoL4LeftWrist(), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+
+        /* L3 Auto Aligning */
+        controller.povLeft().and(OperatorXbox.getInstance().leftTriggerOnly()).whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+        controller.povLeft().and(OperatorXbox.getInstance().leftTriggerOnly()).whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight, ElevatorSubsystem.State.kCoralL3), 
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelLeft, ElevatorSubsystem.State.kCoralL3), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+
+        controller.povRight().and(OperatorXbox.getInstance().leftTriggerOnly()).whileTrue(mLineupMaster.directDriveToNearestRightBranch());
+        controller.povRight().and(OperatorXbox.getInstance().leftTriggerOnly()).whileTrue(new ConditionalCommand(
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelRight, ElevatorSubsystem.State.kCoralL3), 
+            RobotCommands.coralPrimeAutoScore(RushinatorPivot.State.kStowTravel, RushinatorWrist.State.kTravelLeft, ElevatorSubsystem.State.kCoralL3), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+
+        /* L3 Scoring */
+        controller.a().and(OperatorXbox.getInstance().leftTriggerOnly()).onTrue(new ConditionalCommand(
+            RobotCommands.scoreCoralAutoL3RightWrist(), 
+            RobotCommands.scoreCoralAutoL3LeftWrist(), 
+            () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreRightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kTravelL4Right ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
+        );
+
         controller.povUp().onTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
         controller.povDown().onTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
 

@@ -74,6 +74,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         kAlgaeL2(17.01552734375),
         kAlgaeL3(30.27490234375),
         kAlgaeIntake(3.650390625),
+        kAlgaeLoliIntake(4.0),
         kClimb(13.1376953125),
         kZero(0.0);
 

@@ -105,6 +105,52 @@ public class RobotCommands {
         );
     }
 
+    /* Auto Scorring L3 */
+    public static Command scoreCoralAutoL3RightWrist(){
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL3),
+                new SetArmState(RushinatorPivot.State.kScoreL3),
+                new SetWristState(RushinatorWrist.State.kScoreL3RightWrist),
+                new WaitCommand(0.4)
+            ),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new SequentialCommandGroup(
+                    new WaitCommand(0.15),
+                    new ParallelCommandGroup(
+                        new SetArmState(RushinatorPivot.State.kStowTravel),
+                        new SetWristState(RushinatorWrist.State.kTravelRight)
+                    )
+                ),
+                new WaitCommand(0.7)
+            )
+        );
+    }
+
+    public static Command scoreCoralAutoL3LeftWrist(){
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kCoralScoreL3),
+                new SetArmState(RushinatorPivot.State.kScoreL3),
+                new SetWristState(RushinatorWrist.State.kScoreL3LeftWrist),
+                new WaitCommand(0.4)
+            ),
+            new ParallelRaceGroup(
+                new SetElevatorState(ElevatorSubsystem.State.kZero),
+                new SequentialCommandGroup(
+                    new WaitCommand(0.15),
+                    new ParallelCommandGroup(
+                        new SetArmState(RushinatorPivot.State.kStowTravel),
+                        new SetWristState(RushinatorWrist.State.kTravelLeft)
+                    )
+                ),
+                new WaitCommand(0.7)
+            )
+        );
+    }
+
+    /* Auto Scoring L4 */
     public static Command scoreCoralAutoL4RightWrist(){
         return new SequentialCommandGroup(
             new ParallelRaceGroup(

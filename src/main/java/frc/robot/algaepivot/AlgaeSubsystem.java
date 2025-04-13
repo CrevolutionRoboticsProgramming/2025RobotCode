@@ -51,6 +51,7 @@ public class AlgaeSubsystem extends SubsystemBase {
 
     public enum State {
         kFloorIntake(Rotation2d.fromRotations(0.05)),
+        kLoliPop(Rotation2d.fromRotations(0.15)),
         kProcessor(Rotation2d.fromRotations(0.14306640625)),
         kReefIntake(Rotation2d.fromRotations(0.11938476562499999)),
         kScore(Rotation2d.fromRotations(0.27578125)),
