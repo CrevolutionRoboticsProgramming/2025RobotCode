@@ -7,8 +7,12 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -24,7 +28,10 @@ public class Climber extends SubsystemBase{
     public static class Settings {
         static final int kClimberPivotId = 27; //TODO: change this to sparkmax ID
 
-        static final InvertedValue kClimberPivotInverted = InvertedValue.Clockwise_Positive;
+        // static final InvertedValue kClimberPivotInverted = InvertedValue.Clockwise_Positive;
+        static final boolean kClimberPivotInverted = false;
+
+        static final int kStallCurrentLimit = 80; // in amps
 
         static final double kG = 0.1; // V
         static final double kS = 0.0;  // V / rad
@@ -38,8 +45,8 @@ public class Climber extends SubsystemBase{
         public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(200); //120
         public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(300);
 
-        public static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.8);
-        public static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0);
+        public static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.8); //TODO: change this
+        public static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0); //TODO: change this
 
         public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
 
@@ -48,9 +55,10 @@ public class Climber extends SubsystemBase{
     }
 
     public enum State {
-        kDeploy(Rotation2d.fromRotations(150.91650390625)),
-        kRetract(Rotation2d.fromRotations(80.5693359375)),
-        kStow(Settings.kMinPos);
+        //TODO: redo these states based on the climber encoder position
+        kDeploy(Rotation2d.fromRotations(150.91650390625)), //TODO
+        kRetract(Rotation2d.fromRotations(80.5693359375)), //TODO
+        kStow(Settings.kMinPos); //TODO
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -66,12 +74,23 @@ public class Climber extends SubsystemBase{
     private Constraints mConstraints;
     private final ArmFeedforward mAFFController;
 
-    private SparkMax mClimberPivotNeo;
+    private SparkMax mClimberPivotMotor;
+    private SparkMaxConfig mClimberPivotMotorConfig;
+    private RelativeEncoder mClimberPivotMotorEncoder;
+
 
     public static State kLastState;
 
     public Climber() {
-        mClimberPivotNeo = new SparkMax(Settings.kClimberPivotId, MotorType.kBrushless);
+        mClimberPivotMotor = new SparkMax(Settings.kClimberPivotId, MotorType.kBrushless);
+
+        mClimberPivotMotorConfig = new SparkMaxConfig();
+        mClimberPivotMotorConfig.inverted(Settings.kClimberPivotInverted);
+        mClimberPivotMotorConfig.smartCurrentLimit(Settings.kStallCurrentLimit);
+        mClimberPivotMotor.configure(mClimberPivotMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        mClimberPivotMotorEncoder = mClimberPivotMotor.getEncoder();
+        
 
         // ClimberPivot = new TalonFX(Settings.kClimberPivotId);
 
@@ -120,20 +139,18 @@ public class Climber extends SubsystemBase{
     }
 
     public Rotation2d getPos() {
-        // var pos = ClimberPivot.getPosition().getValueAsDouble();
-
-        return Rotation2d.k180deg;
+        return Rotation2d.fromRotations(mClimberPivotMotorEncoder.getPosition());
     }
 
     public Rotation2d getAngularVelocity() {
         // return Rotation2d.fromRotations(ClimberPivot.getVelocity().getValueAsDouble());
-        return null;
+        return Rotation2d.fromRotations(mClimberPivotMotorEncoder.getVelocity()); //TODO: i dont know what the unit conversions are
     }
 
     public static class DefaultCommand extends Command {
 
         public DefaultCommand() {
-            addRequirements(RushinatorPivot.getInstance());
+            addRequirements(Climber.getInstance());
         }
 
         @Override
@@ -156,6 +173,8 @@ public class Climber extends SubsystemBase{
         speed += mAFFController.calculate(getPos().getRotations(), mPPIDController.getSetpoint().velocity);
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
+        
+        mClimberPivotMotor.setVoltage(speed);
 
         // ClimberPivot.setVoltage(speed);
     }
