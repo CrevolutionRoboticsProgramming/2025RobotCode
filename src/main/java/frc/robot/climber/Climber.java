@@ -7,6 +7,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -20,7 +22,7 @@ import frc.robot.rushinator.RushinatorPivot;
 
 public class Climber extends SubsystemBase{
     public static class Settings {
-        static final int kClimberPivotId = 27;
+        static final int kClimberPivotId = 27; //TODO: change this to sparkmax ID
 
         static final InvertedValue kClimberPivotInverted = InvertedValue.Clockwise_Positive;
 
@@ -59,30 +61,34 @@ public class Climber extends SubsystemBase{
 
     public static Climber mInstance;
 
-    private TalonFX ClimberPivot;
+    // private TalonFX ClimberPivot;
     private final ProfiledPIDController mPPIDController;
     private Constraints mConstraints;
     private final ArmFeedforward mAFFController;
 
+    private SparkMax mClimberPivotNeo;
+
     public static State kLastState;
 
     public Climber() {
-        ClimberPivot = new TalonFX(Settings.kClimberPivotId);
+        mClimberPivotNeo = new SparkMax(Settings.kClimberPivotId, MotorType.kBrushless);
 
-        var ElbowPivotConfigurator = ClimberPivot.getConfigurator();
+        // ClimberPivot = new TalonFX(Settings.kClimberPivotId);
 
-        var ElbowPivotConfigs = new MotorOutputConfigs();
+        // var ElbowPivotConfigurator = ClimberPivot.getConfigurator();
 
-        ClimberPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
-                .withInverted(InvertedValue.Clockwise_Positive)
-                .withNeutralMode(NeutralModeValue.Brake)
-        ));
-        ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
+        // var ElbowPivotConfigs = new MotorOutputConfigs();
+
+        // ClimberPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
+        //         .withInverted(InvertedValue.Clockwise_Positive)
+        //         .withNeutralMode(NeutralModeValue.Brake)
+        // ));
+        // ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
 
         // set invert to CW+ and apply config change
-        ElbowPivotConfigs.Inverted = Settings.kClimberPivotInverted;
+        // ElbowPivotConfigs.Inverted = Settings.kClimberPivotInverted;
 
-        ElbowPivotConfigurator.apply(ElbowPivotConfigs);
+        // ElbowPivotConfigurator.apply(ElbowPivotConfigs);
 
         mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, new TrapezoidProfile.Constraints(
                 Settings.kMaxVelocity.getRadians(),
@@ -91,9 +97,9 @@ public class Climber extends SubsystemBase{
         mPPIDController.setTolerance(0.01);
         mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
 
-        ClimberPivot.setPosition(0.0);
+        // ClimberPivot.setPosition(0.0);
 
-        ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
+        // ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
         
         if (kLastState == null) {
             kLastState = State.kStow;
@@ -114,13 +120,14 @@ public class Climber extends SubsystemBase{
     }
 
     public Rotation2d getPos() {
-        var pos = ClimberPivot.getPosition().getValueAsDouble();
+        // var pos = ClimberPivot.getPosition().getValueAsDouble();
 
-        return Rotation2d.fromRotations(pos);
+        return Rotation2d.k180deg;
     }
 
     public Rotation2d getAngularVelocity() {
-        return Rotation2d.fromRotations(ClimberPivot.getVelocity().getValueAsDouble());
+        // return Rotation2d.fromRotations(ClimberPivot.getVelocity().getValueAsDouble());
+        return null;
     }
 
     public static class DefaultCommand extends Command {
@@ -150,6 +157,6 @@ public class Climber extends SubsystemBase{
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
 
-        ClimberPivot.setVoltage(speed);
+        // ClimberPivot.setVoltage(speed);
     }
 }
