@@ -15,6 +15,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -35,7 +36,7 @@ public class Climber extends SubsystemBase{
 
         static final double kG = 0.1; // V
         static final double kS = 0.0;  // V / rad
-        static final double kV = 1.0; // V * sec / rad
+        static final double kV = 0.0; // V * sec / rad
         static final double kA = 0.0; // V * sec^2 / rad
 
         static final double kP = 0.01;
@@ -70,8 +71,9 @@ public class Climber extends SubsystemBase{
     public static Climber mInstance;
 
     // private TalonFX ClimberPivot;
-    private final ProfiledPIDController mPPIDController;
+    // private final ProfiledPIDController mPPIDController;
     private Constraints mConstraints;
+    private final BangBangController mBBController;
     private final ArmFeedforward mAFFController;
 
     private SparkMax mClimberPivotMotor;
@@ -90,6 +92,15 @@ public class Climber extends SubsystemBase{
         mClimberPivotMotor.configure(mClimberPivotMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         mClimberPivotMotorEncoder = mClimberPivotMotor.getEncoder();
+
+        mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
+
+        mBBController = new BangBangController(0.01);
+
+        if (kLastState == null) {
+            kLastState = State.kStow;
+        }
+        // mPPIDController.setGoal(kLastState.pos.getRotations());
         
 
         // ClimberPivot = new TalonFX(Settings.kClimberPivotId);
@@ -109,22 +120,16 @@ public class Climber extends SubsystemBase{
 
         // ElbowPivotConfigurator.apply(ElbowPivotConfigs);
 
-        mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, new TrapezoidProfile.Constraints(
-                Settings.kMaxVelocity.getRadians(),
-                Settings.kMaxAcceleration.getRadians()
-        ));
-        mPPIDController.setTolerance(0.01);
-        mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
+        // mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, new TrapezoidProfile.Constraints(
+        //         Settings.kMaxVelocity.getRadians(),
+        //         Settings.kMaxAcceleration.getRadians()
+        // ));
+        // mPPIDController.setTolerance(0.01);
+        
 
         // ClimberPivot.setPosition(0.0);
 
         // ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
-        
-        if (kLastState == null) {
-            kLastState = State.kStow;
-        }
-        mPPIDController.setGoal(kLastState.pos.getRotations());
-
     }
 
     public static Climber getInstance() {
@@ -135,7 +140,8 @@ public class Climber extends SubsystemBase{
     }
 
     public void setTargetPos(Rotation2d pos) {
-        mPPIDController.setGoal(pos.getRotations());
+        // mPPIDController.setGoal(pos.getRotations());
+        mBBController.setSetpoint(pos.getRotations());
     }
 
     public Rotation2d getPos() {
@@ -163,14 +169,17 @@ public class Climber extends SubsystemBase{
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Climber Pivot Angle (Rotations)", getPos().getRotations());
-        SmartDashboard.putNumber("Climber Pivot Angular Velocity (Rotations / sec)", getAngularVelocity().getRotations());
+        SmartDashboard.putNumber("Climber Pivot Angular Velocity (Rotations / sec)", getAngularVelocity().getRotations() * 60.0);
 
-        SmartDashboard.putNumber("Climber Target Pos", mPPIDController.getSetpoint().position);
-        SmartDashboard.putNumber("Target Vel", mPPIDController.getSetpoint().velocity);
+        // SmartDashboard.putNumber("Climber Target Pos", mPPIDController.getSetpoint().position);
+        // SmartDashboard.putNumber("Target Vel", mPPIDController.getSetpoint().velocity);
+
+        SmartDashboard.putNumber("Climber Target Pos", mBBController.getSetpoint());
+        SmartDashboard.putNumber("Target Vel (RPS)", mBBController.getSetpoint() / 60.0);
 
         // Method to run pivots
-        double speed = mPPIDController.calculate(getPos().getRotations());
-        speed += mAFFController.calculate(getPos().getRotations(), mPPIDController.getSetpoint().velocity);
+        double speed = mBBController.calculate(getPos().getRotations());
+        speed += mAFFController.calculate(getPos().getRotations(), mBBController.getSetpoint() / 60.0);
 
         SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
         
