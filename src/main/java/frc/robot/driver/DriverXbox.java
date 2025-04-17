@@ -330,8 +330,8 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
 
-        controller.povUp().onTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
-        controller.povDown().onTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
+        // controller.povUp().onTrue(new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag));
+        // controller.povDown().onTrue(new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag));
 
         //Align to Reef
         // controller.povLeft().whileTrue(new DriveToPoseCommand(
@@ -372,8 +372,8 @@ public class DriverXbox extends XboxGamepad {
         // controller.povRight().whileTrue(new AutoAlign(false));
 
 
-        // controller.povLeft().onTrue(RobotCommands.scoreCoralAutonL4());
-        // controller.povDown().onTrue(RobotCommands.autoHPPickUp());
+        // controller.povUp().onTrue(RobotCommands.scoreCoralAutoL4RightWrist());
+        // controller.povDown().onTrue(RobotCommands.scoreCoralAutoL3RightWrist());
         // controller.povRight().onTrue(RobotCommands.scoreCoralAutonL1());
 
         /*Elevator TEst Commands */
