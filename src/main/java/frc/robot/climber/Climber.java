@@ -35,12 +35,12 @@ public class Climber extends SubsystemBase{
 
         static final int kStallCurrentLimit = 80; // in amps
 
-        static final double kG = 0.1; // V
+        static final double kG = 0.0; // V
         static final double kS = 0.0;  // V / rad
         static final double kV = 0.0; // V * sec / rad
         static final double kA = 0.0; // V * sec^2 / rad
 
-        static final double kP = 0.01;
+        static final double kP = 0.0;
         static final double kI = 0.0;
         static final double kD = 0.0;
 
@@ -53,14 +53,13 @@ public class Climber extends SubsystemBase{
         public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
 
         static final double kCurrentLimit = 40.0;
-
     }
 
     public enum State {
         //TODO: redo these states based on the climber encoder position
         kDeploy(Rotation2d.fromRotations(150.91650390625)), //TODO
         kRetract(Rotation2d.fromRotations(80.5693359375)), //TODO
-        kStow(Settings.kMinPos); //TODO
+        kStow(Rotation2d.fromRotations(0));
 
         State(Rotation2d pos) {
             this.pos = pos;
@@ -81,7 +80,6 @@ public class Climber extends SubsystemBase{
     private SparkMaxConfig mClimberPivotMotorConfig;
     private RelativeEncoder mClimberPivotMotorEncoder;
 
-
     public static State kLastState;
 
     public Climber() {
@@ -97,7 +95,7 @@ public class Climber extends SubsystemBase{
 
         mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
 
-        mBBController = new BangBangController(0.01);
+       mBBController = new BangBangController(2.0f); // Tolerance in rotations
 
         if (kLastState == null) {
             kLastState = State.kStow;
@@ -172,6 +170,7 @@ public class Climber extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("Climber Pivot Angle (Rotations)", getPos().getRotations());
         SmartDashboard.putNumber("Climber Pivot Angular Velocity (Rotations / sec)", getAngularVelocity().getRotations() * 60.0);
+        SmartDashboard.putNumber("Climber Pivot Current (Amps)", mClimberPivotMotor.getOutputCurrent());
 
         // SmartDashboard.putNumber("Climber Target Pos", mPPIDController.getSetpoint().position);
         // SmartDashboard.putNumber("Target Vel", mPPIDController.getSetpoint().velocity);
@@ -180,13 +179,9 @@ public class Climber extends SubsystemBase{
         SmartDashboard.putNumber("Target Vel (RPS)", mBBController.getSetpoint() / 60.0);
 
         // Method to run pivots
-        double speed = mBBController.calculate(getPos().getRotations());
-        speed += mAFFController.calculate(getPos().getRotations(), mBBController.getSetpoint() / 60.0);
-
-        SmartDashboard.putNumber("mPPIDC + mFFC Output", speed);
-        
-        mClimberPivotMotor.setVoltage(speed);
-
-        // ClimberPivot.setVoltage(speed);
+        double voltage = mBBController.calculate(getPos().getRotations()) * 2.0f;
+        voltage += mAFFController.calculate(getPos().getRotations(), mBBController.getSetpoint() / 60.0);
+        mClimberPivotMotor.setVoltage(voltage);
+        SmartDashboard.putNumber("Climber Pivot Voltage", voltage);
     }
 }
