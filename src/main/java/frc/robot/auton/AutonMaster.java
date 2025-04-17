@@ -41,11 +41,11 @@ import frc.robot.rushinator.RushinatorWrist;
 import frc.robot.rushinator.commands.SetArmState;
 import frc.robot.rushinator.commands.SetRollersVoltage;
 import frc.robot.rushinator.commands.SetWristState;
-import frc.robot.vision.LineupMaster;
-import frc.robot.vision.PoseEstimatorSubsystem;
+// import frc.robot.vision.LineupMaster;
+// import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig.HPStation;
-import frc.robot.vision.commands.AutoAlign;
-import frc.robot.vision.commands.AutoAlignHP;
+// import frc.robot.vision.commands.AutoAlign;
+// import frc.robot.vision.commands.AutoAlignHP;
 
 /* MASTER AUTON CLASS */
 public class AutonMaster {
@@ -62,8 +62,9 @@ public class AutonMaster {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
                 () -> {
-                    Pose2d poseEstPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
-                    return poseEstPose != Pose2d.kZero ? poseEstPose : CommandSwerveDrivetrain.getInstance().getPose();
+                    // Pose2d poseEstPose = PoseEstimatorSubsystem.getInstance().getCurrentPose();
+                    // return poseEstPose != Pose2d.kZero ? poseEstPose : CommandSwerveDrivetrain.getInstance().getPose();
+                    return CommandSwerveDrivetrain.getInstance().getPose();
                 },   // Supplier of current robot pose
                 drivetrain::resetPose,         // Consumer for seeding pose against auto
                 drivetrain::getRobotRelvativeSpeeds, // Supplier of current robot speeds
@@ -116,8 +117,8 @@ public class AutonMaster {
     public void configureNamedCommands() {
         NamedCommands.registerCommand("PrimeScoreL4", RobotCommands.primeScoreCoralAutonL4());
 
-        NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
-        NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
+        // NamedCommands.registerCommand("LineUpLeft", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
+        // NamedCommands.registerCommand("LineUpRight", new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
 
         // NamedCommands.registerCommand("LineUpLeft", new LineupMaster().directDriveToNearestLeftBranch());
         // NamedCommands.registerCommand("LineUpRight", new LineupMaster().directDriveToNearestRightBranch());
@@ -162,13 +163,13 @@ public class AutonMaster {
         // NamedCommands.registerCommand("LineUpRedHPStationRight", new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag));
         // NamedCommands.registerCommand("LineUpRedHPStationLeft", new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag));
 
-        NamedCommands.registerCommand("LineUpHPStationRight", new ConditionalCommand(
-            new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag), 
-            () -> DriverStation.getAlliance().get() == Alliance.Red));
+        // NamedCommands.registerCommand("LineUpHPStationRight", new ConditionalCommand(
+        //     new AutoAlignHP(() -> HPStation.RED_RIGHT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_RIGHT_STATION.AprilTag), 
+        //     () -> DriverStation.getAlliance().get() == Alliance.Red));
         
-        NamedCommands.registerCommand("LineUpHPStationLeft", new ConditionalCommand(
-            new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag), 
-            () -> DriverStation.getAlliance().get() == Alliance.Red));
+        // NamedCommands.registerCommand("LineUpHPStationLeft", new ConditionalCommand(
+        //     new AutoAlignHP(() -> HPStation.RED_LEFT_STATION.AprilTag), new AutoAlignHP(() -> HPStation.BLU_LEFT_STATION.AprilTag), 
+        //     () -> DriverStation.getAlliance().get() == Alliance.Red));
 
     }
 

@@ -124,7 +124,7 @@ public class VisionConfig {
     }
 
     /*Red Alliance */
-    private static final double acutalX = 5.575;
+    private static final double acutalX = 4.075;
 
     /*Blue Alliance */
     // private static final double acutalX = 5.1;

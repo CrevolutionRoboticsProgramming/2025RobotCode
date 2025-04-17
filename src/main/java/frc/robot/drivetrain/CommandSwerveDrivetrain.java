@@ -45,7 +45,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.crevolib.math.Conversions;
 import frc.robot.RobotContainer;
 import frc.robot.drivetrain.TunerConstants.TunerSwerveDrivetrain;
-import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig.ReefFace;
 // import frc.robot.vision.commands.DriveToPoseCommand;
 

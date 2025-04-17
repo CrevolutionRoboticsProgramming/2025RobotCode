@@ -23,7 +23,7 @@ import frc.robot.elevator.ElevatorSubsystem;
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import frc.robot.operator.OperatorXbox;
-import frc.robot.vision.PoseEstimatorSubsystem;
+// import frc.robot.vision.PoseEstimatorSubsystem;
 import frc.robot.vision.VisionConfig;
 
 import frc.robot.rushinator.*;
@@ -58,7 +58,7 @@ public class RobotContainer {
         autonTab.add(mAutonChooser);
         SmartDashboard.putData(mAutonChooser);
 
-        var mPoseEstimator = PoseEstimatorSubsystem.getInstance();
+        // var mPoseEstimator = PoseEstimatorSubsystem.getInstance();
 
         // ShuffleboardTab visionTab = Shuffleboard.getTab("Vision Pose Estimator");
         // PoseEstimatorSubsystem.getInstance().addDashboardWidgets(visionTab);

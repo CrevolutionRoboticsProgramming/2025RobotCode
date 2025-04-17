@@ -46,7 +46,7 @@ public class RushinatorPivot extends SubsystemBase {
     }
 
     public enum State {
-        kFloorIntake(Rotation2d.fromRotations(-0.090185546875)),
+        kFloorIntake(Rotation2d.fromRotations(-0.08349609375)),
         kHPIntake(Rotation2d.fromRotations(0.211669921875)),
         kScore(Rotation2d.fromRotations(0.119873046875)),
         kScoreL1(Rotation2d.fromRotations(0.10595703125)),
