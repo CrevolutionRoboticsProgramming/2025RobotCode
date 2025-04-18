@@ -9,12 +9,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.algaeflywheel.AlgaeRoller;
 import frc.robot.algaepivot.AlgaeSubsystem;
 import frc.robot.auton.AutonMaster;
+import frc.robot.climber.Climber;
 import frc.robot.driver.DriverXbox;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.drivetrain.TunerConstants;
@@ -24,7 +23,6 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import frc.robot.operator.OperatorXbox;
 import frc.robot.vision.PoseEstimatorSubsystem;
-import frc.robot.vision.VisionConfig;
 
 import frc.robot.rushinator.*;
 import frc.robot.rushinator.commands.*;
@@ -38,7 +36,7 @@ import frc.robot.rushinator.commands.*;
 public class RobotContainer {
     public static double kMaxVelocity = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     public static double kMaxAngularVelocity = RotationsPerSecond.of(1.0).in(RadiansPerSecond);
-    
+
     public static boolean modeFast = true;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
@@ -70,7 +68,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-    //     return CommandSwerveDrivetrain.getInstance().applyRequest(() -> 
+    //     return CommandSwerveDrivetrain.getInstance().applyRequest(() ->
     //     RobotContainer.drive.withVelocityX(0.25 * RobotContainer.kMaxVelocity) // Drive forward with negative Y (forward)
     //          .withVelocityY(0.0) // Drive left with negative X (left)
     //          .withRotationalRate(0.0) // Drive counterclockwise with negative X (left)
@@ -83,6 +81,10 @@ public class RobotContainer {
         final var driver = DriverXbox.getInstance();
         final var operator = OperatorXbox.getInstance();
         final var currAlliance = DriverStation.getAlliance().get();
+
+        // TODO: Re-enable climber once setpoints have been tuned
+        // final var climber = new Climber(operator::getClimberDeploy, operator::getClimberRetract, operator::getClimberOverride, Climber.OperatingMode.kManual);
+        // climber.setDefaultCommand(new Climber.DefaultCommand(climber));
 
         CommandSwerveDrivetrain.getInstance().setDefaultCommand(
                 CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
@@ -143,7 +145,7 @@ public class RobotContainer {
         // }
         // RushinatorWrist.getInstance().setDefaultCommand(new HoldWristPosition());
         // RushinatorWrist.getInstance().setDefaultCommand(new ManualWristControl(() -> operator.getLeftY()));
-        
+
 
         // CommandSwerveDrivetrain.getInstance().setDefaultCommand(
         //     CommandSwerveDrivetrain.getInstance().applyRequest(() -> {
@@ -172,12 +174,12 @@ public class RobotContainer {
         );
         RushinatorWrist.getInstance().setDefaultCommand(
             new ConditionalCommand(
-            new SetWristState(RushinatorWrist.State.kTravelRight), 
-            new SetWristState(RushinatorWrist.State.kTravelLeft), 
+            new SetWristState(RushinatorWrist.State.kTravelRight),
+            new SetWristState(RushinatorWrist.State.kTravelLeft),
             () -> RushinatorWrist.kLastState == RushinatorWrist.State.kTravelRight ||
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist || 
-            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist || 
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL4RightWrist ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL3RightWrist ||
+            RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL2RightWrist ||
             RushinatorWrist.kLastState == RushinatorWrist.State.kScoreL1Mid ||
             RushinatorWrist.kLastState == RushinatorWrist.State.kGroundMid ||
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid ||
@@ -185,10 +187,10 @@ public class RobotContainer {
             RushinatorWrist.kLastState == RushinatorWrist.State.kClimblRight
             )
         );
-        
+
         AlgaeRoller.getInstance().setDefaultCommand(new AlgaeRoller.DefaultCommand());
-        
+
 //        CoralSubsystem.getInstance().setDefaultCommand(new CoralSubsystem.TuningCommand(() -> (driver.getRightX() + 1) / 2.0f));
     }
 }
-  
+
