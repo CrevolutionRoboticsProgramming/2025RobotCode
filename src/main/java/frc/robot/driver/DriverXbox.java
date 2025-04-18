@@ -19,7 +19,6 @@ import frc.robot.algaepivot.commands.AlgaePivotCommands;
 import frc.robot.algaepivot.commands.SetAngleAlgaePivot;
 import frc.robot.auton.AutonMaster;
 import frc.robot.climber.Climber;
-import frc.robot.climber.commands.SetClimberAngle;
 import frc.robot.commands.RobotCommands;
 import frc.robot.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.elevator.ElevatorSubsystem;

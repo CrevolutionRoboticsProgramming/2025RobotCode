@@ -1,12 +1,5 @@
 package frc.robot.climber;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -15,173 +8,195 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.rushinator.RushinatorPivot;
 
-public class Climber extends SubsystemBase{
+import java.util.ArrayList;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+public class Climber extends SubsystemBase {
     public static class Settings {
-        static final int kClimberPivotId = 27; //TODO: change this to sparkmax ID
+        static final int kClimberPivotId = 27;
 
-        // static final InvertedValue kClimberPivotInverted = InvertedValue.Clockwise_Positive;
-        static final boolean kClimberPivotInverted = false;
+        public static final Rotation2d kMaxPos = Rotation2d.fromRotations(270.0);
+        public static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0);
 
-        static final int kStallCurrentLimit = 80; // in amps
+        public static final Rotation2d kHoldPos = Rotation2d.fromRotations(263.0);
+        public static final Rotation2d kDeployPos = Rotation2d.fromRotations(180.0);
 
-        static final double kG = 0.0; // V
-        static final double kS = 0.0;  // V / rad
-        static final double kV = 0.0; // V * sec / rad
-        static final double kA = 0.0; // V * sec^2 / rad
-
-        static final double kP = 0.0;
-        static final double kI = 0.0;
-        static final double kD = 0.0;
-
-        public static final Rotation2d kMaxVelocity = Rotation2d.fromDegrees(200); //120
-        public static final Rotation2d kMaxAcceleration = Rotation2d.fromDegrees(300);
-
-        public static final Rotation2d kMaxPos = Rotation2d.fromRotations(0.8); //TODO: change this
-        public static final Rotation2d kMinPos = Rotation2d.fromRotations(0.0); //TODO: change this
-
-        public static final Rotation2d kAFFAngleOffset = Rotation2d.fromDegrees(0);
-
-        static final double kCurrentLimit = 40.0;
+        static final double kMaxVoltage = 12.0f;
+        static final int kMaxCurrent = 40;
     }
 
-    public enum State {
-        //TODO: redo these states based on the climber encoder position
-        kDeploy(Rotation2d.fromRotations(150.91650390625)), //TODO
-        kRetract(Rotation2d.fromRotations(80.5693359375)), //TODO
-        kStow(Rotation2d.fromRotations(0));
+    private enum State {
+        kFloating,
+        kStowed,
+        kDeploying,
+        kDeployed,
+        kRetracting,
+        kHold;
+    }
 
-        State(Rotation2d pos) {
-            this.pos = pos;
+    public enum OperatingMode {
+        kManual,
+        kCompetition
+    }
 
+    private final SparkMax spark;
+    private final RelativeEncoder encoder;
+
+    private final Supplier<Boolean> deployProvider, retractProvider;
+    private final Supplier<Double> overrideProvider;
+
+    private State state;
+    private final OperatingMode operatingMode;
+
+    public Climber(Supplier<Boolean> deployProvider, Supplier<Boolean> retractProvider, Supplier<Double> overrideProvider) {
+        this(deployProvider, retractProvider, overrideProvider, OperatingMode.kCompetition);
+    }
+
+    public Climber(Supplier<Boolean> deployProvider, Supplier<Boolean> retractProvider, Supplier<Double> overrideProvider, OperatingMode operatingMode) {
+        this.deployProvider = deployProvider;
+        this.retractProvider = retractProvider;
+        this.overrideProvider = overrideProvider;
+
+        this.spark = new SparkMax(Settings.kClimberPivotId, MotorType.kBrushless);
+        this.encoder = spark.getEncoder();
+
+        final var sparkConfig = new SparkMaxConfig()
+                .inverted(true)
+                .smartCurrentLimit(Settings.kMaxCurrent)
+                .idleMode(IdleMode.kBrake) ;
+        spark.configure(sparkConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        this.state = switch (operatingMode) {
+            case kManual -> State.kFloating;
+            case kCompetition -> State.kStowed;
+        };
+        this.operatingMode = operatingMode;
+    }
+
+    public void setVoltage(double voltage) {
+        // Ensure we don't drive past either of the soft limits for the climber by clamping the voltage
+        if ((voltage < 0 && getPos().getRotations() <= Settings.kMinPos.getRotations())
+                || (voltage > 0 && getPos().getRotations() >= Settings.kMaxPos.getRotations())) {
+            voltage = 0;
         }
-        public final Rotation2d pos;
-    }
-
-    public static Climber mInstance;
-
-    // private TalonFX ClimberPivot;
-    // private final ProfiledPIDController mPPIDController;
-    private Constraints mConstraints;
-    private final BangBangController mBBController;
-    private final ArmFeedforward mAFFController;
-
-    private SparkMax mClimberPivotMotor;
-    private SparkMaxConfig mClimberPivotMotorConfig;
-    private RelativeEncoder mClimberPivotMotorEncoder;
-
-    public static State kLastState;
-
-    public Climber() {
-        mClimberPivotMotor = new SparkMax(Settings.kClimberPivotId, MotorType.kBrushless);
-
-        mClimberPivotMotorConfig = new SparkMaxConfig();
-        mClimberPivotMotorConfig.inverted(Settings.kClimberPivotInverted);
-        mClimberPivotMotorConfig.smartCurrentLimit(Settings.kStallCurrentLimit);
-        mClimberPivotMotorConfig.idleMode(IdleMode.kBrake);
-        mClimberPivotMotor.configure(mClimberPivotMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        mClimberPivotMotorEncoder = mClimberPivotMotor.getEncoder();
-
-        mAFFController = new ArmFeedforward(Settings.kS, Settings.kG, Settings.kV, Settings.kA);
-
-       mBBController = new BangBangController(2.0f); // Tolerance in rotations
-
-        if (kLastState == null) {
-            kLastState = State.kStow;
-        }
-        // mPPIDController.setGoal(kLastState.pos.getRotations());
-        
-
-        // ClimberPivot = new TalonFX(Settings.kClimberPivotId);
-
-        // var ElbowPivotConfigurator = ClimberPivot.getConfigurator();
-
-        // var ElbowPivotConfigs = new MotorOutputConfigs();
-
-        // ClimberPivot.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs()
-        //         .withInverted(InvertedValue.Clockwise_Positive)
-        //         .withNeutralMode(NeutralModeValue.Brake)
-        // ));
-        // ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
-
-        // set invert to CW+ and apply config change
-        // ElbowPivotConfigs.Inverted = Settings.kClimberPivotInverted;
-
-        // ElbowPivotConfigurator.apply(ElbowPivotConfigs);
-
-        // mPPIDController = new ProfiledPIDController(Settings.kP, Settings.kI, Settings.kD, new TrapezoidProfile.Constraints(
-        //         Settings.kMaxVelocity.getRadians(),
-        //         Settings.kMaxAcceleration.getRadians()
-        // ));
-        // mPPIDController.setTolerance(0.01);
-        
-
-        // ClimberPivot.setPosition(0.0);
-
-        // ClimberPivot.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Settings.kCurrentLimit));
-    }
-
-    public static Climber getInstance() {
-        if (mInstance == null) {
-            mInstance = new Climber();
-        }
-        return mInstance;
-    }
-
-    public void setTargetPos(Rotation2d pos) {
-        // mPPIDController.setGoal(pos.getRotations());
-        mBBController.setSetpoint(pos.getRotations());
+        spark.setVoltage(voltage);
     }
 
     public Rotation2d getPos() {
-        return Rotation2d.fromRotations(mClimberPivotMotorEncoder.getPosition());
+        return Rotation2d.fromRotations(encoder.getPosition());
     }
 
-    public Rotation2d getAngularVelocity() {
-        // return Rotation2d.fromRotations(ClimberPivot.getVelocity().getValueAsDouble());
-        return Rotation2d.fromRotations(mClimberPivotMotorEncoder.getVelocity()); //TODO: i dont know what the unit conversions are
-    }
-
-    public static class DefaultCommand extends Command {
-
-        public DefaultCommand() {
-            addRequirements(Climber.getInstance());
+    private State nextState(State state) {
+        if (operatingMode == OperatingMode.kManual) {
+            return State.kFloating;
         }
 
-        @Override
-        public void execute() {
-            Climber.getInstance().setTargetPos(State.kStow.pos);
+        if (overrideProvider.get() != 0.0f) {
+            return State.kFloating;
         }
 
+        ArrayList<State> observedStates = new ArrayList<>();
+        while (true) {
+            var previousState = state;
+            observedStates.add(previousState);
+            switch (state) {
+                case kFloating:
+                    if (deployProvider.get()) {
+                        state = State.kDeploying;
+                    } else if (retractProvider.get()) {
+                        state = State.kRetracting;
+                    }
+                    break;
+                case kStowed:
+                    if (deployProvider.get()) {
+                        state = State.kDeploying;
+                    }
+                    break;
+                case kDeploying:
+                    if (retractProvider.get()) {
+                        state = State.kFloating;
+                    } else if (getPos().getRotations() >= Settings.kDeployPos.getRotations()) {
+                        state = State.kDeployed;
+                    }
+                    break;
+                case kDeployed:
+                    if (retractProvider.get()) {
+                        state = State.kRetracting;
+                    }
+                    break;
+                case kRetracting:
+                    if (deployProvider.get()) {
+                        state = State.kFloating;
+                    } else if (getPos().getRotations() <= Settings.kHoldPos.getRotations()) {
+                        state = State.kHold;
+                    }
+                    break;
+                case kHold:
+                    if (deployProvider.get()) {
+                        state = State.kFloating;
+                    }
+                    // TODO: If a low enough current is detected for a sufficiently long time, we should transition to floating.
+                    // This will prevent over-driving the climber when it isn't under load.
+                    break;
+            }
+
+            // If we don't transition state in an iteration, we've reached the terminal state and can return
+            if (previousState == state) {
+                return state;
+            }
+
+            // If the list of observed states contains the current state, we've entered a loop. This shouldn't occur and
+            // indicates an issue in the state machine, but we should log a warning before breaking the loop.
+            if (observedStates.contains(state)) {
+                System.out.printf("[WARN:CLIMBER] Encountered loop while transitioning climber state (states: %s)", observedStates.stream().map(Object::toString).collect(Collectors.joining(", ")));
+                return state;
+            }
+        }
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Climber Pivot Angle (Rotations)", getPos().getRotations());
-        SmartDashboard.putNumber("Climber Pivot Angular Velocity (Rotations / sec)", getAngularVelocity().getRotations() * 60.0);
-        SmartDashboard.putNumber("Climber Pivot Current (Amps)", mClimberPivotMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Climber Angle (Rotations)", getPos().getRotations());
+        SmartDashboard.putNumber("Climber Current (Amps)", spark.getOutputCurrent());
 
-        // SmartDashboard.putNumber("Climber Target Pos", mPPIDController.getSetpoint().position);
-        // SmartDashboard.putNumber("Target Vel", mPPIDController.getSetpoint().velocity);
+        switch (state) {
+            case kFloating:
+                setVoltage(overrideProvider.get() * Settings.kMaxVoltage);
+                break;
+            case kStowed:
+                setVoltage(0);
+                break;
+            case kDeploying:
+                setVoltage(8.0f);
+                break;
+            case kDeployed:
+                setVoltage(0.0f);
+                break;
+            case kRetracting:
+                setVoltage(-6.0f);
+                break;
+            case kHold:
+                // TODO: Make this value proportional to the distance from the zero point
+                setVoltage(-2.0f);
+                break;
+        }
 
-        SmartDashboard.putNumber("Climber Target Pos", mBBController.getSetpoint());
-        SmartDashboard.putNumber("Target Vel (RPS)", mBBController.getSetpoint() / 60.0);
+        final var ns = nextState(state);
+        if (ns != state) {
+            System.out.printf("[INFO:CLIMBER] Transitioning state (previous: %s, new: %s)", state.toString(), ns.toString());
+            state = ns;
+        }
+    }
 
-        // Method to run pivots
-        double voltage = mBBController.calculate(getPos().getRotations()) * 2.0f;
-        voltage += mAFFController.calculate(getPos().getRotations(), mBBController.getSetpoint() / 60.0);
-        mClimberPivotMotor.setVoltage(voltage);
-        SmartDashboard.putNumber("Climber Pivot Voltage", voltage);
+    public static class DefaultCommand extends Command {
+        public DefaultCommand(Climber climber) {
+            addRequirements(climber);
+        }
     }
 }
