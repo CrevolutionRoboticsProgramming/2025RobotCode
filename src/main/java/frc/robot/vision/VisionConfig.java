@@ -41,7 +41,7 @@ public class VisionConfig {
     
     // Creates camera names; ensure these all match with the correct camera on the Photonvison Dashboard
     public static final int TOTAL_CAMS = 2; //TODO: change to 4 where 4 cams are available
-    public static final String[] CAM_NAMES = new String[] {"Left_Cam", "Right_Cam"}; //TODO: add center cam and drive cam
+    public static final String[] CAM_NAMES = new String[] {"Coral_Left_Cam", "Coral_Right_Cam"}; //TODO: add center cam and drive cam
 
     //Camera Positions
     public static final Transform3d[] ROBOT_TO_CAM_TRANSFORMS = new Transform3d[] {
