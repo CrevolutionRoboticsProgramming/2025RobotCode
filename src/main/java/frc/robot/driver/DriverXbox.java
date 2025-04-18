@@ -76,6 +76,7 @@ public class DriverXbox extends XboxGamepad {
         return mInstance;
     }
     
+    
 
     @Override
     public void setupTeleopButtons() {
@@ -284,6 +285,12 @@ public class DriverXbox extends XboxGamepad {
             RushinatorWrist.kLastState == RushinatorWrist.State.kHPMid)
         );
 
+        controller.povUp().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
+        controller.povDown().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
+
+        // controller.povUp().whileTrue(new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).leftBranch, () -> true));
+        // controller.povDown().whileTrue(new AutoAlign(() -> LineupMaster.getClosestReefFace(()-> PoseEstimatorSubsystem.getInstance().getCurrentPose()).rightBranch, () -> false));
+
         /* L3 Auto Aligning */
         // controller.povUp().whileTrue(mLineupMaster.directDriveToNearestRightBranch());
         // controller.povDown().whileTrue(mLineupMaster.directDriveToNearestLeftBranch());
@@ -471,6 +478,8 @@ public class DriverXbox extends XboxGamepad {
     @Override
     public void setupTestButtons() {}
 
+
+
     public Translation2d getDriveTranslation() {
         final var xComponent = translationStickCurve.calculate(controller.getLeftX());
         final var yComponent = translationStickCurve.calculate(controller.getLeftY());
@@ -488,6 +497,14 @@ public class DriverXbox extends XboxGamepad {
 
     public boolean isLeftPovPressed() {
         return controller.povLeft().getAsBoolean();
+    }
+
+    public boolean isUpPovPressed() {
+        return controller.povUp().getAsBoolean();
+    }
+
+    public boolean isDownPovPressed() {
+        return controller.povDown().getAsBoolean();
     }
 
     public boolean isRightPovPressed() {

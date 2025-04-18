@@ -222,7 +222,7 @@ public class AutoAlign extends Command {
         this.isLeftAlign = this.isAutoLeftAlign.get();
       }
       else {
-        this.isLeftAlign = DriverXbox.getInstance().isLeftPovPressed();
+        this.isLeftAlign = DriverXbox.getInstance().isLeftPovPressed() || DriverXbox.getInstance().isUpPovPressed();
       }
       this.nearestReefFace = LineupMaster.getClosestReefFace(poseProvider);
       if(isLeftAlign) {

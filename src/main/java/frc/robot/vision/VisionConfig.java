@@ -132,6 +132,11 @@ public class VisionConfig {
     private static final double x = 0.5 * acutalX;
     private static final double y = (Math.sqrt(3)/2) * acutalX;
 
+    private static final double X = 1.5;
+
+    private static final double Rx = 0.5 * X;
+    private static final double Ry = (Math.sqrt(3)/2) * X;
+
     public enum HPStation {
         //TODO: may need to adjust x, y coordinates for all poses below - see markings reference picture
         BLU_LEFT_STATION(13, Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), 305),
@@ -171,18 +176,19 @@ public class VisionConfig {
         RED_REEF_GH_L4(10, 12.227306 - Units.inchesToMeters(acutalX), 4.025900, 180.0, null, null),
         RED_REEF_IJ_L4(11, 12.643358 - Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 240.0, null, null),
         RED_REEF_KL_L4(6, 13.474446 + Units.inchesToMeters(x), 3.306318 - Units.inchesToMeters(y), 300.0, null, null),
-        BLU_REEF_AB(18, 3.657600, 4.025900, 180.0, null, null),
-        BLU_REEF_CD(17, 4.073906, 3.306318, 240.0, null, null),
-        BLU_REEF_EF(22, 4.904740, 3.306318, 300.0, null, null),
-        BLU_REEF_GH(21, 5.321046, 4.025900, 0.0, null, null),
-        BLU_REEF_IJ(20, 4.904740, 4.745482, 60.0, null, null),
-        BLU_REEF_KL(19, 4.073906, 4.745482, 120.0, null, null),
-        RED_REEF_AB(7, 13.890498, 4.025900, 0.0, null, null),
-        RED_REEF_CD(8, 13.474446, 4.745482, 60., null, null),
-        RED_REEF_EF(9, 12.643358, 4.745482, 120.0, null, null),
-        RED_REEF_GH(10, 12.227306, 4.025900, 180.0, null, null),
-        RED_REEF_IJ(11, 12.643358, 3.306318, 240.0, null, null),
-        RED_REEF_KL(6, 13.474446, 3.306318, 300.0, null, null);
+        
+        BLU_REEF_AB(18, 3.657600 - Units.inchesToMeters(X), 4.025900, 180.0, null, null),
+        BLU_REEF_CD(17, 4.073906 - Units.inchesToMeters(Rx), 3.306318 - Units.inchesToMeters(Ry), 240.0, null, null),
+        BLU_REEF_EF(22, 4.904740 + Units.inchesToMeters(Rx), 3.306318 - Units.inchesToMeters(Ry), 300.0, null, null),
+        BLU_REEF_GH(21, 5.321046 + Units.inchesToMeters(X), 4.025900, 0.0, null, null),
+        BLU_REEF_IJ(20, 4.904740 + Units.inchesToMeters(Rx), 4.745482 + Units.inchesToMeters(Ry), 60.0, null, null),
+        BLU_REEF_KL(19, 4.073906 - Units.inchesToMeters(Rx), 4.745482 + Units.inchesToMeters(Ry), 120.0, null, null),
+        RED_REEF_AB(7, 13.890498 + Units.inchesToMeters(X), 4.025900, 0.0, null, null),
+        RED_REEF_CD(8, 13.474446 + Units.inchesToMeters(Rx), 4.745482 + Units.inchesToMeters(Ry), 60., null, null),
+        RED_REEF_EF(9, 12.643358 - Units.inchesToMeters(Rx), 4.745482 + Units.inchesToMeters(Ry), 120.0, null, null),
+        RED_REEF_GH(10, 12.227306 - Units.inchesToMeters(X), 4.025900, 180.0, null, null),
+        RED_REEF_IJ(11, 12.643358 - Units.inchesToMeters(Rx), 3.306318 - Units.inchesToMeters(Ry), 240.0, null, null),
+        RED_REEF_KL(6, 13.474446 + Units.inchesToMeters(Rx), 3.306318 - Units.inchesToMeters(Ry), 300.0, null, null);
 
         
 
